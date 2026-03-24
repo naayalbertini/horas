@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banco de Horas</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://unpkg.com/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f7fb;
+      color: #1f2937;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1380px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    .topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+    }
+
+    .topo h1 {
+      margin: 0;
+      color: #1f3a93;
+      font-size: 2rem;
+    }
+
+    .topo-acoes {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button, .btn-link {
+      border: none;
+      background: #1f3a93;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 15px;
+      text-decoration: none;
+      transition: 0.2s ease;
+    }
+
+    button:hover, .btn-link:hover {
+      background: #162c70;
+      transform: translateY(-1px);
+    }
+
+    .btn-secundario {
+      background: #00a86b;
+    }
+
+    .btn-secundario:hover {
+      background: #00885a;
+    }
+
+    .btn-pdf {
+      background: #d93025;
+    }
+
+    .btn-pdf:hover {
+      background: #b42318;
+    }
+
+    .btn-excluir {
+      background: #c0392b;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .btn-excluir:hover {
+      background: #a93226;
+    }
+
+    .filtros {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      background: #eef3ff;
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #243b6b;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cdd6e1;
+      border-radius: 10px;
+      outline: none;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    input:focus, select:focus {
+      border-color: #1f3a93;
+    }
+
+    .campo-oculto {
+      display: none;
+    }
+
+    .resumo-geral {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .card-resumo {
+      background: linear-gradient(135deg, #f8fbff, #edf4ff);
+      border: 1px solid #d9e6ff;
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .card-resumo h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: #4b5b7c;
+      font-weight: 600;
+    }
+
+    .card-resumo p {
+      margin: 0;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #1f3a93;
+    }
+
+    .tabela-wrapper {
+      overflow-x: auto;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1000px;
+      background: #fff;
+    }
+
+    thead {
+      background: #1f3a93;
+      color: #fff;
+    }
+
+    th, td {
+      padding: 14px 12px;
+      text-align: left;
+      border-bottom: 1px solid #edf0f5;
+      font-size: 14px;
+      vertical-align: top;
+    }
+
+    tbody tr:hover {
+      background: #f9fbff;
+    }
+
+    .positivo {
+      color: #0f9d58;
+      font-weight: 700;
+    }
+
+    .negativo {
+      color: #d93025;
+      font-weight: 700;
+    }
+
+    .neutro {
+      color: #4b5563;
+      font-weight: 700;
+    }
+
+    .funcionario-card {
+      margin-top: 25px;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .funcionario-header {
+      background: #f4f8ff;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: center;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .funcionario-header h2 {
+      margin: 0;
+      color: #1f3a93;
+      font-size: 1.2rem;
+    }
+
+    .funcionario-detalhes {
+      padding: 18px;
+      background: #fff;
+    }
+
+    .vazio {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6b7280;
+      font-size: 16px;
+    }
+
+    .badge-sabado,
+    .badge-especial,
+    .badge-regra {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 4px;
+      margin-right: 5px;
+    }
+
+    .badge-sabado {
+      background: #fff4d6;
+      color: #9a6700;
+      border: 1px solid #f1d38a;
+    }
+
+    .badge-especial {
+      background: #e9f7ef;
+      color: #176f42;
+      border: 1px solid #a7dfbf;
+    }
+
+    .badge-regra {
+      background: #f1ecff;
+      color: #5b3cc4;
+      border: 1px solid #d6ccff;
+    }
+
+    .resumo-funcionario {
+      margin-bottom: 14px;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .mes-card {
+      margin-top: 15px;
+      border: 1px solid #dbe6f9;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .mes-header {
+      background: #eef4ff;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #1f3a93;
+    }
+
+    .mes-header:hover {
+      background: #e5eeff;
+    }
+
+    .mes-conteudo {
+      display: none;
+      padding: 16px;
+      background: #fff;
+    }
+
+    .info-regra {
+      background: #f8fbff;
+      border: 1px solid #dbe6f9;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 16px;
+      color: #46536b;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    small.motivo {
+      display: block;
+      margin-top: 4px;
+      color: #5f6b7a;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 18px;
+      }
+
+      .topo h1 {
+        font-size: 1.5rem;
+      }
+
+      .card-resumo p {
+        font-size: 1.3rem;
+      }
+
+      th, td {
+        font-size: 13px;
+        padding: 10px;
+      }
+
+      .topo-acoes {
+        width: 100%;
+      }
+
+      .topo-acoes a,
+      .topo-acoes button {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topo">
+      <h1><i class="fas fa-business-time"></i> Banco de Horas</h1>
+      <div class="topo-acoes">
+        <a href="index.html" class="btn-link"><i class="fas fa-arrow-left"></i> Voltar para Registros</a>
+        <button class="btn-secundario" onclick="exportarCSV()"><i class="fas fa-file-csv"></i> Exportar CSV</button>
+        <button class="btn-pdf" onclick="gerarPDFBancoHoras()"><i class="fas fa-file-pdf"></i> Baixar PDF Completo</button>
+      </div>
+    </div>
+
+    <div class="filtros">
+      <div>
+        <label for="filtroFuncionario">Funcionário</label>
+        <input type="text" id="filtroFuncionario" placeholder="Digite o nome do funcionário">
+      </div>
+
+      <div>
+        <label for="filtroMes">Mês</label>
+        <select id="filtroMes">
+          <option value="">Todos</option>
+          <option value="01">Janeiro</option>
+          <option value="02">Fevereiro</option>
+          <option value="03">Março</option>
+          <option value="04">Abril</option>
+          <option value="05">Maio</option>
+          <option value="06">Junho</option>
+          <option value="07">Julho</option>
+          <option value="08">Agosto</option>
+          <option value="09">Setembro</option>
+          <option value="10">Outubro</option>
+          <option value="11">Novembro</option>
+          <option value="12">Dezembro</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="filtroAno">Ano</label>
+        <input type="number" id="filtroAno" placeholder="Ex: 2026">
+      </div>
+
+      <div>
+        <label for="cargaSemanal">Carga semanal</label>
+        <select id="cargaSemanal">
+          <option value="40" selected>40 horas semanais</option>
+          <option value="44">44 horas semanais</option>
+          <option value="36">36 horas semanais</option>
+          <option value="30">30 horas semanais</option>
+        </select>
+      </div>
+
+      <div style="display:flex; align-items:end;">
+        <button onclick="carregarBancoHoras()" style="width:100%;">
+          <i class="fas fa-search"></i> Calcular Banco
+        </button>
+      </div>
+    </div>
+
+    <div class="filtros">
+      <div>
+        <label for="dataEspecial">Data</label>
+        <input type="date" id="dataEspecial">
+      </div>
+
+      <div>
+        <label for="tipoDataEspecial">Tipo</label>
+        <select id="tipoDataEspecial">
+          <option value="facultativo">Facultativo</option>
+          <option value="folga_empresa">Folga da empresa</option>
+          <option value="feriado_interno">Feriado interno</option>
+          <option value="compensacao">Compensação</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="regraDataEspecial">Regra da data</label>
+        <select id="regraDataEspecial">
+          <option value="nao_gera_debito">Não gera débito</option>
+          <option value="trabalhado_vira_extra" selected>Trabalhado vira extra</option>
+          <option value="carga_personalizada">Carga personalizada</option>
+        </select>
+      </div>
+
+      <div id="campoCargaPrevista" class="campo-oculto">
+        <label for="cargaPrevistaDataEspecial">Carga prevista do dia (horas)</label>
+        <input type="number" id="cargaPrevistaDataEspecial" placeholder="Ex: 4" min="0" step="0.5">
+      </div>
+
+      <div style="grid-column: span 2;">
+        <label for="descricaoDataEspecial">Descrição / Motivo</label>
+        <input type="text" id="descricaoDataEspecial" placeholder="Ex: Facultativo dado pela escola para compensação de outro dia">
+      </div>
+
+      <div style="display:flex; align-items:end;">
+        <button onclick="salvarDataEspecial()" style="width:100%;">
+          <i class="fas fa-calendar-plus"></i> Salvar Regra da Data
+        </button>
+      </div>
+    </div>
+
+    <div class="resumo-geral">
+      <div class="card-resumo">
+        <h3>Total de funcionários</h3>
+        <p id="totalFuncionarios">0</p>
+      </div>
+      <div class="card-resumo">
+        <h3>Total trabalhado</h3>
+        <p id="totalTrabalhado">00h 00m</p>
+      </div>
+      <div class="card-resumo">
+        <h3>Total previsto</h3>
+        <p id="totalPrevisto">00h 00m</p>
+      </div>
+      <div class="card-resumo">
+        <h3>Saldo geral</h3>
+        <p id="saldoGeral" class="neutro">00h 00m</p>
+      </div>
+    </div>
+
+    <div class="tabela-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Funcionário</th>
+            <th>Registros</th>
+            <th>Horas Trabalhadas</th>
+            <th>Horas Previstas</th>
+            <th>Horas Extras</th>
+            <th>Horas Negativas</th>
+            <th>Saldo Final</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaBancoHoras">
+          <tr>
+            <td colspan="7" class="vazio">Carregando dados...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="listaDatasEspeciais"></div>
+    <div id="detalhesFuncionarios"></div>
+
+    <div class="info-regra">
+      <strong>Como funciona:</strong><br>
+      • Sábado: tudo vira extra.<br>
+      • Data com regra “Não gera débito”: não cobra horas do dia e não gera negativo.<br>
+      • Data com regra “Trabalhado vira extra”: não cobra horas do dia; se a pessoa vier, tudo vira extra.<br>
+      • Data com regra “Carga personalizada”: compara com a carga que você informar naquele dia.
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      addDoc,
+      deleteDoc,
+      doc
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDJWyk_B2rl6_dSKLL7s5cgQiyE7yr9ts0",
+      authDomain: "registrohoras-7a805.firebaseapp.com",
+      projectId: "registrohoras-7a805",
+      storageBucket: "registrohoras-7a805.firebasestorage.app",
+      messagingSenderId: "398934901336",
+      appId: "1:398934901336:web:b72de732481bfd955d802d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let registrosOriginais = [];
+    let datasEspeciais = [];
+    let resultadoAtualCSV = [];
+    let detalhesAtuaisPDF = [];
+    let ultimoResumoPDF = {
+      totalFuncionarios: 0,
+      totalTrabalhado: 0,
+      totalPrevisto: 0,
+      saldoGeral: 0
+    };
+
+    const nomesMeses = [
+      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+
+    function removerAcentos(str) {
+      return (str || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function parseTime(timeStr) {
+      if (!timeStr) return 0;
+      const [h, m] = timeStr.split(":").map(Number);
+      return (h * 60) + m;
+    }
+
+    function formatarMinutosParaHora(minutosTotais) {
+      const sinal = minutosTotais < 0 ? "-" : "";
+      const abs = Math.abs(minutosTotais);
+      const h = Math.floor(abs / 60);
+      const m = abs % 60;
+      return `${sinal}${String(h).padStart(2, "0")}h ${String(m).padStart(2, "0")}m`;
+    }
+
+    function calcularDuracaoTotal(horarios) {
+      let duracaoMinutos = 0;
+      const horas = Array.isArray(horarios) ? horarios : [];
+
+      for (const h of horas) {
+        if (h.entrada && h.saida) {
+          const entradaMinutos = parseTime(h.entrada);
+          const saidaMinutos = parseTime(h.saida);
+
+          if (saidaMinutos > entradaMinutos) {
+            duracaoMinutos += (saidaMinutos - entradaMinutos);
+          }
+        }
+      }
+      return duracaoMinutos;
+    }
+
+    function obterClasseSaldo(valor) {
+      if (valor > 0) return "positivo";
+      if (valor < 0) return "negativo";
+      return "neutro";
+    }
+
+    function formatarDataBR(dataISO) {
+      if (!dataISO) return "";
+      const [ano, mes, dia] = dataISO.split("-");
+      return `${dia}/${mes}/${ano}`;
+    }
+
+    function ehSabado(dataISO) {
+      if (!dataISO) return false;
+      const [ano, mes, dia] = dataISO.split("-").map(Number);
+      const data = new Date(ano, mes - 1, dia);
+      return data.getDay() === 6;
+    }
+
+    function obterMesAno(dataISO) {
+      if (!dataISO) return "Sem período";
+      const [ano, mes] = dataISO.split("-");
+      return `${nomesMeses[Number(mes) - 1]}/${ano}`;
+    }
+
+    function formatarTipoEspecial(tipo) {
+      if (tipo === "facultativo") return "Facultativo";
+      if (tipo === "folga_empresa") return "Folga da empresa";
+      if (tipo === "feriado_interno") return "Feriado interno";
+      if (tipo === "compensacao") return "Compensação";
+      if (tipo === "outro") return "Outro";
+      return tipo || "";
+    }
+
+    function formatarRegraEspecial(regra) {
+      if (regra === "nao_gera_debito") return "Não gera débito";
+      if (regra === "trabalhado_vira_extra") return "Trabalhado vira extra";
+      if (regra === "carga_personalizada") return "Carga personalizada";
+      return regra || "";
+    }
+
+    function getDataEspecial(dataISO) {
+      return datasEspeciais.find(item => item.data === dataISO) || null;
+    }
+
+    function atualizarCampoCargaPersonalizada() {
+      const regra = document.getElementById("regraDataEspecial").value;
+      const campo = document.getElementById("campoCargaPrevista");
+
+      if (regra === "carga_personalizada") {
+        campo.classList.remove("campo-oculto");
+      } else {
+        campo.classList.add("campo-oculto");
+        document.getElementById("cargaPrevistaDataEspecial").value = "";
+      }
+    }
+
+    async function buscarRegistros() {
+      const snapshot = await getDocs(collection(db, "horas"));
+      registrosOriginais = [];
+
+      snapshot.forEach((docItem) => {
+        const d = docItem.data();
+        registrosOriginais.push({
+          id: docItem.id,
+          funcionario: d.funcionario || "Sem nome",
+          data: d.data || "",
+          horarios: Array.isArray(d.horarios) ? d.horarios : [],
+          duracaoMinutos: calcularDuracaoTotal(d.horarios || [])
+        });
+      });
+    }
+
+    async function buscarDatasEspeciais() {
+      const snapshot = await getDocs(collection(db, "datasEspeciais"));
+      datasEspeciais = [];
+
+      snapshot.forEach((docItem) => {
+        const d = docItem.data();
+        datasEspeciais.push({
+          id: docItem.id,
+          data: d.data || "",
+          tipo: d.tipo || "facultativo",
+          descricao: d.descricao || "",
+          regra: d.regra || "trabalhado_vira_extra",
+          cargaPrevista: Number(d.cargaPrevista || 0)
+        });
+      });
+
+      renderizarDatasEspeciais();
+    }
+
+    function filtrarRegistros() {
+      const nomeFiltro = removerAcentos(
+        document.getElementById("filtroFuncionario").value.trim().toLowerCase()
+      );
+      const mesFiltro = document.getElementById("filtroMes").value;
+      const anoFiltro = document.getElementById("filtroAno").value.trim();
+
+      return registrosOriginais.filter(reg => {
+        const nomeOk = removerAcentos(reg.funcionario.toLowerCase()).includes(nomeFiltro);
+
+        let mesOk = true;
+        let anoOk = true;
+
+        if (reg.data) {
+          const [ano, mes] = reg.data.split("-");
+          if (mesFiltro) mesOk = mes === mesFiltro;
+          if (anoFiltro) anoOk = ano === anoFiltro;
+        }
+
+        return nomeOk && mesOk && anoOk;
+      });
+    }
+
+    function agruparPorFuncionario(registros) {
+      const agrupado = {};
+
+      registros.forEach(reg => {
+        if (!agrupado[reg.funcionario]) {
+          agrupado[reg.funcionario] = [];
+        }
+        agrupado[reg.funcionario].push(reg);
+      });
+
+      return agrupado;
+    }
+
+    function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
+      const dataEspecial = getDataEspecial(registro.data);
+      const sabado = ehSabado(registro.data);
+      const trabalhado = registro.duracaoMinutos;
+
+      if (sabado) {
+        return {
+          previstoDia: 0,
+          saldoDia: trabalhado,
+          extrasDia: trabalhado,
+          negativasDia: 0,
+          sabado: true,
+          dataEspecial: null,
+          observacao: "Sábado = extra"
+        };
+      }
+
+      if (dataEspecial) {
+        if (dataEspecial.regra === "nao_gera_debito") {
+          return {
+            previstoDia: 0,
+            saldoDia: 0,
+            extrasDia: 0,
+            negativasDia: 0,
+            sabado: false,
+            dataEspecial,
+            observacao: `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)}`
+          };
+        }
+
+        if (dataEspecial.regra === "trabalhado_vira_extra") {
+          return {
+            previstoDia: 0,
+            saldoDia: trabalhado,
+            extrasDia: trabalhado,
+            negativasDia: 0,
+            sabado: false,
+            dataEspecial,
+            observacao: `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)}`
+          };
+        }
+
+        if (dataEspecial.regra === "carga_personalizada") {
+          const previsto = Number(dataEspecial.cargaPrevista || 0) * 60;
+          const saldo = trabalhado - previsto;
+
+          return {
+            previstoDia: previsto,
+            saldoDia: saldo,
+            extrasDia: saldo > 0 ? saldo : 0,
+            negativasDia: saldo < 0 ? Math.abs(saldo) : 0,
+            sabado: false,
+            dataEspecial,
+            observacao: `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)}`
+          };
+        }
+      }
+
+      const saldoPadrao = trabalhado - minutosPrevistosPadrao;
+
+      return {
+        previstoDia: minutosPrevistosPadrao,
+        saldoDia: saldoPadrao,
+        extrasDia: saldoPadrao > 0 ? saldoPadrao : 0,
+        negativasDia: saldoPadrao < 0 ? Math.abs(saldoPadrao) : 0,
+        sabado: false,
+        dataEspecial: null,
+        observacao: "Regra padrão"
+      };
+    }
+
+    function renderizarResumo(resultado) {
+      document.getElementById("totalFuncionarios").textContent = resultado.totalFuncionarios;
+      document.getElementById("totalTrabalhado").textContent = formatarMinutosParaHora(resultado.totalTrabalhado);
+      document.getElementById("totalPrevisto").textContent = formatarMinutosParaHora(resultado.totalPrevisto);
+
+      const saldoEl = document.getElementById("saldoGeral");
+      saldoEl.textContent = formatarMinutosParaHora(resultado.saldoGeral);
+      saldoEl.className = obterClasseSaldo(resultado.saldoGeral);
+    }
+
+    function renderizarTabela(linhas) {
+      const tbody = document.getElementById("tabelaBancoHoras");
+
+      if (!linhas.length) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="vazio">Nenhum registro encontrado para esse filtro.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = linhas.map(item => `
+        <tr>
+          <td>${item.funcionario}</td>
+          <td>${item.quantidadeRegistros}</td>
+          <td>${formatarMinutosParaHora(item.trabalhado)}</td>
+          <td>${formatarMinutosParaHora(item.previsto)}</td>
+          <td class="positivo">${formatarMinutosParaHora(item.extras)}</td>
+          <td class="negativo">${formatarMinutosParaHora(item.negativas)}</td>
+          <td class="${obterClasseSaldo(item.saldo)}">${formatarMinutosParaHora(item.saldo)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderizarDatasEspeciais() {
+      const container = document.getElementById("listaDatasEspeciais");
+
+      if (!datasEspeciais.length) {
+        container.innerHTML = `
+          <div class="funcionario-card">
+            <div class="funcionario-header">
+              <h2><i class="fas fa-calendar-check"></i> Regras de Datas Cadastradas</h2>
+            </div>
+            <div class="funcionario-detalhes">
+              Nenhuma data cadastrada.
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      const linhas = datasEspeciais
+        .slice()
+        .sort((a, b) => a.data.localeCompare(b.data))
+        .map(item => `
+          <tr>
+            <td>${formatarDataBR(item.data)}</td>
+            <td>${formatarTipoEspecial(item.tipo)}</td>
+            <td>${formatarRegraEspecial(item.regra)}</td>
+            <td>${item.regra === "carga_personalizada" ? `${item.cargaPrevista}h` : "-"}</td>
+            <td>${item.descricao || "-"}</td>
+            <td>
+              <button class="btn-excluir" onclick="excluirDataEspecial('${item.id}')">Excluir</button>
+            </td>
+          </tr>
+        `).join("");
+
+      container.innerHTML = `
+        <div class="funcionario-card">
+          <div class="funcionario-header">
+            <h2><i class="fas fa-calendar-check"></i> Regras de Datas Cadastradas</h2>
+          </div>
+          <div class="funcionario-detalhes">
+            <div class="tabela-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Regra</th>
+                    <th>Carga</th>
+                    <th>Descrição</th>
+                    <th>Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${linhas}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function construirEstruturaDetalhada(agrupado, minutosPrevistosPorRegistro) {
+      const nomes = Object.keys(agrupado).sort((a, b) => a.localeCompare(b, "pt-BR"));
+      const detalhes = [];
+
+      nomes.forEach(nome => {
+        const registros = agrupado[nome]
+          .slice()
+          .sort((a, b) => a.data.localeCompare(b.data));
+
+        let totalTrabalhado = 0;
+        let totalPrevisto = 0;
+        let totalExtras = 0;
+        let totalNegativas = 0;
+
+        const registrosPorMes = {};
+
+        registros.forEach(reg => {
+          totalTrabalhado += reg.duracaoMinutos;
+
+          const regraDia = calcularRegraDoDia(reg, minutosPrevistosPorRegistro);
+
+          totalPrevisto += regraDia.previstoDia;
+          totalExtras += regraDia.extrasDia;
+          totalNegativas += regraDia.negativasDia;
+
+          const chaveMes = obterMesAno(reg.data);
+
+          if (!registrosPorMes[chaveMes]) {
+            registrosPorMes[chaveMes] = [];
+          }
+
+          registrosPorMes[chaveMes].push({
+            ...reg,
+            ...regraDia,
+            horariosTexto: reg.horarios.map(h => `${h.entrada} às ${h.saida}`).join(" | ")
+          });
+        });
+
+        const saldoFinal = totalExtras - totalNegativas;
+
+        detalhes.push({
+          funcionario: nome,
+          totalTrabalhado,
+          totalPrevisto,
+          totalExtras,
+          totalNegativas,
+          saldoFinal,
+          meses: Object.keys(registrosPorMes)
+            .sort((a, b) => a.localeCompare(b, "pt-BR"))
+            .map(mesAno => ({
+              mesAno,
+              registros: registrosPorMes[mesAno]
+            }))
+        });
+      });
+
+      return detalhes;
+    }
+
+    function renderizarDetalhes(detalhesEstruturados) {
+      const container = document.getElementById("detalhesFuncionarios");
+
+      if (!detalhesEstruturados.length) {
+        container.innerHTML = "";
+        return;
+      }
+
+      container.innerHTML = detalhesEstruturados.map((item, indexFuncionario) => {
+        const mesesHTML = item.meses.map((mes, indexMes) => {
+          const contentId = `mes_${indexFuncionario}_${indexMes}`;
+
+          const linhas = mes.registros.map(reg => `
+            <tr>
+              <td>
+                ${formatarDataBR(reg.data)}
+                ${reg.sabado ? '<br><span class="badge-sabado">Sábado = extra</span>' : ''}
+                ${reg.dataEspecial ? `<br><span class="badge-especial">${formatarTipoEspecial(reg.dataEspecial.tipo)}</span>` : ''}
+                ${reg.dataEspecial ? `<br><span class="badge-regra">${formatarRegraEspecial(reg.dataEspecial.regra)}</span>` : ''}
+                ${reg.dataEspecial?.descricao ? `<small class="motivo">${reg.dataEspecial.descricao}</small>` : ''}
+              </td>
+              <td>${reg.horariosTexto || "-"}</td>
+              <td>${formatarMinutosParaHora(reg.duracaoMinutos)}</td>
+              <td>${formatarMinutosParaHora(reg.previstoDia)}</td>
+              <td class="${obterClasseSaldo(reg.saldoDia)}">${formatarMinutosParaHora(reg.saldoDia)}</td>
+            </tr>
+          `).join("");
+
+          return `
+            <div class="mes-card">
+              <div class="mes-header" onclick="toggleMes('${contentId}')">
+                <span><i class="fas fa-folder"></i> ${mes.mesAno}</span>
+                <span><i class="fas fa-chevron-down"></i></span>
+              </div>
+              <div class="mes-conteudo" id="${contentId}">
+                <div class="tabela-wrapper">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Data</th>
+                        <th>Horários</th>
+                        <th>Trabalhado</th>
+                        <th>Previsto</th>
+                        <th>Saldo do Dia</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${linhas}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        return `
+          <div class="funcionario-card">
+            <div class="funcionario-header">
+              <h2><i class="fas fa-user"></i> ${item.funcionario}</h2>
+              <div>
+                <strong>Saldo:</strong>
+                <span class="${obterClasseSaldo(item.saldoFinal)}">${formatarMinutosParaHora(item.saldoFinal)}</span>
+              </div>
+            </div>
+            <div class="funcionario-detalhes">
+              <div class="resumo-funcionario">
+                <div><strong>Trabalhado:</strong> ${formatarMinutosParaHora(item.totalTrabalhado)}</div>
+                <div><strong>Previsto:</strong> ${formatarMinutosParaHora(item.totalPrevisto)}</div>
+                <div class="positivo"><strong>Extras:</strong> ${formatarMinutosParaHora(item.totalExtras)}</div>
+                <div class="negativo"><strong>Negativas:</strong> ${formatarMinutosParaHora(item.totalNegativas)}</div>
+              </div>
+              ${mesesHTML}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    window.toggleMes = function(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      if (el.style.display === "none" || el.style.display === "") {
+        el.style.display = "block";
+      } else {
+        el.style.display = "none";
+      }
+    };
+
+    window.salvarDataEspecial = async function() {
+      const data = document.getElementById("dataEspecial").value;
+      const tipo = document.getElementById("tipoDataEspecial").value;
+      const regra = document.getElementById("regraDataEspecial").value;
+      const descricao = document.getElementById("descricaoDataEspecial").value.trim();
+      const cargaPrevistaInformada = document.getElementById("cargaPrevistaDataEspecial").value;
+
+      if (!data) {
+        alert("Selecione a data.");
+        return;
+      }
+
+      let cargaPrevista = 0;
+
+      if (regra === "carga_personalizada") {
+        if (cargaPrevistaInformada === "") {
+          alert("Informe a carga prevista do dia.");
+          return;
+        }
+        cargaPrevista = Number(cargaPrevistaInformada);
+        if (Number.isNaN(cargaPrevista) || cargaPrevista < 0) {
+          alert("Informe uma carga válida.");
+          return;
+        }
+      }
+
+      try {
+        await addDoc(collection(db, "datasEspeciais"), {
+          data,
+          tipo,
+          regra,
+          descricao,
+          cargaPrevista
+        });
+
+        document.getElementById("dataEspecial").value = "";
+        document.getElementById("tipoDataEspecial").value = "facultativo";
+        document.getElementById("regraDataEspecial").value = "trabalhado_vira_extra";
+        document.getElementById("descricaoDataEspecial").value = "";
+        document.getElementById("cargaPrevistaDataEspecial").value = "";
+        atualizarCampoCargaPersonalizada();
+
+        await buscarDatasEspeciais();
+        carregarBancoHoras();
+
+        alert("Regra da data salva com sucesso!");
+      } catch (error) {
+        console.error("Erro ao salvar regra da data:", error);
+        alert("Erro ao salvar regra da data.");
+      }
+    };
+
+    window.excluirDataEspecial = async function(id) {
+      if (!confirm("Deseja excluir esta regra de data?")) return;
+
+      try {
+        await deleteDoc(doc(db, "datasEspeciais", id));
+        await buscarDatasEspeciais();
+        carregarBancoHoras();
+      } catch (error) {
+        console.error("Erro ao excluir regra da data:", error);
+        alert("Erro ao excluir regra da data.");
+      }
+    };
+
+    window.carregarBancoHoras = async function() {
+      const tbody = document.getElementById("tabelaBancoHoras");
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" class="vazio">Calculando banco de horas...</td>
+        </tr>
+      `;
+
+      try {
+        if (!registrosOriginais.length) {
+          await buscarRegistros();
+        }
+
+        const registrosFiltrados = filtrarRegistros();
+        const agrupado = agruparPorFuncionario(registrosFiltrados);
+
+        const cargaSemanal = Number(document.getElementById("cargaSemanal").value || 40);
+        const horasPorDia = cargaSemanal / 5;
+        const minutosPrevistosPorRegistro = Math.round(horasPorDia * 60);
+
+        const linhas = [];
+        let totalTrabalhado = 0;
+        let totalPrevisto = 0;
+        let saldoGeral = 0;
+
+        Object.keys(agrupado)
+          .sort((a, b) => a.localeCompare(b, "pt-BR"))
+          .forEach(funcionario => {
+            const registros = agrupado[funcionario];
+
+            let trabalhado = 0;
+            let previsto = 0;
+            let extras = 0;
+            let negativas = 0;
+
+            registros.forEach(reg => {
+              trabalhado += reg.duracaoMinutos;
+
+              const regraDia = calcularRegraDoDia(reg, minutosPrevistosPorRegistro);
+              previsto += regraDia.previstoDia;
+              extras += regraDia.extrasDia;
+              negativas += regraDia.negativasDia;
+            });
+
+            const saldo = extras - negativas;
+
+            linhas.push({
+              funcionario,
+              quantidadeRegistros: registros.length,
+              trabalhado,
+              previsto,
+              extras,
+              negativas,
+              saldo
+            });
+
+            totalTrabalhado += trabalhado;
+            totalPrevisto += previsto;
+            saldoGeral += saldo;
+          });
+
+        resultadoAtualCSV = linhas;
+        ultimoResumoPDF = {
+          totalFuncionarios: linhas.length,
+          totalTrabalhado,
+          totalPrevisto,
+          saldoGeral
+        };
+
+        detalhesAtuaisPDF = construirEstruturaDetalhada(agrupado, minutosPrevistosPorRegistro);
+
+        renderizarTabela(linhas);
+        renderizarDetalhes(detalhesAtuaisPDF);
+        renderizarResumo(ultimoResumoPDF);
+
+      } catch (error) {
+        console.error("Erro ao carregar banco de horas:", error);
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="vazio">Erro ao carregar os dados. Veja o console.</td>
+          </tr>
+        `;
+      }
+    };
+
+    window.exportarCSV = function() {
+      if (!resultadoAtualCSV.length) {
+        alert("Não há dados para exportar.");
+        return;
+      }
+
+      let csv = "Funcionário,Registros,Horas Trabalhadas,Horas Previstas,Horas Extras,Horas Negativas,Saldo Final\n";
+
+      resultadoAtualCSV.forEach(item => {
+        csv += `"${item.funcionario}",${item.quantidadeRegistros},"${formatarMinutosParaHora(item.trabalhado)}","${formatarMinutosParaHora(item.previsto)}","${formatarMinutosParaHora(item.extras)}","${formatarMinutosParaHora(item.negativas)}","${formatarMinutosParaHora(item.saldo)}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+
+      link.setAttribute("href", url);
+      link.setAttribute("download", "banco_de_horas.csv");
+      link.style.visibility = "hidden";
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    window.gerarPDFBancoHoras = function() {
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert("Erro: biblioteca do PDF não carregou.");
+        return;
+      }
+
+      if (!resultadoAtualCSV.length) {
+        alert("Não há dados para gerar o PDF.");
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF("p", "mm", "a4");
+      const dataAtual = new Date();
+
+      const filtroFuncionario = document.getElementById("filtroFuncionario").value || "Todos";
+      const filtroMes = document.getElementById("filtroMes");
+      const filtroMesTexto = filtroMes.options[filtroMes.selectedIndex]?.text || "Todos";
+      const filtroAno = document.getElementById("filtroAno").value || "Todos";
+      const cargaSemanal = document.getElementById("cargaSemanal").value || "40";
+
+      doc.setFontSize(18);
+      doc.setTextColor(31, 58, 147);
+      doc.text("Relatório Completo de Banco de Horas", 14, 18);
+
+      doc.setFontSize(10);
+      doc.setTextColor(80, 80, 80);
+      doc.text(`Gerado em: ${dataAtual.toLocaleDateString("pt-BR")} ${dataAtual.toLocaleTimeString("pt-BR")}`, 14, 25);
+
+      doc.setFontSize(11);
+      doc.setTextColor(0, 0, 0);
+      doc.text(`Funcionário: ${filtroFuncionario}`, 14, 34);
+      doc.text(`Mês: ${filtroMesTexto}`, 14, 40);
+      doc.text(`Ano: ${filtroAno}`, 14, 46);
+      doc.text(`Carga semanal: ${cargaSemanal} horas`, 14, 52);
+
+      doc.setFontSize(12);
+      doc.setTextColor(31, 58, 147);
+      doc.text("Resumo Geral", 14, 63);
+
+      doc.autoTable({
+        startY: 67,
+        head: [["Total Funcionários", "Total Trabalhado", "Total Previsto", "Saldo Geral"]],
+        body: [[
+          String(ultimoResumoPDF.totalFuncionarios),
+          formatarMinutosParaHora(ultimoResumoPDF.totalTrabalhado),
+          formatarMinutosParaHora(ultimoResumoPDF.totalPrevisto),
+          formatarMinutosParaHora(ultimoResumoPDF.saldoGeral)
+        ]],
+        theme: "grid",
+        headStyles: { fillColor: [31, 58, 147] },
+        styles: { fontSize: 10 }
+      });
+
+      const corpoTabelaResumo = resultadoAtualCSV.map(item => [
+        item.funcionario,
+        String(item.quantidadeRegistros),
+        formatarMinutosParaHora(item.trabalhado),
+        formatarMinutosParaHora(item.previsto),
+        formatarMinutosParaHora(item.extras),
+        formatarMinutosParaHora(item.negativas),
+        formatarMinutosParaHora(item.saldo)
+      ]);
+
+      doc.setFontSize(12);
+      doc.setTextColor(31, 58, 147);
+      doc.text("Resumo por Funcionário", 14, doc.autoTable.previous.finalY + 12);
+
+      doc.autoTable({
+        startY: doc.autoTable.previous.finalY + 16,
+        head: [[
+          "Funcionário",
+          "Registros",
+          "Horas Trabalhadas",
+          "Horas Previstas",
+          "Horas Extras",
+          "Horas Negativas",
+          "Saldo Final"
+        ]],
+        body: corpoTabelaResumo,
+        theme: "striped",
+        headStyles: { fillColor: [31, 58, 147] },
+        styles: { fontSize: 9, cellPadding: 2.5 },
+        columnStyles: {
+          0: { cellWidth: 45 },
+          1: { cellWidth: 18 },
+          2: { cellWidth: 28 },
+          3: { cellWidth: 28 },
+          4: { cellWidth: 24 },
+          5: { cellWidth: 24 },
+          6: { cellWidth: 24 }
+        }
+      });
+
+      let y = doc.autoTable.previous.finalY + 14;
+
+      detalhesAtuaisPDF.forEach((funcionarioDetalhe, idx) => {
+        if (y > 240) {
+          doc.addPage();
+          y = 16;
+        }
+
+        doc.setFontSize(14);
+        doc.setTextColor(31, 58, 147);
+        doc.text(`Funcionário: ${funcionarioDetalhe.funcionario}`, 14, y);
+        y += 6;
+
+        doc.autoTable({
+          startY: y,
+          head: [["Trabalhado", "Previsto", "Extras", "Negativas", "Saldo Final"]],
+          body: [[
+            formatarMinutosParaHora(funcionarioDetalhe.totalTrabalhado),
+            formatarMinutosParaHora(funcionarioDetalhe.totalPrevisto),
+            formatarMinutosParaHora(funcionarioDetalhe.totalExtras),
+            formatarMinutosParaHora(funcionarioDetalhe.totalNegativas),
+            formatarMinutosParaHora(funcionarioDetalhe.saldoFinal)
+          ]],
+          theme: "grid",
+          headStyles: { fillColor: [79, 111, 203] },
+          styles: { fontSize: 10 }
+        });
+
+        y = doc.autoTable.previous.finalY + 8;
+
+        funcionarioDetalhe.meses.forEach((mes) => {
+          if (y > 225) {
+            doc.addPage();
+            y = 16;
+          }
+
+          doc.setFontSize(12);
+          doc.setTextColor(60, 60, 60);
+          doc.text(`Mês/Ano: ${mes.mesAno}`, 14, y);
+          y += 4;
+
+          const bodyMes = mes.registros.map(reg => {
+            let observacao = reg.observacao || "-";
+            if (reg.dataEspecial?.descricao) {
+              observacao += ` | ${reg.dataEspecial.descricao}`;
+            }
+
+            return [
+              formatarDataBR(reg.data),
+              reg.horariosTexto || "-",
+              formatarMinutosParaHora(reg.duracaoMinutos),
+              formatarMinutosParaHora(reg.previstoDia),
+              formatarMinutosParaHora(reg.saldoDia),
+              observacao
+            ];
+          });
+
+          doc.autoTable({
+            startY: y,
+            head: [["Data", "Horários", "Trabalhado", "Previsto", "Saldo do Dia", "Observação"]],
+            body: bodyMes,
+            theme: "striped",
+            headStyles: { fillColor: [31, 58, 147] },
+            styles: {
+              fontSize: 8.5,
+              cellPadding: 2
+            },
+            columnStyles: {
+              0: { cellWidth: 22 },
+              1: { cellWidth: 42 },
+              2: { cellWidth: 22 },
+              3: { cellWidth: 22 },
+              4: { cellWidth: 22 },
+              5: { cellWidth: 55 }
+            }
+          });
+
+          y = doc.autoTable.previous.finalY + 8;
+        });
+
+        if (idx < detalhesAtuaisPDF.length - 1) {
+          if (y > 235) {
+            doc.addPage();
+            y = 16;
+          } else {
+            y += 4;
+          }
+        }
+      });
+
+      const totalPages = doc.internal.getNumberOfPages();
+      for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(9);
+        doc.setTextColor(110, 110, 110);
+        doc.text(`Página ${i} de ${totalPages}`, 14, doc.internal.pageSize.height - 8);
+      }
+
+      const nomeArquivo = `relatorio_completo_banco_horas_${dataAtual.toLocaleDateString("pt-BR").replace(/\//g, "-")}.pdf`;
+      doc.save(nomeArquivo);
+    };
+
+    document.getElementById("regraDataEspecial").addEventListener("change", atualizarCampoCargaPersonalizada);
+    document.getElementById("filtroFuncionario").addEventListener("input", () => carregarBancoHoras());
+    document.getElementById("filtroMes").addEventListener("change", () => carregarBancoHoras());
+    document.getElementById("filtroAno").addEventListener("input", () => carregarBancoHoras());
+    document.getElementById("cargaSemanal").addEventListener("change", () => carregarBancoHoras());
+
+    await buscarRegistros();
+    await buscarDatasEspeciais();
+    atualizarCampoCargaPersonalizada();
+    carregarBancoHoras();
+  </script>
+</body>
+</html>
