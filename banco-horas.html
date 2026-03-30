@@ -421,22 +421,28 @@
       </div>
 
       <div>
-        <label for="tipoDataEspecial">Tipo</label>
-        <select id="tipoDataEspecial">
-          <option value="facultativo">Facultativo</option>
-          <option value="folga_empresa">Folga da empresa</option>
-          <option value="feriado_interno">Feriado interno</option>
-          <option value="compensacao">Compensação</option>
-          <option value="outro">Outro</option>
+       
+ <select id="tipoDataEspecial">
+<option value="facultativo" selected>Facultativo</option>
+<option value="folga_empresa">Folga da empresa</option>
+<option value="feriado_interno">Feriado interno</option>
+<option value="compensacao">Compensação</option>
+<option value="atestado">Atestado</option>
+<option value="outro">Outro</option>
         </select>
       </div>
-
+<div id="campoHorasAbonadas" class="campo-oculto">
+  <label for="horasAbonadasDataEspecial">Horas abonadas / justificadas (horas)</label>
+  <input type="number" id="horasAbonadasDataEspecial" placeholder="Ex: 4" min="0" step="0.5">
+</div>
       <div>
         <label for="regraDataEspecial">Regra da data</label>
         <select id="regraDataEspecial">
           <option value="nao_gera_debito">Não gera débito</option>
           <option value="trabalhado_vira_extra" selected>Trabalhado vira extra</option>
           <option value="carga_personalizada">Carga personalizada</option>
+          <option value="compensacao_manual">Compensação manual</option>
+          <option value="atestado_parcial">Atestado parcial</option>
         </select>
       </div>
 
@@ -505,7 +511,9 @@
       • Sábado: tudo vira extra.<br>
       • Data com regra “Não gera débito”: não cobra horas do dia e não gera negativo.<br>
       • Data com regra “Trabalhado vira extra”: não cobra horas do dia; se a pessoa vier, tudo vira extra.<br>
-      • Data com regra “Carga personalizada”: compara com a carga que você informar naquele dia.
+      • Data com regra “Carga personalizada”: compara com a carga que você informar naquele dia.<br>
+      • Data com regra “Compensação manual”: desconta da jornada do dia apenas a carga informada; só o excedente vira extra.<br>
+      • Data com regra “Atestado parcial”: abona parte da carga do dia e evita negativo indevido.
     </div>
   </div>
 
@@ -613,6 +621,7 @@
       if (tipo === "folga_empresa") return "Folga da empresa";
       if (tipo === "feriado_interno") return "Feriado interno";
       if (tipo === "compensacao") return "Compensação";
+      if (tipo === "atestado") return "Atestado";
       if (tipo === "outro") return "Outro";
       return tipo || "";
     }
@@ -621,6 +630,8 @@
       if (regra === "nao_gera_debito") return "Não gera débito";
       if (regra === "trabalhado_vira_extra") return "Trabalhado vira extra";
       if (regra === "carga_personalizada") return "Carga personalizada";
+      if (regra === "compensacao_manual") return "Compensação manual";
+      if (regra === "atestado_parcial") return "Atestado parcial";
       return regra || "";
     }
 
@@ -628,17 +639,26 @@
       return datasEspeciais.find(item => item.data === dataISO) || null;
     }
 
-    function atualizarCampoCargaPersonalizada() {
-      const regra = document.getElementById("regraDataEspecial").value;
-      const campo = document.getElementById("campoCargaPrevista");
+function atualizarCampoCargaPersonalizada() {
+  const regra = document.getElementById("regraDataEspecial").value;
 
-      if (regra === "carga_personalizada") {
-        campo.classList.remove("campo-oculto");
-      } else {
-        campo.classList.add("campo-oculto");
-        document.getElementById("cargaPrevistaDataEspecial").value = "";
-      }
-    }
+  const campoCarga = document.getElementById("campoCargaPrevista");
+  const campoHorasAbonadas = document.getElementById("campoHorasAbonadas");
+
+  if (regra === "carga_personalizada" || regra === "compensacao_manual") {
+    campoCarga.classList.remove("campo-oculto");
+  } else {
+    campoCarga.classList.add("campo-oculto");
+    document.getElementById("cargaPrevistaDataEspecial").value = "";
+  }
+
+  if (regra === "atestado_parcial") {
+    campoHorasAbonadas.classList.remove("campo-oculto");
+  } else {
+    campoHorasAbonadas.classList.add("campo-oculto");
+    document.getElementById("horasAbonadasDataEspecial").value = "";
+  }
+}
 
     async function buscarRegistros() {
       const snapshot = await getDocs(collection(db, "horas"));
@@ -668,7 +688,8 @@
           tipo: d.tipo || "facultativo",
           descricao: d.descricao || "",
           regra: d.regra || "trabalhado_vira_extra",
-          cargaPrevista: Number(d.cargaPrevista || 0)
+          cargaPrevista: Number(d.cargaPrevista || 0),
+          horasAbonadas: Number(d.horasAbonadas || 0)
         });
       });
 
@@ -711,78 +732,109 @@
       return agrupado;
     }
 
-    function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
-      const dataEspecial = getDataEspecial(registro.data);
-      const sabado = ehSabado(registro.data);
-      const trabalhado = registro.duracaoMinutos;
+function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
+  const dataEspecial = getDataEspecial(registro.data);
+  const sabado = ehSabado(registro.data);
+  const trabalhado = registro.duracaoMinutos;
 
-      if (sabado) {
-        return {
-          previstoDia: 0,
-          saldoDia: trabalhado,
-          extrasDia: trabalhado,
-          negativasDia: 0,
-          sabado: true,
-          dataEspecial: null,
-          observacao: "Sábado = extra"
-        };
-      }
-
-      if (dataEspecial) {
-        if (dataEspecial.regra === "nao_gera_debito") {
-          return {
-            previstoDia: 0,
-            saldoDia: 0,
-            extrasDia: 0,
-            negativasDia: 0,
-            sabado: false,
-            dataEspecial,
-            observacao: `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)}`
-          };
-        }
-
-        if (dataEspecial.regra === "trabalhado_vira_extra") {
-          return {
-            previstoDia: 0,
-            saldoDia: trabalhado,
-            extrasDia: trabalhado,
-            negativasDia: 0,
-            sabado: false,
-            dataEspecial,
-            observacao: `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)}`
-          };
-        }
-
-        if (dataEspecial.regra === "carga_personalizada") {
-          const previsto = Number(dataEspecial.cargaPrevista || 0) * 60;
-          const saldo = trabalhado - previsto;
-
-          return {
-            previstoDia: previsto,
-            saldoDia: saldo,
-            extrasDia: saldo > 0 ? saldo : 0,
-            negativasDia: saldo < 0 ? Math.abs(saldo) : 0,
-            sabado: false,
-            dataEspecial,
-            observacao: `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)}`
-          };
-        }
-      }
-
-      const saldoPadrao = trabalhado - minutosPrevistosPadrao;
-
+  if (dataEspecial) {
+    if (dataEspecial.regra === "nao_gera_debito") {
       return {
-        previstoDia: minutosPrevistosPadrao,
-        saldoDia: saldoPadrao,
-        extrasDia: saldoPadrao > 0 ? saldoPadrao : 0,
-        negativasDia: saldoPadrao < 0 ? Math.abs(saldoPadrao) : 0,
+        previstoDia: 0,
+        saldoDia: 0,
+        extrasDia: 0,
+        negativasDia: 0,
         sabado: false,
-        dataEspecial: null,
-        observacao: "Regra padrão"
+        dataEspecial,
+        observacao: `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)}`
       };
     }
 
-    function renderizarResumo(resultado) {
+    if (dataEspecial.regra === "trabalhado_vira_extra") {
+      return {
+        previstoDia: 0,
+        saldoDia: trabalhado,
+        extrasDia: trabalhado,
+        negativasDia: 0,
+        sabado: false,
+        dataEspecial,
+        observacao: `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)}`
+      };
+    }
+
+    if (dataEspecial.regra === "compensacao_manual") {
+      const compensacao = Number(dataEspecial.cargaPrevista || 0) * 60;
+      const extraReal = trabalhado - compensacao;
+
+      return {
+        previstoDia: compensacao,
+        saldoDia: extraReal,
+        extrasDia: extraReal > 0 ? extraReal : 0,
+        negativasDia: extraReal < 0 ? Math.abs(extraReal) : 0,
+        sabado: false,
+        dataEspecial,
+        observacao: `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)} (${formatarMinutosParaHora(compensacao)})`
+      };
+    }
+
+    if (dataEspecial.regra === "atestado_parcial") {
+      const abonado = Number(dataEspecial.horasAbonadas || 0) * 60;
+      const previstoAjustado = Math.max(0, minutosPrevistosPadrao - abonado);
+      const saldo = trabalhado - previstoAjustado;
+
+      return {
+        previstoDia: previstoAjustado,
+        saldoDia: saldo,
+        extrasDia: saldo > 0 ? saldo : 0,
+        negativasDia: saldo < 0 ? Math.abs(saldo) : 0,
+        sabado: false,
+        dataEspecial,
+        observacao: `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)} (${Number(dataEspecial.horasAbonadas || 0)}h abonadas)`
+      };
+    }
+
+    if (dataEspecial.regra === "carga_personalizada") {
+      const previsto = Number(dataEspecial.cargaPrevista || 0) * 60;
+      const saldo = trabalhado - previsto;
+
+      return {
+        previstoDia: previsto,
+        saldoDia: saldo,
+        extrasDia: saldo > 0 ? saldo : 0,
+        negativasDia: saldo < 0 ? Math.abs(saldo) : 0,
+        sabado: false,
+        dataEspecial,
+        observacao: `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)} (${Number(dataEspecial.cargaPrevista || 0)}h)`
+      };
+    }
+  }
+
+  if (sabado && !dataEspecial) {
+    return {
+      previstoDia: 0,
+      saldoDia: trabalhado,
+      extrasDia: trabalhado,
+      negativasDia: 0,
+      sabado: true,
+      dataEspecial: null,
+      observacao: "Sábado = extra"
+    };
+  }
+
+  const saldoPadrao = trabalhado - minutosPrevistosPadrao;
+
+  return {
+    previstoDia: minutosPrevistosPadrao,
+    saldoDia: saldoPadrao,
+    extrasDia: saldoPadrao > 0 ? saldoPadrao : 0,
+    negativasDia: saldoPadrao < 0 ? Math.abs(saldoPadrao) : 0,
+    sabado: false,
+    dataEspecial: null,
+    observacao: "Regra padrão"
+  };
+}
+
+        function renderizarResumo(resultado) {
       document.getElementById("totalFuncionarios").textContent = resultado.totalFuncionarios;
       document.getElementById("totalTrabalhado").textContent = formatarMinutosParaHora(resultado.totalTrabalhado);
       document.getElementById("totalPrevisto").textContent = formatarMinutosParaHora(resultado.totalPrevisto);
@@ -817,7 +869,7 @@
       `).join("");
     }
 
-    function renderizarDatasEspeciais() {
+        function renderizarDatasEspeciais() {
       const container = document.getElementById("listaDatasEspeciais");
 
       if (!datasEspeciais.length) {
@@ -842,7 +894,8 @@
             <td>${formatarDataBR(item.data)}</td>
             <td>${formatarTipoEspecial(item.tipo)}</td>
             <td>${formatarRegraEspecial(item.regra)}</td>
-            <td>${item.regra === "carga_personalizada" ? `${item.cargaPrevista}h` : "-"}</td>
+            <td>${["carga_personalizada", "compensacao_manual"].includes(item.regra) ? `${item.cargaPrevista}h` : "-"}</td>
+            <td>${item.regra === "atestado_parcial" ? `${item.horasAbonadas}h` : "-"}</td>
             <td>${item.descricao || "-"}</td>
             <td>
               <button class="btn-excluir" onclick="excluirDataEspecial('${item.id}')">Excluir</button>
@@ -864,6 +917,7 @@
                     <th>Tipo</th>
                     <th>Regra</th>
                     <th>Carga</th>
+                    <th>Horas abonadas</th>
                     <th>Descrição</th>
                     <th>Ação</th>
                   </tr>
@@ -1028,56 +1082,77 @@
     };
 
     window.salvarDataEspecial = async function() {
-      const data = document.getElementById("dataEspecial").value;
-      const tipo = document.getElementById("tipoDataEspecial").value;
-      const regra = document.getElementById("regraDataEspecial").value;
-      const descricao = document.getElementById("descricaoDataEspecial").value.trim();
-      const cargaPrevistaInformada = document.getElementById("cargaPrevistaDataEspecial").value;
+  const data = document.getElementById("dataEspecial").value;
+  const tipo = document.getElementById("tipoDataEspecial").value;
+  const regra = document.getElementById("regraDataEspecial").value;
+  const descricao = document.getElementById("descricaoDataEspecial").value.trim();
+  const cargaPrevistaInformada = document.getElementById("cargaPrevistaDataEspecial").value;
+  const horasAbonadasInformada = document.getElementById("horasAbonadasDataEspecial").value;
 
-      if (!data) {
-        alert("Selecione a data.");
-        return;
-      }
+  if (!data) {
+    alert("Selecione a data.");
+    return;
+  }
 
-      let cargaPrevista = 0;
+  let cargaPrevista = 0;
+  let horasAbonadas = 0;
 
-      if (regra === "carga_personalizada") {
-        if (cargaPrevistaInformada === "") {
-          alert("Informe a carga prevista do dia.");
-          return;
-        }
-        cargaPrevista = Number(cargaPrevistaInformada);
-        if (Number.isNaN(cargaPrevista) || cargaPrevista < 0) {
-          alert("Informe uma carga válida.");
-          return;
-        }
-      }
+  if (regra === "carga_personalizada" || regra === "compensacao_manual") {
+    if (cargaPrevistaInformada === "") {
+      alert("Informe a carga prevista do dia.");
+      return;
+    }
 
-      try {
-        await addDoc(collection(db, "datasEspeciais"), {
-          data,
-          tipo,
-          regra,
-          descricao,
-          cargaPrevista
-        });
+    cargaPrevista = Number(cargaPrevistaInformada);
 
-        document.getElementById("dataEspecial").value = "";
-        document.getElementById("tipoDataEspecial").value = "facultativo";
-        document.getElementById("regraDataEspecial").value = "trabalhado_vira_extra";
-        document.getElementById("descricaoDataEspecial").value = "";
-        document.getElementById("cargaPrevistaDataEspecial").value = "";
-        atualizarCampoCargaPersonalizada();
+    if (Number.isNaN(cargaPrevista) || cargaPrevista < 0) {
+      alert("Informe uma carga válida.");
+      return;
+    }
+  }
 
-        await buscarDatasEspeciais();
-        carregarBancoHoras();
+  if (regra === "atestado_parcial") {
+    if (horasAbonadasInformada === "") {
+      alert("Informe as horas abonadas do atestado.");
+      return;
+    }
 
-        alert("Regra da data salva com sucesso!");
-      } catch (error) {
-        console.error("Erro ao salvar regra da data:", error);
-        alert("Erro ao salvar regra da data.");
-      }
-    };
+    horasAbonadas = Number(horasAbonadasInformada);
+
+    if (Number.isNaN(horasAbonadas) || horasAbonadas < 0) {
+      alert("Informe uma quantidade válida de horas abonadas.");
+      return;
+    }
+  }
+
+  try {
+    await addDoc(collection(db, "datasEspeciais"), {
+      data,
+      tipo,
+      regra,
+      descricao,
+      cargaPrevista,
+      horasAbonadas
+    });
+
+    document.getElementById("dataEspecial").value = "";
+    document.getElementById("tipoDataEspecial").value = "facultativo";
+    document.getElementById("regraDataEspecial").value = "trabalhado_vira_extra";
+    document.getElementById("descricaoDataEspecial").value = "";
+    document.getElementById("cargaPrevistaDataEspecial").value = "";
+    document.getElementById("horasAbonadasDataEspecial").value = "";
+
+    atualizarCampoCargaPersonalizada();
+
+    await buscarDatasEspeciais();
+    carregarBancoHoras();
+
+    alert("Regra da data salva com sucesso!");
+  } catch (error) {
+    console.error("Erro ao salvar regra da data:", error);
+    alert("Erro ao salvar regra da data.");
+  }
+};
 
     window.excluirDataEspecial = async function(id) {
       if (!confirm("Deseja excluir esta regra de data?")) return;
