@@ -342,6 +342,10 @@
       display: none !important;
     }
 
+    body.modo-chefia .card-todos-registros {
+      display: none !important;
+    }
+
     .modo-badge {
       display: inline-block;
       padding: 6px 10px;
@@ -726,7 +730,9 @@
       </div>
     </div>
 
-    <div class="departamento-card">
+    <div id="registrosPorDepartamento"></div>
+
+    <div class="departamento-card card-todos-registros">
       <div class="departamento-header" onclick="toggleDepartamento('todos_registros_funcionarios')">
         <div>
           <h2><i class="fas fa-table"></i> Todos os registros de funcionários</h2>
@@ -737,7 +743,6 @@
         </div>
       </div>
       <div class="departamento-corpo" id="todos_registros_funcionarios">
-        <div id="registrosPorDepartamento"></div>
         <div class="tabela-wrapper tabela-registros-geral">
       <table>
         <thead>
