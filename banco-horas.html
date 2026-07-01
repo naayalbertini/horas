@@ -95,6 +95,25 @@
       background: #a93226;
     }
 
+    .btn-editar {
+      background: #f39c12;
+      padding: 8px 12px;
+      font-size: 13px;
+      margin-right: 6px;
+    }
+
+    .btn-editar:hover {
+      background: #d68910;
+    }
+
+    .btn-cancelar {
+      background: #6b7280;
+    }
+
+    .btn-cancelar:hover {
+      background: #4b5563;
+    }
+
     .filtros {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -319,6 +338,130 @@
       font-size: 14px;
     }
 
+    body.modo-chefia .admin-only {
+      display: none !important;
+    }
+
+    .modo-badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eef4ff;
+      color: #1f3a93;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .departamento-card {
+      margin-top: 22px;
+      border: 1px solid #dbe6f9;
+      border-radius: 10px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(31, 58, 147, 0.06);
+    }
+
+    .departamento-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 18px 20px;
+      background: #f1f6ff;
+      border-bottom: 1px solid #dbe6f9;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .departamento-header:hover {
+      background: #e8f1ff;
+    }
+
+    .departamento-header h2 {
+      margin: 0;
+      color: #1f3a93;
+      font-size: 1.25rem;
+    }
+
+    .departamento-resumo {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      color: #475467;
+      font-size: 14px;
+    }
+
+    .departamento-corpo {
+      padding: 16px;
+      display: none;
+      background: #fbfdff;
+    }
+
+    .departamento-corpo.aberto {
+      display: block;
+    }
+
+    .departamento-acao {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #1f3a93;
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .departamento-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .funcionario-card.departamento-funcionario {
+      margin-top: 0;
+      border-radius: 8px;
+    }
+
+    .departamento-funcionario .funcionario-header {
+      padding: 18px 20px;
+    }
+
+    .departamento-funcionario .funcionario-detalhes {
+      padding: 18px;
+    }
+
+    .departamento-funcionario .resumo-funcionario {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .departamento-funcionario .resumo-funcionario > div {
+      padding: 10px 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .departamento-funcionario .mes-card {
+      border-radius: 8px;
+    }
+
+    .departamento-funcionario .mes-header {
+      padding: 16px 18px;
+      font-size: 15px;
+    }
+
+    .departamento-funcionario .mes-conteudo {
+      padding: 18px;
+    }
+
+    #sabados_letivos_datas_compensatorias th:last-child {
+      display: none;
+    }
+
     small.motivo {
       display: block;
       margin-top: 4px;
@@ -356,13 +499,15 @@
     }
   </style>
 </head>
-<body>
+<body class="modo-chefia">
   <div class="container">
     <div class="topo">
-      <h1><i class="fas fa-business-time"></i> Banco de Horas</h1>
+      <h1><i class="fas fa-business-time"></i> Banco de Horas <span id="modoBadge" class="modo-badge">Chefia</span></h1>
       <div class="topo-acoes">
-        <a href="index.html" class="btn-link"><i class="fas fa-arrow-left"></i> Voltar para Registros</a>
+        <a href="index.html" class="btn-link admin-only"><i class="fas fa-arrow-left"></i> Voltar para Registros</a>
+        <a href="banco_de_horas_chefes.html" class="btn-link admin-only"><i class="fas fa-eye"></i> Abrir Layout Chefia</a>
         <button class="btn-secundario" onclick="exportarCSV()"><i class="fas fa-file-csv"></i> Exportar CSV</button>
+        <button class="btn-secundario admin-only" onclick="exportarBackupCompleto()"><i class="fas fa-download"></i> Backup Completo</button>
         <button class="btn-pdf" onclick="gerarPDFBancoHoras()"><i class="fas fa-file-pdf"></i> Baixar PDF Completo</button>
       </div>
     </div>
@@ -371,6 +516,13 @@
       <div>
         <label for="filtroFuncionario">Funcionário</label>
         <input type="text" id="filtroFuncionario" placeholder="Digite o nome do funcionário">
+      </div>
+
+      <div>
+        <label for="filtroDepartamento">Departamento</label>
+        <select id="filtroDepartamento">
+          <option value="">Todos</option>
+        </select>
       </div>
 
       <div>
@@ -402,6 +554,7 @@
         <select id="cargaSemanal">
           <option value="40" selected>40 horas semanais</option>
           <option value="44">44 horas semanais</option>
+          <option value="22">22 horas semanais</option>
           <option value="36">36 horas semanais</option>
           <option value="30">30 horas semanais</option>
         </select>
@@ -414,51 +567,142 @@
       </div>
     </div>
 
-    <div class="filtros">
+    <div class="filtros admin-only">
+      <input type="hidden" id="dataEspecialEditandoId">
       <div>
-        <label for="dataEspecial">Data</label>
+        <label for="dataEspecial">Data trabalhada / data da regra</label>
         <input type="date" id="dataEspecial">
       </div>
 
       <div>
-       
- <select id="tipoDataEspecial">
-<option value="facultativo" selected>Facultativo</option>
-<option value="folga_empresa">Folga da empresa</option>
-<option value="feriado_interno">Feriado interno</option>
-<option value="compensacao">Compensação</option>
-<option value="atestado">Atestado</option>
-<option value="outro">Outro</option>
+        <label for="tipoDataEspecial">Tipo</label>
+        <select id="tipoDataEspecial">
+          <option value="facultativo">Facultativo</option>
+          <option value="folga_empresa">Folga da empresa</option>
+          <option value="feriado_interno">Feriado interno</option>
+          <option value="compensacao">Compensação</option>
+          <option value="outro">Outro</option>
         </select>
       </div>
-<div id="campoHorasAbonadas" class="campo-oculto">
-  <label for="horasAbonadasDataEspecial">Horas abonadas / justificadas (horas)</label>
-  <input type="number" id="horasAbonadasDataEspecial" placeholder="Ex: 4" min="0" step="0.5">
-</div>
+
       <div>
         <label for="regraDataEspecial">Regra da data</label>
         <select id="regraDataEspecial">
           <option value="nao_gera_debito">Não gera débito</option>
           <option value="trabalhado_vira_extra" selected>Trabalhado vira extra</option>
           <option value="carga_personalizada">Carga personalizada</option>
-          <option value="compensacao_manual">Compensação manual</option>
-          <option value="atestado_parcial">Atestado parcial</option>
         </select>
       </div>
 
       <div id="campoCargaPrevista" class="campo-oculto">
         <label for="cargaPrevistaDataEspecial">Carga prevista do dia (horas)</label>
-        <input type="number" id="cargaPrevistaDataEspecial" placeholder="Ex: 4" min="0" step="0.5">
+        <input type="number" id="cargaPrevistaDataEspecial" placeholder="Ex: 8" min="0" step="0.5">
+      </div>
+
+      <div id="campoDataCompensada" class="campo-oculto">
+        <label for="dataCompensadaEspecial">Compensa qual data?</label>
+        <input type="date" id="dataCompensadaEspecial">
       </div>
 
       <div style="grid-column: span 2;">
         <label for="descricaoDataEspecial">Descrição / Motivo</label>
-        <input type="text" id="descricaoDataEspecial" placeholder="Ex: Facultativo dado pela escola para compensação de outro dia">
+        <input type="text" id="descricaoDataEspecial" placeholder="Ex: Compensação do Carnaval autorizada pela direção">
+      </div>
+
+      <div style="display:flex; align-items:end; gap:8px; flex-wrap:wrap;">
+        <button id="btnSalvarDataEspecial" onclick="salvarDataEspecial()" style="flex:1; min-width:180px;">
+          <i class="fas fa-calendar-plus"></i> Salvar Regra da Data
+        </button>
+        <button id="btnCancelarEdicaoData" class="btn-cancelar campo-oculto" onclick="cancelarEdicaoDataEspecial()" style="flex:1; min-width:160px;">
+          <i class="fas fa-times"></i> Cancelar Edição
+        </button>
+      </div>
+    </div>
+
+    <div class="filtros admin-only">
+      <div style="grid-column: 1 / -1;">
+        <h2 style="margin:0; color:#1f3a93; font-size:1.15rem;"><i class="fas fa-id-badge"></i> Funcionários e departamentos</h2>
+        <small style="color:#5f6b7a;">Corrija o nome exibido nos relatórios e vincule cada pessoa a um departamento. O ponto original no Firebase não é alterado.</small>
+      </div>
+
+      <div id="listaFuncionariosAdmin" style="grid-column: 1 / -1;"></div>
+    </div>
+
+    <div class="filtros admin-only">
+      <div style="grid-column: 1 / -1;">
+        <h2 style="margin:0; color:#1f3a93; font-size:1.15rem;"><i class="fas fa-users-cog"></i> Carga horária por funcionário</h2>
+        <small style="color:#5f6b7a;">Cadastre aqui quem trabalha 44h, 40h, 22h ou outra carga. O sistema usa essa carga individual no cálculo, evitando erro quando funcionários têm jornadas diferentes.</small>
+      </div>
+
+      <div>
+        <label for="cargaFuncionarioNome">Funcionário</label>
+        <input type="text" id="cargaFuncionarioNome" placeholder="Nome igual ao registro de ponto">
+      </div>
+
+      <div>
+        <label for="cargaFuncionarioSemanal">Carga semanal</label>
+        <select id="cargaFuncionarioSemanal">
+          <option value="44">44 horas semanais</option>
+          <option value="40">40 horas semanais</option>
+          <option value="22">22 horas semanais</option>
+          <option value="36">36 horas semanais</option>
+          <option value="30">30 horas semanais</option>
+        </select>
       </div>
 
       <div style="display:flex; align-items:end;">
-        <button onclick="salvarDataEspecial()" style="width:100%;">
-          <i class="fas fa-calendar-plus"></i> Salvar Regra da Data
+        <button onclick="salvarCargaFuncionario()" style="width:100%; background:#2563eb;">
+          <i class="fas fa-save"></i> Salvar Carga
+        </button>
+      </div>
+
+      <div id="listaCargasFuncionarios" style="grid-column: 1 / -1;"></div>
+    </div>
+
+    <div class="filtros admin-only">
+      <div style="grid-column: 1 / -1;">
+        <h2 style="margin:0; color:#1f3a93; font-size:1.15rem;"><i class="fas fa-minus-circle"></i> Ajuste manual / abono com saldo anterior</h2>
+        <small style="color:#5f6b7a;">Use para descontar, acrescentar crédito ou abonar horas faltadas usando saldo anterior, sem apagar o ponto original.</small>
+      </div>
+
+      <div>
+        <label for="ajusteFuncionario">Funcionário</label>
+        <input type="text" id="ajusteFuncionario" placeholder="Nome igual ao registro de ponto">
+      </div>
+
+      <div>
+        <label for="ajusteData">Data do desconto/ajuste</label>
+        <input type="date" id="ajusteData">
+      </div>
+
+      <div>
+        <label for="ajusteTipo">Tipo de ajuste</label>
+        <select id="ajusteTipo">
+          <option value="desconto_extra" selected>Descontar do banco de horas</option>
+          <option value="folga_descontar">Folga a descontar em mês escolhido</option>
+          <option value="acrescimo_extra">Adicionar crédito manual</option>
+          <option value="abono_saldo_anterior">Abonar falta com saldo anterior/2025</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="ajusteHoras">Quantidade de horas</label>
+        <input type="number" id="ajusteHoras" placeholder="Ex: 2 ou 1.5" min="0" step="0.25">
+      </div>
+
+      <div id="campoMesDescontoFolga" class="campo-oculto">
+        <label for="ajusteMesDesconto">Mês em que vai descontar</label>
+        <input type="month" id="ajusteMesDesconto">
+      </div>
+
+      <div style="grid-column: span 2;">
+        <label for="ajusteDescricao">Descrição / Motivo</label>
+        <input type="text" id="ajusteDescricao" placeholder="Ex: Faltou pela manhã com autorização da direção; descontar do saldo de 2025">
+      </div>
+
+      <div style="display:flex; align-items:end;">
+        <button onclick="salvarAjusteHoras()" style="width:100%; background:#8e44ad;">
+          <i class="fas fa-save"></i> Salvar Ajuste
         </button>
       </div>
     </div>
@@ -482,25 +726,41 @@
       </div>
     </div>
 
-    <div class="tabela-wrapper">
+    <div class="departamento-card">
+      <div class="departamento-header" onclick="toggleDepartamento('todos_registros_funcionarios')">
+        <div>
+          <h2><i class="fas fa-table"></i> Todos os registros de funcionários</h2>
+          <small>Resumo geral por funcionário, organizado por departamento</small>
+        </div>
+        <div class="departamento-resumo">
+          <span class="departamento-acao"><i class="fas fa-chevron-down"></i> Abrir registros</span>
+        </div>
+      </div>
+      <div class="departamento-corpo" id="todos_registros_funcionarios">
+        <div id="registrosPorDepartamento"></div>
+        <div class="tabela-wrapper tabela-registros-geral">
       <table>
         <thead>
           <tr>
             <th>Funcionário</th>
+            <th>Departamento</th>
             <th>Registros</th>
             <th>Horas Trabalhadas</th>
             <th>Horas Previstas</th>
             <th>Horas Extras</th>
             <th>Horas Negativas</th>
+            <th>Ajustes</th>
             <th>Saldo Final</th>
           </tr>
         </thead>
         <tbody id="tabelaBancoHoras">
           <tr>
-            <td colspan="7" class="vazio">Carregando dados...</td>
+            <td colspan="9" class="vazio">Carregando dados...</td>
           </tr>
         </tbody>
       </table>
+        </div>
+      </div>
     </div>
 
     <div id="listaDatasEspeciais"></div>
@@ -512,8 +772,10 @@
       • Data com regra “Não gera débito”: não cobra horas do dia e não gera negativo.<br>
       • Data com regra “Trabalhado vira extra”: não cobra horas do dia; se a pessoa vier, tudo vira extra.<br>
       • Data com regra “Carga personalizada”: compara com a carga que você informar naquele dia.<br>
-      • Data com regra “Compensação manual”: desconta da jornada do dia apenas a carga informada; só o excedente vira extra.<br>
-      • Data com regra “Atestado parcial”: abona parte da carga do dia e evita negativo indevido.
+      • Para compensação: cadastre a data trabalhada, informe a data compensada e use carga personalizada, normalmente 8h.<br>
+      • Folgas a descontar: use “Folga a descontar em mês escolhido”, informe a data da folga, as horas e o mês onde o desconto deve aparecer. O abatimento entra automaticamente no mês selecionado.
+      • Carga individual: cadastre a carga de cada funcionário acima. Quem não tiver cadastro usa a carga padrão do filtro.
+      • Atraso/falta autorizada para descontar de saldo anterior: use “Abonar falta com saldo anterior/2025” em Ajuste manual. Isso soma as horas no mês atual para não ficar negativo e registra a justificativa.
     </div>
   </div>
 
@@ -524,6 +786,8 @@
       collection,
       getDocs,
       addDoc,
+      setDoc,
+      updateDoc,
       deleteDoc,
       doc
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -542,6 +806,9 @@
 
     let registrosOriginais = [];
     let datasEspeciais = [];
+    let ajustesHoras = [];
+    let cargasFuncionarios = [];
+    let funcionariosMeta = [];
     let resultadoAtualCSV = [];
     let detalhesAtuaisPDF = [];
     let ultimoResumoPDF = {
@@ -550,6 +817,7 @@
       totalPrevisto: 0,
       saldoGeral: 0
     };
+    let dataEspecialEditandoId = null;
 
     const nomesMeses = [
       "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
@@ -558,6 +826,66 @@
 
     function removerAcentos(str) {
       return (str || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function escaparHTML(valor) {
+      return String(valor || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function gerarIdFuncionario(nome) {
+      const base = removerAcentos(String(nome || "").trim().toLowerCase())
+        .replace(/[^a-z0-9]+/g, "_")
+        .replace(/^_+|_+$/g, "");
+      return base || "sem_nome";
+    }
+
+    function getModoChefia() {
+      return window.location.pathname.toLowerCase().includes("chefes") ||
+        new URLSearchParams(window.location.search).get("modo") === "chefia";
+    }
+
+    function aplicarModoDaPagina() {
+      if (!getModoChefia()) return;
+      document.body.classList.add("modo-chefia");
+      const badge = document.getElementById("modoBadge");
+      if (badge) badge.textContent = "Chefia";
+      document.title = "Banco de Horas - Consulta";
+    }
+
+    function nomesIguais(nomeA, nomeB) {
+      return removerAcentos(String(nomeA || "").trim().toLowerCase()) ===
+        removerAcentos(String(nomeB || "").trim().toLowerCase());
+    }
+
+    function obterPerfilFuncionario(nome) {
+      return funcionariosMeta.find(item =>
+        nomesIguais(item.nomeOriginal, nome) ||
+        nomesIguais(item.nomeExibicao, nome)
+      ) || null;
+    }
+
+    function obterNomeFuncionario(nome) {
+      const perfil = obterPerfilFuncionario(nome);
+      return perfil?.nomeExibicao || nome || "Sem nome";
+    }
+
+    function obterDepartamentoFuncionario(nome) {
+      const perfil = obterPerfilFuncionario(nome);
+      return perfil?.departamento || "Sem departamento";
+    }
+
+    function obterNomesFuncionariosSistema() {
+      const nomes = new Set();
+      registrosOriginais.forEach(item => nomes.add(item.funcionario));
+      ajustesHoras.forEach(item => nomes.add(item.funcionario));
+      cargasFuncionarios.forEach(item => nomes.add(item.funcionario));
+      funcionariosMeta.forEach(item => nomes.add(item.nomeOriginal || item.nomeExibicao));
+      return Array.from(nomes).filter(Boolean).sort((a, b) => obterNomeFuncionario(a).localeCompare(obterNomeFuncionario(b), "pt-BR"));
     }
 
     function parseTime(timeStr) {
@@ -621,7 +949,6 @@
       if (tipo === "folga_empresa") return "Folga da empresa";
       if (tipo === "feriado_interno") return "Feriado interno";
       if (tipo === "compensacao") return "Compensação";
-      if (tipo === "atestado") return "Atestado";
       if (tipo === "outro") return "Outro";
       return tipo || "";
     }
@@ -630,8 +957,6 @@
       if (regra === "nao_gera_debito") return "Não gera débito";
       if (regra === "trabalhado_vira_extra") return "Trabalhado vira extra";
       if (regra === "carga_personalizada") return "Carga personalizada";
-      if (regra === "compensacao_manual") return "Compensação manual";
-      if (regra === "atestado_parcial") return "Atestado parcial";
       return regra || "";
     }
 
@@ -639,26 +964,26 @@
       return datasEspeciais.find(item => item.data === dataISO) || null;
     }
 
-function atualizarCampoCargaPersonalizada() {
-  const regra = document.getElementById("regraDataEspecial").value;
+    function atualizarCampoCargaPersonalizada() {
+      const tipo = document.getElementById("tipoDataEspecial").value;
+      const regra = document.getElementById("regraDataEspecial").value;
+      const campoCarga = document.getElementById("campoCargaPrevista");
+      const campoCompensada = document.getElementById("campoDataCompensada");
 
-  const campoCarga = document.getElementById("campoCargaPrevista");
-  const campoHorasAbonadas = document.getElementById("campoHorasAbonadas");
+      if (regra === "carga_personalizada") {
+        campoCarga.classList.remove("campo-oculto");
+      } else {
+        campoCarga.classList.add("campo-oculto");
+        document.getElementById("cargaPrevistaDataEspecial").value = "";
+      }
 
-  if (regra === "carga_personalizada" || regra === "compensacao_manual") {
-    campoCarga.classList.remove("campo-oculto");
-  } else {
-    campoCarga.classList.add("campo-oculto");
-    document.getElementById("cargaPrevistaDataEspecial").value = "";
-  }
-
-  if (regra === "atestado_parcial") {
-    campoHorasAbonadas.classList.remove("campo-oculto");
-  } else {
-    campoHorasAbonadas.classList.add("campo-oculto");
-    document.getElementById("horasAbonadasDataEspecial").value = "";
-  }
-}
+      if (tipo === "compensacao") {
+        campoCompensada.classList.remove("campo-oculto");
+      } else {
+        campoCompensada.classList.add("campo-oculto");
+        document.getElementById("dataCompensadaEspecial").value = "";
+      }
+    }
 
     async function buscarRegistros() {
       const snapshot = await getDocs(collection(db, "horas"));
@@ -666,6 +991,11 @@ function atualizarCampoCargaPersonalizada() {
 
       snapshot.forEach((docItem) => {
         const d = docItem.data();
+
+        // Ignora lançamentos manuais de ajuste, pois eles são tratados separadamente.
+        // Isso evita que um ajuste seja contado como registro de ponto com 00h.
+        if (d.ajusteManual === true) return;
+
         registrosOriginais.push({
           id: docItem.id,
           funcionario: d.funcionario || "Sem nome",
@@ -689,12 +1019,361 @@ function atualizarCampoCargaPersonalizada() {
           descricao: d.descricao || "",
           regra: d.regra || "trabalhado_vira_extra",
           cargaPrevista: Number(d.cargaPrevista || 0),
-          horasAbonadas: Number(d.horasAbonadas || 0)
+          dataCompensada: d.dataCompensada || ""
         });
       });
 
       renderizarDatasEspeciais();
     }
+
+    function carregarAjustesLocais() {
+      try {
+        return JSON.parse(localStorage.getItem("ajustesHorasLocal") || "[]");
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function salvarAjustesLocais(lista) {
+      localStorage.setItem("ajustesHorasLocal", JSON.stringify(lista));
+    }
+
+    function carregarCargasFuncionariosLocais() {
+      try {
+        return JSON.parse(localStorage.getItem("cargasFuncionariosLocal") || "[]");
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function salvarCargasFuncionariosLocais(lista) {
+      localStorage.setItem("cargasFuncionariosLocal", JSON.stringify(lista));
+    }
+
+    async function buscarFuncionariosMeta() {
+      funcionariosMeta = [];
+
+      try {
+        const snapshot = await getDocs(collection(db, "funcionarios"));
+        snapshot.forEach((docItem) => {
+          const d = docItem.data();
+          funcionariosMeta.push({
+            id: docItem.id,
+            nomeOriginal: d.nomeOriginal || "",
+            nomeExibicao: d.nomeExibicao || d.nomeOriginal || "",
+            departamento: d.departamento || ""
+          });
+        });
+      } catch (error) {
+        console.error("Erro ao carregar funcionários:", error);
+        alert("O Firebase bloqueou a leitura da coleção 'funcionarios'. Atualize as regras do Firestore para liberar essa coleção.");
+      }
+
+      renderizarFuncionariosAdmin();
+      atualizarFiltroDepartamentos();
+    }
+
+    function atualizarFiltroDepartamentos() {
+      const select = document.getElementById("filtroDepartamento");
+      if (!select) return;
+
+      const valorAtual = select.value;
+      const departamentos = new Set();
+      obterNomesFuncionariosSistema().forEach(nome => {
+        departamentos.add(obterDepartamentoFuncionario(nome));
+      });
+
+      select.innerHTML = '<option value="">Todos</option>' + Array.from(departamentos)
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b, "pt-BR"))
+        .map(dep => `<option value="${dep}">${dep}</option>`)
+        .join("");
+
+      if (Array.from(departamentos).includes(valorAtual)) {
+        select.value = valorAtual;
+      }
+    }
+
+    function renderizarFuncionariosAdmin() {
+      const container = document.getElementById("listaFuncionariosAdmin");
+      if (!container) return;
+
+      const nomes = obterNomesFuncionariosSistema();
+      if (!nomes.length) {
+        container.innerHTML = '<small style="color:#5f6b7a;">Nenhum funcionário encontrado nos registros ainda.</small>';
+        return;
+      }
+
+      const linhas = nomes.map(nomeOriginal => {
+        const id = gerarIdFuncionario(nomeOriginal);
+        const perfil = obterPerfilFuncionario(nomeOriginal);
+        const nomeExibicao = perfil?.nomeExibicao || nomeOriginal;
+        const departamento = perfil?.departamento || "";
+
+        return `
+          <tr>
+            <td>${escaparHTML(nomeOriginal)}</td>
+            <td><input type="text" id="nome_${id}" value="${escaparHTML(nomeExibicao)}" placeholder="Nome para relatório"></td>
+            <td><input type="text" id="dep_${id}" value="${escaparHTML(departamento)}" placeholder="Ex: Financeiro"></td>
+            <td><button data-id="${escaparHTML(id)}" data-nome-original="${escaparHTML(nomeOriginal)}" onclick="salvarFuncionarioMeta(this.dataset.id, this.dataset.nomeOriginal)"><i class="fas fa-save"></i> Salvar</button></td>
+          </tr>
+        `;
+      }).join("");
+
+      container.innerHTML = `
+        <div class="tabela-wrapper" style="margin-top:10px;">
+          <table style="min-width:900px;">
+            <thead><tr><th>Nome no ponto</th><th>Nome exibido</th><th>Departamento</th><th>Ação</th></tr></thead>
+            <tbody>${linhas}</tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    window.salvarFuncionarioMeta = async function(id, nomeOriginal) {
+      const nomeExibicao = document.getElementById(`nome_${id}`).value.trim();
+      const departamento = document.getElementById(`dep_${id}`).value.trim();
+
+      if (!nomeExibicao) {
+        alert("Informe o nome exibido do funcionário.");
+        return;
+      }
+
+      try {
+        await setDoc(doc(db, "funcionarios", id), {
+          nomeOriginal,
+          nomeExibicao,
+          departamento,
+          atualizadoEm: new Date().toISOString()
+        });
+
+        await buscarFuncionariosMeta();
+        carregarBancoHoras();
+        alert("Funcionário atualizado com sucesso.");
+      } catch (error) {
+        console.error("Erro ao salvar funcionário:", error);
+        alert("O Firebase bloqueou a gravação em 'funcionarios'. Atualize as regras do Firestore e tente novamente.");
+      }
+    };
+
+    async function buscarCargasFuncionarios() {
+      cargasFuncionarios = [];
+
+      try {
+        const snapshot = await getDocs(collection(db, "cargasFuncionarios"));
+        snapshot.forEach((docItem) => {
+          const d = docItem.data();
+          cargasFuncionarios.push({
+            id: docItem.id,
+            origem: "firebase",
+            funcionario: d.funcionario || "Sem nome",
+            cargaSemanal: Number(d.cargaSemanal || 40)
+          });
+        });
+      } catch (error) {
+        console.warn("Não foi possível carregar cargas do Firebase. Usando cargas locais.", error);
+      }
+
+      const locais = carregarCargasFuncionariosLocais().map(item => ({ ...item, origem: "local" }));
+      cargasFuncionarios = cargasFuncionarios.concat(locais);
+      renderizarCargasFuncionarios();
+    }
+
+    function obterCargaSemanalFuncionario(funcionario) {
+      const encontrada = cargasFuncionarios.find(item =>
+        nomesIguais(item.funcionario, funcionario) ||
+        nomesIguais(obterNomeFuncionario(item.funcionario), funcionario)
+      );
+      if (encontrada) return Number(encontrada.cargaSemanal || 40);
+      return Number(document.getElementById("cargaSemanal").value || 40);
+    }
+
+    function obterMinutosPrevistosPorFuncionario(funcionario) {
+      const cargaSemanal = obterCargaSemanalFuncionario(funcionario);
+      return Math.round((cargaSemanal / 5) * 60);
+    }
+
+    function renderizarCargasFuncionarios() {
+      const container = document.getElementById("listaCargasFuncionarios");
+      if (!container) return;
+
+      if (!cargasFuncionarios.length) {
+        container.innerHTML = '<small style="color:#5f6b7a;">Nenhuma carga individual cadastrada. Será usada a carga padrão do filtro acima.</small>';
+        return;
+      }
+
+      const linhas = cargasFuncionarios
+        .slice()
+        .sort((a, b) => a.funcionario.localeCompare(b.funcionario, "pt-BR"))
+        .map(item => `
+          <tr>
+            <td>${item.funcionario}</td>
+            <td>${item.cargaSemanal}h semanais</td>
+            <td><button class="btn-excluir" onclick="excluirCargaFuncionario('${item.id}')">Excluir</button></td>
+          </tr>
+        `).join("");
+
+      container.innerHTML = `
+        <div class="tabela-wrapper" style="margin-top:10px;">
+          <table style="min-width:600px;">
+            <thead><tr><th>Funcionário</th><th>Carga</th><th>Ação</th></tr></thead>
+            <tbody>${linhas}</tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    window.salvarCargaFuncionario = async function() {
+      const funcionario = document.getElementById("cargaFuncionarioNome").value.trim();
+      const cargaSemanal = Number(document.getElementById("cargaFuncionarioSemanal").value || 40);
+
+      if (!funcionario) { alert("Informe o nome do funcionário."); return; }
+      if (!cargaSemanal || cargaSemanal <= 0) { alert("Informe uma carga válida."); return; }
+
+      const existente = cargasFuncionarios.find(item => nomesIguais(item.funcionario, funcionario));
+      const dados = { funcionario, cargaSemanal };
+
+      try {
+        if (existente && existente.origem !== "local") {
+          await updateDoc(doc(db, "cargasFuncionarios", existente.id), dados);
+        } else if (!existente) {
+          await addDoc(collection(db, "cargasFuncionarios"), dados);
+        } else {
+          const locais = carregarCargasFuncionariosLocais().filter(item => !nomesIguais(item.funcionario, funcionario));
+          locais.push({ id: existente.id || `local_${Date.now()}`, ...dados });
+          salvarCargasFuncionariosLocais(locais);
+        }
+      } catch (error) {
+        console.error("Erro ao salvar carga no Firebase:", error);
+        const locais = carregarCargasFuncionariosLocais().filter(item => !nomesIguais(item.funcionario, funcionario));
+        locais.push({ id: existente?.id || `local_${Date.now()}`, ...dados });
+        salvarCargasFuncionariosLocais(locais);
+        alert("O Firebase bloqueou o salvamento da carga. Salvei no navegador para não perder.");
+      }
+
+      document.getElementById("cargaFuncionarioNome").value = "";
+      await buscarCargasFuncionarios();
+      carregarBancoHoras();
+    };
+
+    window.excluirCargaFuncionario = async function(id) {
+      if (!confirm("Deseja excluir esta carga individual?")) return;
+      try {
+        const item = cargasFuncionarios.find(carga => carga.id === id);
+        if (item?.origem === "local" || String(id).startsWith("local_")) {
+          const locais = carregarCargasFuncionariosLocais().filter(carga => carga.id !== id);
+          salvarCargasFuncionariosLocais(locais);
+        } else {
+          await deleteDoc(doc(db, "cargasFuncionarios", id));
+        }
+        await buscarCargasFuncionarios();
+        carregarBancoHoras();
+      } catch (error) {
+        console.error("Erro ao excluir carga:", error);
+        alert("Erro ao excluir carga individual.");
+      }
+    };
+
+    async function buscarAjustesHoras() {
+      ajustesHoras = [];
+
+      try {
+        const snapshot = await getDocs(collection(db, "ajustesHoras"));
+
+        snapshot.forEach((docItem) => {
+          const d = docItem.data();
+          ajustesHoras.push({
+            id: docItem.id,
+            origem: "firebase",
+            funcionario: d.funcionario || "Sem nome",
+            data: d.data || "",
+            tipo: d.tipo || "desconto_extra",
+            minutos: Number(d.minutos || 0),
+            descricao: d.descricao || ""
+          });
+        });
+      } catch (error) {
+        console.warn("Não foi possível carregar ajustes do Firebase. Usando ajustes locais.", error);
+      }
+
+      const locais = carregarAjustesLocais().map(item => ({ ...item, origem: "local" }));
+      ajustesHoras = ajustesHoras.concat(locais);
+      renderizarAjustesHoras();
+    }
+
+    function filtrarAjustesHoras() {
+      const nomeFiltro = removerAcentos(
+        document.getElementById("filtroFuncionario").value.trim().toLowerCase()
+      );
+      const mesFiltro = document.getElementById("filtroMes").value;
+      const anoFiltro = document.getElementById("filtroAno").value.trim();
+      const departamentoFiltro = document.getElementById("filtroDepartamento")?.value || "";
+
+      return ajustesHoras.filter(ajuste => {
+        const nomeExibido = obterNomeFuncionario(ajuste.funcionario);
+        const nomeOk = removerAcentos(`${ajuste.funcionario} ${nomeExibido}`.toLowerCase()).includes(nomeFiltro);
+        const departamentoOk = !departamentoFiltro || obterDepartamentoFuncionario(ajuste.funcionario) === departamentoFiltro;
+        let mesOk = true;
+        let anoOk = true;
+
+        if (ajuste.data) {
+          const [ano, mes] = ajuste.data.split("-");
+          if (mesFiltro) mesOk = mes === mesFiltro;
+          if (anoFiltro) anoOk = ano === anoFiltro;
+        }
+
+        return nomeOk && departamentoOk && mesOk && anoOk;
+      });
+    }
+
+    function obterMinutosAjuste(ajuste) {
+      const minutos = Math.abs(Number(ajuste.minutos || 0));
+
+      // desconto_extra e folga_descontar diminuem o saldo no mês escolhido.
+      // acrescimo_extra e abono_saldo_anterior entram como crédito no mês filtrado.
+      // No caso do abono, a ideia é cobrir a falta do dia atual usando saldo antigo/2025,
+      // para o dia não aparecer como negativo no relatório do mês atual.
+      return (ajuste.tipo === "desconto_extra" || ajuste.tipo === "folga_descontar" || ajuste.tipo === "horas_pagas") ? -minutos : minutos;
+    }
+
+    function formatarTipoAjuste(tipo) {
+      if (tipo === "desconto_extra") return "Desconto do banco";
+      if (tipo === "horas_pagas") return "Horas extras pagas";
+      if (tipo === "folga_descontar") return "Folga descontada";
+      if (tipo === "acrescimo_extra") return "Crédito manual";
+      if (tipo === "abono_saldo_anterior") return "Abono com saldo anterior/2025";
+      return tipo || "Ajuste";
+    }
+
+    function obterClasseAjuste(ajuste) {
+      return obterMinutosAjuste(ajuste) < 0 ? "negativo" : "positivo";
+    }
+
+    function obterAbonosSaldoAnterior(funcionario, data, ajustesFiltrados) {
+      return ajustesFiltrados.filter(ajuste =>
+        ajuste.tipo === "abono_saldo_anterior" &&
+        ajuste.data === data &&
+        nomesIguais(obterNomeFuncionario(ajuste.funcionario), funcionario)
+      );
+    }
+
+    function somarMinutosAbonoSaldoAnterior(funcionario, data, ajustesFiltrados) {
+      return obterAbonosSaldoAnterior(funcionario, data, ajustesFiltrados)
+        .reduce((total, ajuste) => total + Math.abs(Number(ajuste.minutos || 0)), 0);
+    }
+
+    function montarObservacaoAbono(funcionario, data, ajustesFiltrados) {
+      const abonos = obterAbonosSaldoAnterior(funcionario, data, ajustesFiltrados);
+      if (!abonos.length) return "";
+
+      const total = abonos.reduce((soma, ajuste) => soma + Math.abs(Number(ajuste.minutos || 0)), 0);
+      const descricoes = abonos
+        .map(ajuste => ajuste.descricao || "descontado do saldo anterior/2025")
+        .join(" | ");
+
+      return `Abono com saldo anterior/2025: +${formatarMinutosParaHora(total)}${descricoes ? " - " + descricoes : ""}`;
+    }
+
 
     function filtrarRegistros() {
       const nomeFiltro = removerAcentos(
@@ -702,9 +1381,12 @@ function atualizarCampoCargaPersonalizada() {
       );
       const mesFiltro = document.getElementById("filtroMes").value;
       const anoFiltro = document.getElementById("filtroAno").value.trim();
+      const departamentoFiltro = document.getElementById("filtroDepartamento")?.value || "";
 
       return registrosOriginais.filter(reg => {
-        const nomeOk = removerAcentos(reg.funcionario.toLowerCase()).includes(nomeFiltro);
+        const nomeExibido = obterNomeFuncionario(reg.funcionario);
+        const nomeOk = removerAcentos(`${reg.funcionario} ${nomeExibido}`.toLowerCase()).includes(nomeFiltro);
+        const departamentoOk = !departamentoFiltro || obterDepartamentoFuncionario(reg.funcionario) === departamentoFiltro;
 
         let mesOk = true;
         let anoOk = true;
@@ -715,7 +1397,7 @@ function atualizarCampoCargaPersonalizada() {
           if (anoFiltro) anoOk = ano === anoFiltro;
         }
 
-        return nomeOk && mesOk && anoOk;
+        return nomeOk && departamentoOk && mesOk && anoOk;
       });
     }
 
@@ -723,118 +1405,106 @@ function atualizarCampoCargaPersonalizada() {
       const agrupado = {};
 
       registros.forEach(reg => {
-        if (!agrupado[reg.funcionario]) {
-          agrupado[reg.funcionario] = [];
+        const nomeRelatorio = obterNomeFuncionario(reg.funcionario);
+        if (!agrupado[nomeRelatorio]) {
+          agrupado[nomeRelatorio] = [];
         }
-        agrupado[reg.funcionario].push(reg);
+        agrupado[nomeRelatorio].push({
+          ...reg,
+          funcionario: nomeRelatorio,
+          funcionarioOriginal: reg.funcionario
+        });
       });
 
       return agrupado;
     }
 
-function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
-  const dataEspecial = getDataEspecial(registro.data);
-  const sabado = ehSabado(registro.data);
-  const trabalhado = registro.duracaoMinutos;
+    function montarObservacaoDataEspecial(dataEspecial) {
+      let texto = `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)}`;
+      if (dataEspecial.dataCompensada) {
+        texto += ` | Compensa: ${formatarDataBR(dataEspecial.dataCompensada)}`;
+      }
+      return texto;
+    }
 
-  if (dataEspecial) {
-    if (dataEspecial.regra === "nao_gera_debito") {
+    function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
+      const dataEspecial = getDataEspecial(registro.data);
+      const sabado = ehSabado(registro.data);
+      const trabalhado = registro.duracaoMinutos;
+
+      /*
+        IMPORTANTE:
+        A regra da data especial precisa vir ANTES da regra automática de sábado.
+        Assim, quando um sábado for cadastrado como "Compensação" com "Carga personalizada",
+        ele deixa de virar hora extra automaticamente e passa a comparar com a carga informada.
+      */
+      if (dataEspecial) {
+        if (dataEspecial.regra === "nao_gera_debito") {
+          return {
+            previstoDia: 0,
+            saldoDia: 0,
+            extrasDia: 0,
+            negativasDia: 0,
+            sabado,
+            dataEspecial,
+            observacao: montarObservacaoDataEspecial(dataEspecial)
+          };
+        }
+
+        if (dataEspecial.regra === "trabalhado_vira_extra") {
+          return {
+            previstoDia: 0,
+            saldoDia: trabalhado,
+            extrasDia: trabalhado,
+            negativasDia: 0,
+            sabado,
+            dataEspecial,
+            observacao: montarObservacaoDataEspecial(dataEspecial)
+          };
+        }
+
+        if (dataEspecial.regra === "carga_personalizada") {
+          const previsto = Number(dataEspecial.cargaPrevista || 0) * 60;
+          const saldo = trabalhado - previsto;
+
+          return {
+            previstoDia: previsto,
+            saldoDia: saldo,
+            extrasDia: saldo > 0 ? saldo : 0,
+            negativasDia: saldo < 0 ? Math.abs(saldo) : 0,
+            sabado,
+            dataEspecial,
+            observacao: montarObservacaoDataEspecial(dataEspecial)
+          };
+        }
+      }
+
+      if (sabado) {
+        return {
+          previstoDia: 0,
+          saldoDia: trabalhado,
+          extrasDia: trabalhado,
+          negativasDia: 0,
+          sabado: true,
+          dataEspecial: null,
+          observacao: "Sábado = extra"
+        };
+      }
+
+      const saldoPadrao = trabalhado - minutosPrevistosPadrao;
+
       return {
-        previstoDia: 0,
-        saldoDia: 0,
-        extrasDia: 0,
-        negativasDia: 0,
+        previstoDia: minutosPrevistosPadrao,
+        saldoDia: saldoPadrao,
+        extrasDia: saldoPadrao > 0 ? saldoPadrao : 0,
+        negativasDia: saldoPadrao < 0 ? Math.abs(saldoPadrao) : 0,
         sabado: false,
-        dataEspecial,
-        observacao: `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)}`
+        dataEspecial: null,
+        observacao: "Regra padrão"
       };
     }
 
-    if (dataEspecial.regra === "trabalhado_vira_extra") {
-      return {
-        previstoDia: 0,
-        saldoDia: trabalhado,
-        extrasDia: trabalhado,
-        negativasDia: 0,
-        sabado: false,
-        dataEspecial,
-        observacao: `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)}`
-      };
-    }
-
-    if (dataEspecial.regra === "compensacao_manual") {
-      const compensacao = Number(dataEspecial.cargaPrevista || 0) * 60;
-      const extraReal = trabalhado - compensacao;
-
-      return {
-        previstoDia: compensacao,
-        saldoDia: extraReal,
-        extrasDia: extraReal > 0 ? extraReal : 0,
-        negativasDia: extraReal < 0 ? Math.abs(extraReal) : 0,
-        sabado: false,
-        dataEspecial,
-        observacao: `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)} (${formatarMinutosParaHora(compensacao)})`
-      };
-    }
-
-    if (dataEspecial.regra === "atestado_parcial") {
-      const abonado = Number(dataEspecial.horasAbonadas || 0) * 60;
-      const previstoAjustado = Math.max(0, minutosPrevistosPadrao - abonado);
-      const saldo = trabalhado - previstoAjustado;
-
-      return {
-        previstoDia: previstoAjustado,
-        saldoDia: saldo,
-        extrasDia: saldo > 0 ? saldo : 0,
-        negativasDia: saldo < 0 ? Math.abs(saldo) : 0,
-        sabado: false,
-        dataEspecial,
-        observacao: `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)} (${Number(dataEspecial.horasAbonadas || 0)}h abonadas)`
-      };
-    }
-
-    if (dataEspecial.regra === "carga_personalizada") {
-      const previsto = Number(dataEspecial.cargaPrevista || 0) * 60;
-      const saldo = trabalhado - previsto;
-
-      return {
-        previstoDia: previsto,
-        saldoDia: saldo,
-        extrasDia: saldo > 0 ? saldo : 0,
-        negativasDia: saldo < 0 ? Math.abs(saldo) : 0,
-        sabado: false,
-        dataEspecial,
-        observacao: `${formatarTipoEspecial(dataEspecial.tipo)} - ${formatarRegraEspecial(dataEspecial.regra)} (${Number(dataEspecial.cargaPrevista || 0)}h)`
-      };
-    }
-  }
-
-  if (sabado && !dataEspecial) {
-    return {
-      previstoDia: 0,
-      saldoDia: trabalhado,
-      extrasDia: trabalhado,
-      negativasDia: 0,
-      sabado: true,
-      dataEspecial: null,
-      observacao: "Sábado = extra"
-    };
-  }
-
-  const saldoPadrao = trabalhado - minutosPrevistosPadrao;
-
-  return {
-    previstoDia: minutosPrevistosPadrao,
-    saldoDia: saldoPadrao,
-    extrasDia: saldoPadrao > 0 ? saldoPadrao : 0,
-    negativasDia: saldoPadrao < 0 ? Math.abs(saldoPadrao) : 0,
-    sabado: false,
-    dataEspecial: null,
-    observacao: "Regra padrão"
-  };
-}
-
-        function renderizarResumo(resultado) {
+    function renderizarResumo(resultado) {
       document.getElementById("totalFuncionarios").textContent = resultado.totalFuncionarios;
       document.getElementById("totalTrabalhado").textContent = formatarMinutosParaHora(resultado.totalTrabalhado);
       document.getElementById("totalPrevisto").textContent = formatarMinutosParaHora(resultado.totalPrevisto);
@@ -846,37 +1516,206 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
 
     function renderizarTabela(linhas) {
       const tbody = document.getElementById("tabelaBancoHoras");
+      const containerDepartamentos = document.getElementById("registrosPorDepartamento");
+      const tabelaGeral = document.querySelector(".tabela-registros-geral");
 
       if (!linhas.length) {
+        if (containerDepartamentos) containerDepartamentos.innerHTML = "";
+        if (tabelaGeral) tabelaGeral.style.display = "";
         tbody.innerHTML = `
           <tr>
-            <td colspan="7" class="vazio">Nenhum registro encontrado para esse filtro.</td>
+            <td colspan="9" class="vazio">Nenhum registro encontrado para esse filtro.</td>
           </tr>
         `;
         return;
       }
 
+      if (getModoChefia() && containerDepartamentos) {
+        const departamentos = {};
+
+        linhas.forEach(item => {
+          const nomeDepartamento = item.departamento || "Sem departamento cadastrado";
+          if (!departamentos[nomeDepartamento]) {
+            departamentos[nomeDepartamento] = {
+              nome: nomeDepartamento,
+              funcionarios: [],
+              totalTrabalhado: 0,
+              totalPrevisto: 0,
+              totalExtras: 0,
+              totalNegativas: 0,
+              totalAjustes: 0,
+              saldoFinal: 0
+            };
+          }
+
+          departamentos[nomeDepartamento].funcionarios.push(item);
+          departamentos[nomeDepartamento].totalTrabalhado += item.trabalhado;
+          departamentos[nomeDepartamento].totalPrevisto += item.previsto;
+          departamentos[nomeDepartamento].totalExtras += item.extras;
+          departamentos[nomeDepartamento].totalNegativas += item.negativas;
+          departamentos[nomeDepartamento].totalAjustes += item.ajustes || 0;
+          departamentos[nomeDepartamento].saldoFinal += item.saldo;
+        });
+
+        containerDepartamentos.innerHTML = Object.values(departamentos)
+          .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"))
+          .map((dep, indexDepartamento) => `
+            <section class="departamento-card">
+              <div class="departamento-header" onclick="toggleDepartamento('registros_departamento_${indexDepartamento}')">
+                <div>
+                  <h2><i class="fas fa-building"></i> ${dep.nome}</h2>
+                  <small>${dep.funcionarios.length} funcionÃ¡rio(s)</small>
+                </div>
+                <div class="departamento-resumo">
+                  <span><strong>Trabalhado:</strong> ${formatarMinutosParaHora(dep.totalTrabalhado)}</span>
+                  <span><strong>Previsto:</strong> ${formatarMinutosParaHora(dep.totalPrevisto)}</span>
+                  <span class="${obterClasseSaldo(dep.saldoFinal)}"><strong>Saldo:</strong> ${formatarMinutosParaHora(dep.saldoFinal)}</span>
+                  <span class="departamento-acao"><i class="fas fa-chevron-down"></i> Abrir registros</span>
+                </div>
+              </div>
+              <div class="departamento-corpo" id="registros_departamento_${indexDepartamento}">
+                <div class="tabela-wrapper">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>FuncionÃ¡rio</th>
+                        <th>Registros</th>
+                        <th>Horas Trabalhadas</th>
+                        <th>Horas Previstas</th>
+                        <th>Horas Extras</th>
+                        <th>Horas Negativas</th>
+                        <th>Ajustes</th>
+                        <th>Saldo Final</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${dep.funcionarios
+                        .sort((a, b) => a.funcionario.localeCompare(b.funcionario, "pt-BR"))
+                        .map(item => `
+                          <tr>
+                            <td>${item.funcionario}<br><small style="color:#5f6b7a;">Carga: ${item.cargaSemanal || obterCargaSemanalFuncionario(item.funcionario)}h/semana</small></td>
+                            <td>${item.quantidadeRegistros}</td>
+                            <td>${formatarMinutosParaHora(item.trabalhado)}</td>
+                            <td>${formatarMinutosParaHora(item.previsto)}</td>
+                            <td class="positivo">${formatarMinutosParaHora(item.extras)}</td>
+                            <td class="negativo">${formatarMinutosParaHora(item.negativas)}</td>
+                            <td class="${obterClasseSaldo(item.ajustes || 0)}">${formatarMinutosParaHora(item.ajustes || 0)}</td>
+                            <td class="${obterClasseSaldo(item.saldo)}">${formatarMinutosParaHora(item.saldo)}</td>
+                          </tr>
+                        `).join("")}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          `).join("");
+
+        if (tabelaGeral) tabelaGeral.style.display = "none";
+        tbody.innerHTML = "";
+        return;
+      }
+
+      if (containerDepartamentos) containerDepartamentos.innerHTML = "";
+      if (tabelaGeral) tabelaGeral.style.display = "";
+
       tbody.innerHTML = linhas.map(item => `
         <tr>
-          <td>${item.funcionario}</td>
+          <td>${item.funcionario}<br><small style="color:#5f6b7a;">Carga: ${item.cargaSemanal || obterCargaSemanalFuncionario(item.funcionario)}h/semana</small></td>
+          <td>${item.departamento || "Sem departamento"}</td>
           <td>${item.quantidadeRegistros}</td>
           <td>${formatarMinutosParaHora(item.trabalhado)}</td>
           <td>${formatarMinutosParaHora(item.previsto)}</td>
           <td class="positivo">${formatarMinutosParaHora(item.extras)}</td>
           <td class="negativo">${formatarMinutosParaHora(item.negativas)}</td>
+          <td class="${obterClasseSaldo(item.ajustes || 0)}">${formatarMinutosParaHora(item.ajustes || 0)}</td>
           <td class="${obterClasseSaldo(item.saldo)}">${formatarMinutosParaHora(item.saldo)}</td>
         </tr>
       `).join("");
     }
 
-        function renderizarDatasEspeciais() {
+    function renderizarAjustesHoras() {
+      let container = document.getElementById("listaAjustesHoras");
+      if (!container) {
+        container = document.createElement("div");
+        container.id = "listaAjustesHoras";
+        const listaDatas = document.getElementById("listaDatasEspeciais");
+        listaDatas.parentNode.insertBefore(container, listaDatas.nextSibling);
+      }
+
+      if (!ajustesHoras.length) {
+        container.innerHTML = `
+          <div class="departamento-card">
+            <div class="departamento-header" onclick="toggleDepartamento('ajustes_manuais_horas')">
+              <div>
+                <h2><i class="fas fa-minus-circle"></i> Ajustes Manuais de Horas</h2>
+                <small>Nenhum ajuste cadastrado</small>
+              </div>
+              <div class="departamento-resumo">
+                <span class="departamento-acao"><i class="fas fa-chevron-down"></i> Abrir ajustes</span>
+              </div>
+            </div>
+            <div class="departamento-corpo" id="ajustes_manuais_horas">
+              <div class="funcionario-detalhes">Nenhum ajuste manual cadastrado.</div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      const linhas = ajustesHoras
+        .slice()
+        .sort((a, b) => (a.data || "").localeCompare(b.data || ""))
+        .map(item => `
+          <tr>
+            <td>${formatarDataBR(item.data)}</td>
+            <td>${item.funcionario}</td>
+            <td>${formatarTipoAjuste(item.tipo)}</td>
+            <td class="${obterClasseAjuste(item)}">${formatarMinutosParaHora(obterMinutosAjuste(item))}</td>
+            <td>${item.descricao || "-"}</td>
+            ${getModoChefia() ? "" : `<td><button class="btn-excluir" onclick="excluirAjusteHoras('${item.id}')">Excluir</button></td>`}
+          </tr>
+        `).join("");
+
+      container.innerHTML = `
+        <div class="departamento-card">
+          <div class="departamento-header" onclick="toggleDepartamento('ajustes_manuais_horas')">
+            <div>
+              <h2><i class="fas fa-minus-circle"></i> Ajustes Manuais de Horas</h2>
+              <small>${ajustesHoras.length} ajuste(s) cadastrado(s)</small>
+            </div>
+            <div class="departamento-resumo">
+              <span class="departamento-acao"><i class="fas fa-chevron-down"></i> Abrir ajustes</span>
+            </div>
+          </div>
+          <div class="departamento-corpo" id="ajustes_manuais_horas">
+            <div class="tabela-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Funcionário</th>
+                    <th>Tipo</th>
+                    <th>Horas</th>
+                    <th>Descrição</th>
+                    ${getModoChefia() ? "" : "<th>Ação</th>"}
+                  </tr>
+                </thead>
+                <tbody>${linhas}</tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderizarDatasEspeciais() {
       const container = document.getElementById("listaDatasEspeciais");
 
       if (!datasEspeciais.length) {
         container.innerHTML = `
           <div class="funcionario-card">
             <div class="funcionario-header">
-              <h2><i class="fas fa-calendar-check"></i> Regras de Datas Cadastradas</h2>
+              <h2><i class="fas fa-calendar-check"></i> Sábados Letivos e Datas Compensatórias</h2>
             </div>
             <div class="funcionario-detalhes">
               Nenhuma data cadastrada.
@@ -894,21 +1733,24 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
             <td>${formatarDataBR(item.data)}</td>
             <td>${formatarTipoEspecial(item.tipo)}</td>
             <td>${formatarRegraEspecial(item.regra)}</td>
-            <td>${["carga_personalizada", "compensacao_manual"].includes(item.regra) ? `${item.cargaPrevista}h` : "-"}</td>
-            <td>${item.regra === "atestado_parcial" ? `${item.horasAbonadas}h` : "-"}</td>
+            <td>${item.regra === "carga_personalizada" ? `${item.cargaPrevista}h` : "-"}</td>
+            <td>${item.dataCompensada ? formatarDataBR(item.dataCompensada) : "-"}</td>
             <td>${item.descricao || "-"}</td>
-            <td>
-              <button class="btn-excluir" onclick="excluirDataEspecial('${item.id}')">Excluir</button>
-            </td>
           </tr>
         `).join("");
 
       container.innerHTML = `
-        <div class="funcionario-card">
-          <div class="funcionario-header">
-            <h2><i class="fas fa-calendar-check"></i> Regras de Datas Cadastradas</h2>
+        <div class="departamento-card">
+          <div class="departamento-header" onclick="toggleDepartamento('sabados_letivos_datas_compensatorias')">
+            <div>
+              <h2><i class="fas fa-calendar-check"></i> Sábados Letivos e Datas Compensatórias</h2>
+              <small>${datasEspeciais.length} regra(s) cadastrada(s)</small>
+            </div>
+            <div class="departamento-resumo">
+              <span class="departamento-acao"><i class="fas fa-chevron-down"></i> Abrir datas</span>
+            </div>
           </div>
-          <div class="funcionario-detalhes">
+          <div class="departamento-corpo" id="sabados_letivos_datas_compensatorias">
             <div class="tabela-wrapper">
               <table>
                 <thead>
@@ -917,7 +1759,7 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
                     <th>Tipo</th>
                     <th>Regra</th>
                     <th>Carga</th>
-                    <th>Horas abonadas</th>
+                    <th>Data compensada</th>
                     <th>Descrição</th>
                     <th>Ação</th>
                   </tr>
@@ -932,7 +1774,7 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
       `;
     }
 
-    function construirEstruturaDetalhada(agrupado, minutosPrevistosPorRegistro) {
+    function construirEstruturaDetalhada(agrupado, ajustesFiltrados) {
       const nomes = Object.keys(agrupado).sort((a, b) => a.localeCompare(b, "pt-BR"));
       const detalhes = [];
 
@@ -945,13 +1787,25 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
         let totalPrevisto = 0;
         let totalExtras = 0;
         let totalNegativas = 0;
+        let totalAjustes = 0;
 
         const registrosPorMes = {};
 
         registros.forEach(reg => {
-          totalTrabalhado += reg.duracaoMinutos;
+          const minutosAbonoSaldoAnterior = somarMinutosAbonoSaldoAnterior(nome, reg.data, ajustesFiltrados);
+          const regParaCalculo = {
+            ...reg,
+            duracaoMinutos: reg.duracaoMinutos + minutosAbonoSaldoAnterior
+          };
 
-          const regraDia = calcularRegraDoDia(reg, minutosPrevistosPorRegistro);
+          totalTrabalhado += regParaCalculo.duracaoMinutos;
+
+          const regraDia = calcularRegraDoDia(regParaCalculo, obterMinutosPrevistosPorFuncionario(nome));
+          const observacaoAbono = montarObservacaoAbono(nome, reg.data, ajustesFiltrados);
+
+          if (observacaoAbono) {
+            regraDia.observacao = `${regraDia.observacao || ""} | ${observacaoAbono}`;
+          }
 
           totalPrevisto += regraDia.previstoDia;
           totalExtras += regraDia.extrasDia;
@@ -966,18 +1820,42 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
           registrosPorMes[chaveMes].push({
             ...reg,
             ...regraDia,
-            horariosTexto: reg.horarios.map(h => `${h.entrada} às ${h.saida}`).join(" | ")
+            duracaoMinutos: regParaCalculo.duracaoMinutos,
+            horariosTexto: `${reg.horarios.map(h => `${h.entrada} às ${h.saida}`).join(" | ")}${minutosAbonoSaldoAnterior ? ` | Abono saldo 2025: +${formatarMinutosParaHora(minutosAbonoSaldoAnterior)}` : ""}`,
+            observacaoAbono
           });
         });
 
-        const saldoFinal = totalExtras - totalNegativas;
+        const ajustesDoFuncionario = ajustesFiltrados.filter(ajuste => nomesIguais(obterNomeFuncionario(ajuste.funcionario), nome));
+        ajustesDoFuncionario.forEach(ajuste => {
+          if (ajuste.tipo === "abono_saldo_anterior") return;
+
+          totalAjustes += obterMinutosAjuste(ajuste);
+          const chaveMes = obterMesAno(ajuste.data);
+          if (!registrosPorMes[chaveMes]) registrosPorMes[chaveMes] = [];
+          registrosPorMes[chaveMes].push({
+            id: ajuste.id,
+            data: ajuste.data,
+            horariosTexto: "Ajuste manual",
+            duracaoMinutos: 0,
+            previstoDia: 0,
+            saldoDia: obterMinutosAjuste(ajuste),
+            sabado: false,
+            dataEspecial: null,
+            observacao: `${formatarTipoAjuste(ajuste.tipo)}${ajuste.descricao ? " - " + ajuste.descricao : ""}`
+          });
+        });
+
+        const saldoFinal = totalExtras - totalNegativas + totalAjustes;
 
         detalhes.push({
           funcionario: nome,
+          departamento: obterDepartamentoFuncionario(nome),
           totalTrabalhado,
           totalPrevisto,
           totalExtras,
           totalNegativas,
+          totalAjustes,
           saldoFinal,
           meses: Object.keys(registrosPorMes)
             .sort((a, b) => a.localeCompare(b, "pt-BR"))
@@ -991,11 +1869,149 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
       return detalhes;
     }
 
+    function criarCardFuncionarioDetalhe(item, indexFuncionario) {
+      const mesesHTML = item.meses.map((mes, indexMes) => {
+        const contentId = `mes_${indexFuncionario}_${indexMes}`;
+
+        const linhas = mes.registros.map(reg => `
+          <tr>
+            <td>
+              ${formatarDataBR(reg.data)}
+              ${reg.sabado ? '<br><span class="badge-sabado">Sábado = extra</span>' : ''}
+              ${reg.dataEspecial ? `<br><span class="badge-especial">${formatarTipoEspecial(reg.dataEspecial.tipo)}</span>` : ''}
+              ${reg.dataEspecial ? `<br><span class="badge-regra">${formatarRegraEspecial(reg.dataEspecial.regra)}</span>` : ''}
+              ${reg.dataEspecial?.dataCompensada ? `<small class="motivo">Compensa: ${formatarDataBR(reg.dataEspecial.dataCompensada)}</small>` : ''}
+              ${reg.dataEspecial?.descricao ? `<small class="motivo">${reg.dataEspecial.descricao}</small>` : ''}
+            </td>
+            <td>${reg.horariosTexto || "-"}</td>
+            <td>${formatarMinutosParaHora(reg.duracaoMinutos)}</td>
+            <td>${formatarMinutosParaHora(reg.previstoDia)}</td>
+            <td class="${obterClasseSaldo(reg.saldoDia)}">${formatarMinutosParaHora(reg.saldoDia)}</td>
+          </tr>
+        `).join("");
+
+        return `
+          <div class="mes-card">
+            <div class="mes-header" onclick="toggleMes('${contentId}')">
+              <span><i class="fas fa-folder"></i> ${mes.mesAno}</span>
+              <span><i class="fas fa-chevron-down"></i></span>
+            </div>
+            <div class="mes-conteudo" id="${contentId}">
+              <div class="tabela-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Data</th>
+                      <th>Horários</th>
+                      <th>Trabalhado</th>
+                      <th>Previsto</th>
+                      <th>Saldo do Dia</th>
+                    </tr>
+                  </thead>
+                  <tbody>${linhas}</tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      return `
+        <div class="funcionario-card">
+          <div class="funcionario-header">
+            <h2><i class="fas fa-user"></i> ${item.funcionario}<br><small style="color:#5f6b7a; font-size:13px;">${item.departamento || "Sem departamento"}</small></h2>
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+              <strong>Saldo:</strong>
+              <span class="${obterClasseSaldo(item.saldoFinal)}">${formatarMinutosParaHora(item.saldoFinal)}</span>
+              <button class="btn-pdf" onclick="gerarPDFFuncionario(${indexFuncionario})"><i class="fas fa-file-pdf"></i> PDF deste funcionário</button>
+            </div>
+          </div>
+          <div class="funcionario-detalhes">
+            <div class="resumo-funcionario">
+              <div><strong>Trabalhado:</strong> ${formatarMinutosParaHora(item.totalTrabalhado)}</div>
+              <div><strong>Previsto:</strong> ${formatarMinutosParaHora(item.totalPrevisto)}</div>
+              <div class="positivo"><strong>Extras:</strong> ${formatarMinutosParaHora(item.totalExtras)}</div>
+              <div class="negativo"><strong>Negativas:</strong> ${formatarMinutosParaHora(item.totalNegativas)}</div>
+              <div class="${obterClasseSaldo(item.totalAjustes || 0)}"><strong>Ajustes:</strong> ${formatarMinutosParaHora(item.totalAjustes || 0)}</div>
+            </div>
+            ${mesesHTML}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderizarDetalhesPorDepartamento(detalhesEstruturados) {
+      const departamentos = {};
+
+      detalhesEstruturados.forEach((item, indexFuncionario) => {
+        const nomeDepartamento = item.departamento || "Sem departamento";
+        if (!departamentos[nomeDepartamento]) {
+          departamentos[nomeDepartamento] = {
+            nome: nomeDepartamento,
+            funcionarios: [],
+            totalTrabalhado: 0,
+            totalPrevisto: 0,
+            saldoFinal: 0
+          };
+        }
+
+        departamentos[nomeDepartamento].funcionarios.push({ item, indexFuncionario });
+        departamentos[nomeDepartamento].totalTrabalhado += item.totalTrabalhado;
+        departamentos[nomeDepartamento].totalPrevisto += item.totalPrevisto;
+        departamentos[nomeDepartamento].saldoFinal += item.saldoFinal;
+      });
+
+      const departamentosHtml = Object.values(departamentos)
+        .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"))
+        .map((dep, indexDepartamento) => `
+          <section class="departamento-card">
+            <div class="departamento-header" onclick="toggleDepartamento('departamento_${indexDepartamento}')">
+              <div>
+                <h2><i class="fas fa-building"></i> ${dep.nome}</h2>
+                <small>${dep.funcionarios.length} funcionário(s)</small>
+              </div>
+              <div class="departamento-resumo">
+                <span><strong>Trabalhado:</strong> ${formatarMinutosParaHora(dep.totalTrabalhado)}</span>
+                <span><strong>Previsto:</strong> ${formatarMinutosParaHora(dep.totalPrevisto)}</span>
+                <span class="${obterClasseSaldo(dep.saldoFinal)}"><strong>Saldo:</strong> ${formatarMinutosParaHora(dep.saldoFinal)}</span>
+                <span class="departamento-acao"><i class="fas fa-chevron-down"></i> Abrir funcionários</span>
+              </div>
+            </div>
+            <div class="departamento-corpo" id="departamento_${indexDepartamento}">
+              <div class="departamento-grid">
+              ${dep.funcionarios
+                .sort((a, b) => a.item.funcionario.localeCompare(b.item.funcionario, "pt-BR"))
+                .map(({ item, indexFuncionario }) => criarCardFuncionarioDetalhe(item, indexFuncionario))
+                .join("")}
+              </div>
+            </div>
+          </section>
+        `).join("");
+
+      return `
+        <div class="departamentos-titulo">
+          <h2><i class="fas fa-sitemap"></i> Departamentos</h2>
+          <p>Escolha um departamento para abrir os funcionÃ¡rios e conferir o banco de horas.</p>
+        </div>
+        ${departamentosHtml}
+      `;
+    }
+
     function renderizarDetalhes(detalhesEstruturados) {
       const container = document.getElementById("detalhesFuncionarios");
 
       if (!detalhesEstruturados.length) {
-        container.innerHTML = "";
+        container.innerHTML = getModoChefia() ? `
+          <div class="departamentos-titulo">
+            <h2><i class="fas fa-sitemap"></i> Departamentos</h2>
+            <p>Nenhum registro foi encontrado no Firebase para montar os departamentos.</p>
+          </div>
+        ` : "";
+        return;
+      }
+
+      if (getModoChefia()) {
+        container.innerHTML = renderizarDetalhesPorDepartamento(detalhesEstruturados);
         return;
       }
 
@@ -1010,6 +2026,7 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
                 ${reg.sabado ? '<br><span class="badge-sabado">Sábado = extra</span>' : ''}
                 ${reg.dataEspecial ? `<br><span class="badge-especial">${formatarTipoEspecial(reg.dataEspecial.tipo)}</span>` : ''}
                 ${reg.dataEspecial ? `<br><span class="badge-regra">${formatarRegraEspecial(reg.dataEspecial.regra)}</span>` : ''}
+                ${reg.dataEspecial?.dataCompensada ? `<small class="motivo">Compensa: ${formatarDataBR(reg.dataEspecial.dataCompensada)}</small>` : ''}
                 ${reg.dataEspecial?.descricao ? `<small class="motivo">${reg.dataEspecial.descricao}</small>` : ''}
               </td>
               <td>${reg.horariosTexto || "-"}</td>
@@ -1050,10 +2067,11 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
         return `
           <div class="funcionario-card">
             <div class="funcionario-header">
-              <h2><i class="fas fa-user"></i> ${item.funcionario}</h2>
-              <div>
+              <h2><i class="fas fa-user"></i> ${item.funcionario}<br><small style="color:#5f6b7a; font-size:13px;">${item.departamento || "Sem departamento"}</small></h2>
+              <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
                 <strong>Saldo:</strong>
                 <span class="${obterClasseSaldo(item.saldoFinal)}">${formatarMinutosParaHora(item.saldoFinal)}</span>
+                <button class="btn-pdf" onclick="gerarPDFFuncionario(${indexFuncionario})"><i class="fas fa-file-pdf"></i> PDF deste funcionário</button>
               </div>
             </div>
             <div class="funcionario-detalhes">
@@ -1062,6 +2080,7 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
                 <div><strong>Previsto:</strong> ${formatarMinutosParaHora(item.totalPrevisto)}</div>
                 <div class="positivo"><strong>Extras:</strong> ${formatarMinutosParaHora(item.totalExtras)}</div>
                 <div class="negativo"><strong>Negativas:</strong> ${formatarMinutosParaHora(item.totalNegativas)}</div>
+                <div class="${obterClasseSaldo(item.totalAjustes || 0)}"><strong>Ajustes:</strong> ${formatarMinutosParaHora(item.totalAjustes || 0)}</div>
               </div>
               ${mesesHTML}
             </div>
@@ -1081,84 +2100,130 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
       }
     };
 
+    window.toggleDepartamento = function(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.toggle("aberto");
+
+      const card = el.closest(".departamento-card");
+      const acao = card?.querySelector(".departamento-acao");
+      if (acao) {
+        const aberto = el.classList.contains("aberto");
+        const tipo = id === "todos_registros_funcionarios" ? "registros" : "funcionários";
+        acao.innerHTML = aberto
+          ? `<i class="fas fa-chevron-up"></i> Ocultar ${tipo}`
+          : `<i class="fas fa-chevron-down"></i> Abrir ${tipo}`;
+      }
+    };
+
+    function limparFormularioDataEspecial() {
+      dataEspecialEditandoId = null;
+      document.getElementById("dataEspecialEditandoId").value = "";
+      document.getElementById("dataEspecial").value = "";
+      document.getElementById("tipoDataEspecial").value = "facultativo";
+      document.getElementById("regraDataEspecial").value = "trabalhado_vira_extra";
+      document.getElementById("descricaoDataEspecial").value = "";
+      document.getElementById("cargaPrevistaDataEspecial").value = "";
+      document.getElementById("dataCompensadaEspecial").value = "";
+      document.getElementById("btnSalvarDataEspecial").innerHTML = '<i class="fas fa-calendar-plus"></i> Salvar Regra da Data';
+      document.getElementById("btnCancelarEdicaoData").classList.add("campo-oculto");
+      atualizarCampoCargaPersonalizada();
+    }
+
+    window.cancelarEdicaoDataEspecial = function() {
+      limparFormularioDataEspecial();
+    };
+
+    window.editarDataEspecial = function(id) {
+      const item = datasEspeciais.find(d => d.id === id);
+      if (!item) return;
+
+      dataEspecialEditandoId = id;
+      document.getElementById("dataEspecialEditandoId").value = id;
+      document.getElementById("dataEspecial").value = item.data || "";
+      document.getElementById("tipoDataEspecial").value = item.tipo || "facultativo";
+      document.getElementById("regraDataEspecial").value = item.regra || "trabalhado_vira_extra";
+      document.getElementById("descricaoDataEspecial").value = item.descricao || "";
+      document.getElementById("cargaPrevistaDataEspecial").value = item.cargaPrevista || "";
+      document.getElementById("dataCompensadaEspecial").value = item.dataCompensada || "";
+      document.getElementById("btnSalvarDataEspecial").innerHTML = '<i class="fas fa-save"></i> Atualizar Regra';
+      document.getElementById("btnCancelarEdicaoData").classList.remove("campo-oculto");
+      atualizarCampoCargaPersonalizada();
+      document.getElementById("dataEspecial").focus();
+    };
+
     window.salvarDataEspecial = async function() {
-  const data = document.getElementById("dataEspecial").value;
-  const tipo = document.getElementById("tipoDataEspecial").value;
-  const regra = document.getElementById("regraDataEspecial").value;
-  const descricao = document.getElementById("descricaoDataEspecial").value.trim();
-  const cargaPrevistaInformada = document.getElementById("cargaPrevistaDataEspecial").value;
-  const horasAbonadasInformada = document.getElementById("horasAbonadasDataEspecial").value;
+      const data = document.getElementById("dataEspecial").value;
+      const tipo = document.getElementById("tipoDataEspecial").value;
+      const regra = document.getElementById("regraDataEspecial").value;
+      const descricao = document.getElementById("descricaoDataEspecial").value.trim();
+      const cargaPrevistaInformada = document.getElementById("cargaPrevistaDataEspecial").value;
+      const dataCompensada = document.getElementById("dataCompensadaEspecial").value;
+      const idEdicao = dataEspecialEditandoId || document.getElementById("dataEspecialEditandoId").value;
 
-  if (!data) {
-    alert("Selecione a data.");
-    return;
-  }
+      if (!data) {
+        alert("Selecione a data trabalhada / data da regra.");
+        return;
+      }
 
-  let cargaPrevista = 0;
-  let horasAbonadas = 0;
+      if (tipo === "compensacao" && !dataCompensada) {
+        alert("Informe qual data será compensada.");
+        return;
+      }
 
-  if (regra === "carga_personalizada" || regra === "compensacao_manual") {
-    if (cargaPrevistaInformada === "") {
-      alert("Informe a carga prevista do dia.");
-      return;
-    }
+      let cargaPrevista = 0;
 
-    cargaPrevista = Number(cargaPrevistaInformada);
+      if (regra === "carga_personalizada") {
+        if (cargaPrevistaInformada === "") {
+          alert("Informe a carga prevista do dia.");
+          return;
+        }
+        cargaPrevista = Number(cargaPrevistaInformada);
+        if (Number.isNaN(cargaPrevista) || cargaPrevista < 0) {
+          alert("Informe uma carga válida.");
+          return;
+        }
+      }
 
-    if (Number.isNaN(cargaPrevista) || cargaPrevista < 0) {
-      alert("Informe uma carga válida.");
-      return;
-    }
-  }
+      const duplicada = datasEspeciais.find(item => item.data === data && item.id !== idEdicao);
+      if (duplicada) {
+        alert("Já existe uma regra cadastrada para essa data. Clique em Editar na regra existente ou exclua antes de cadastrar outra.");
+        return;
+      }
 
-  if (regra === "atestado_parcial") {
-    if (horasAbonadasInformada === "") {
-      alert("Informe as horas abonadas do atestado.");
-      return;
-    }
+      const dados = {
+        data,
+        tipo,
+        regra,
+        descricao,
+        cargaPrevista,
+        dataCompensada: tipo === "compensacao" ? dataCompensada : ""
+      };
 
-    horasAbonadas = Number(horasAbonadasInformada);
+      try {
+        if (idEdicao) {
+          await updateDoc(doc(db, "datasEspeciais", idEdicao), dados);
+        } else {
+          await addDoc(collection(db, "datasEspeciais"), dados);
+        }
 
-    if (Number.isNaN(horasAbonadas) || horasAbonadas < 0) {
-      alert("Informe uma quantidade válida de horas abonadas.");
-      return;
-    }
-  }
+        limparFormularioDataEspecial();
+        await buscarDatasEspeciais();
+        carregarBancoHoras();
 
-  try {
-    await addDoc(collection(db, "datasEspeciais"), {
-      data,
-      tipo,
-      regra,
-      descricao,
-      cargaPrevista,
-      horasAbonadas
-    });
-
-    document.getElementById("dataEspecial").value = "";
-    document.getElementById("tipoDataEspecial").value = "facultativo";
-    document.getElementById("regraDataEspecial").value = "trabalhado_vira_extra";
-    document.getElementById("descricaoDataEspecial").value = "";
-    document.getElementById("cargaPrevistaDataEspecial").value = "";
-    document.getElementById("horasAbonadasDataEspecial").value = "";
-
-    atualizarCampoCargaPersonalizada();
-
-    await buscarDatasEspeciais();
-    carregarBancoHoras();
-
-    alert("Regra da data salva com sucesso!");
-  } catch (error) {
-    console.error("Erro ao salvar regra da data:", error);
-    alert("Erro ao salvar regra da data.");
-  }
-};
+        alert(idEdicao ? "Regra da data atualizada com sucesso!" : "Regra da data salva com sucesso!");
+      } catch (error) {
+        console.error("Erro ao salvar regra da data:", error);
+        alert("Erro ao salvar regra da data. Verifique as permissões do Firebase.");
+      }
+    };
 
     window.excluirDataEspecial = async function(id) {
       if (!confirm("Deseja excluir esta regra de data?")) return;
 
       try {
         await deleteDoc(doc(db, "datasEspeciais", id));
+        if (dataEspecialEditandoId === id) limparFormularioDataEspecial();
         await buscarDatasEspeciais();
         carregarBancoHoras();
       } catch (error) {
@@ -1167,11 +2232,88 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
       }
     };
 
+    window.salvarAjusteHoras = async function() {
+      const funcionario = document.getElementById("ajusteFuncionario").value.trim();
+      const dataOriginalFolga = document.getElementById("ajusteData").value;
+      const tipo = document.getElementById("ajusteTipo").value;
+      const mesDesconto = document.getElementById("ajusteMesDesconto")?.value || "";
+      const data = tipo === "folga_descontar" && mesDesconto ? `${mesDesconto}-01` : dataOriginalFolga;
+      const horasInformadas = document.getElementById("ajusteHoras").value;
+      const descricaoDigitada = document.getElementById("ajusteDescricao").value.trim();
+      const descricao = tipo === "folga_descontar"
+        ? `Folga de ${formatarDataBR(dataOriginalFolga)} descontada em ${mesDesconto.split("-").reverse().join("/")}${descricaoDigitada ? " - " + descricaoDigitada : ""}`
+        : descricaoDigitada;
+
+      if (!funcionario) { alert("Informe o nome do funcionário."); return; }
+      if (!dataOriginalFolga) { alert("Informe a data da folga/ajuste."); return; }
+      if (tipo === "folga_descontar" && !mesDesconto) { alert("Informe em qual mês a folga será descontada."); return; }
+      if (horasInformadas === "") { alert("Informe a quantidade de horas."); return; }
+
+      const horas = Number(horasInformadas);
+      if (Number.isNaN(horas) || horas <= 0) { alert("Informe uma quantidade de horas válida."); return; }
+
+      const dadosAjuste = {
+        funcionario,
+        data,
+        tipo,
+        minutos: Math.round(horas * 60),
+        descricao,
+        criadoEm: new Date().toISOString()
+      };
+
+      try {
+        await addDoc(collection(db, "ajustesHoras"), dadosAjuste);
+        alert("Ajuste salvo com sucesso!");
+      } catch (error) {
+        console.error("Erro ao salvar ajuste no Firebase:", error);
+
+        const locais = carregarAjustesLocais();
+        locais.push({
+          id: `local_${Date.now()}`,
+          ...dadosAjuste
+        });
+        salvarAjustesLocais(locais);
+
+        alert("O Firebase bloqueou o salvamento do ajuste. Salvei no navegador para não perder, mas atualize as regras do Firebase para salvar online.");
+      }
+
+      document.getElementById("ajusteFuncionario").value = "";
+      document.getElementById("ajusteData").value = "";
+      document.getElementById("ajusteTipo").value = "desconto_extra";
+      document.getElementById("ajusteHoras").value = "";
+      document.getElementById("ajusteMesDesconto").value = "";
+      document.getElementById("ajusteDescricao").value = "";
+      atualizarCampoMesDescontoFolga();
+
+      await buscarAjustesHoras();
+      carregarBancoHoras();
+    };
+
+    window.excluirAjusteHoras = async function(id) {
+      if (!confirm("Deseja excluir este ajuste de horas?")) return;
+      try {
+        const ajuste = ajustesHoras.find(item => item.id === id);
+
+        if (ajuste?.origem === "local" || String(id).startsWith("local_")) {
+          const locais = carregarAjustesLocais().filter(item => item.id !== id);
+          salvarAjustesLocais(locais);
+        } else {
+          await deleteDoc(doc(db, "ajustesHoras", id));
+        }
+
+        await buscarAjustesHoras();
+        carregarBancoHoras();
+      } catch (error) {
+        console.error("Erro ao excluir ajuste:", error);
+        alert("Erro ao excluir ajuste de horas. Verifique as permissões do Firebase.");
+      }
+    };
+
     window.carregarBancoHoras = async function() {
       const tbody = document.getElementById("tabelaBancoHoras");
       tbody.innerHTML = `
         <tr>
-          <td colspan="7" class="vazio">Calculando banco de horas...</td>
+          <td colspan="9" class="vazio">Calculando banco de horas...</td>
         </tr>
       `;
 
@@ -1181,11 +2323,13 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
         }
 
         const registrosFiltrados = filtrarRegistros();
+        const ajustesFiltrados = filtrarAjustesHoras();
         const agrupado = agruparPorFuncionario(registrosFiltrados);
 
-        const cargaSemanal = Number(document.getElementById("cargaSemanal").value || 40);
-        const horasPorDia = cargaSemanal / 5;
-        const minutosPrevistosPorRegistro = Math.round(horasPorDia * 60);
+        ajustesFiltrados.forEach(ajuste => {
+          const nomeRelatorio = obterNomeFuncionario(ajuste.funcionario);
+          if (!agrupado[nomeRelatorio]) agrupado[nomeRelatorio] = [];
+        });
 
         const linhas = [];
         let totalTrabalhado = 0;
@@ -1201,25 +2345,41 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
             let previsto = 0;
             let extras = 0;
             let negativas = 0;
+            let ajustes = 0;
+
+            const minutosPrevistosDoFuncionario = obterMinutosPrevistosPorFuncionario(funcionario);
 
             registros.forEach(reg => {
-              trabalhado += reg.duracaoMinutos;
+              const minutosAbonoSaldoAnterior = somarMinutosAbonoSaldoAnterior(funcionario, reg.data, ajustesFiltrados);
+              const regParaCalculo = {
+                ...reg,
+                duracaoMinutos: reg.duracaoMinutos + minutosAbonoSaldoAnterior
+              };
 
-              const regraDia = calcularRegraDoDia(reg, minutosPrevistosPorRegistro);
+              trabalhado += regParaCalculo.duracaoMinutos;
+
+              const regraDia = calcularRegraDoDia(regParaCalculo, minutosPrevistosDoFuncionario);
               previsto += regraDia.previstoDia;
               extras += regraDia.extrasDia;
               negativas += regraDia.negativasDia;
             });
 
-            const saldo = extras - negativas;
+            ajustes = ajustesFiltrados
+              .filter(ajuste => nomesIguais(obterNomeFuncionario(ajuste.funcionario), funcionario) && ajuste.tipo !== "abono_saldo_anterior")
+              .reduce((total, ajuste) => total + obterMinutosAjuste(ajuste), 0);
+
+            const saldo = extras - negativas + ajustes;
 
             linhas.push({
               funcionario,
+              departamento: obterDepartamentoFuncionario(funcionario),
+              cargaSemanal: obterCargaSemanalFuncionario(funcionario),
               quantidadeRegistros: registros.length,
               trabalhado,
               previsto,
               extras,
               negativas,
+              ajustes,
               saldo
             });
 
@@ -1227,6 +2387,13 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
             totalPrevisto += previsto;
             saldoGeral += saldo;
           });
+
+        if (getModoChefia()) {
+          linhas.sort((a, b) =>
+            (a.departamento || "").localeCompare(b.departamento || "", "pt-BR") ||
+            a.funcionario.localeCompare(b.funcionario, "pt-BR")
+          );
+        }
 
         resultadoAtualCSV = linhas;
         ultimoResumoPDF = {
@@ -1236,7 +2403,7 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
           saldoGeral
         };
 
-        detalhesAtuaisPDF = construirEstruturaDetalhada(agrupado, minutosPrevistosPorRegistro);
+        detalhesAtuaisPDF = construirEstruturaDetalhada(agrupado, ajustesFiltrados);
 
         renderizarTabela(linhas);
         renderizarDetalhes(detalhesAtuaisPDF);
@@ -1246,7 +2413,7 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
         console.error("Erro ao carregar banco de horas:", error);
         tbody.innerHTML = `
           <tr>
-            <td colspan="7" class="vazio">Erro ao carregar os dados. Veja o console.</td>
+            <td colspan="9" class="vazio">Erro ao carregar os dados. Veja o console.</td>
           </tr>
         `;
       }
@@ -1258,10 +2425,10 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
         return;
       }
 
-      let csv = "Funcionário,Registros,Horas Trabalhadas,Horas Previstas,Horas Extras,Horas Negativas,Saldo Final\n";
+      let csv = "Funcionário,Departamento,Registros,Horas Trabalhadas,Horas Previstas,Horas Extras,Horas Negativas,Ajustes,Saldo Final\n";
 
       resultadoAtualCSV.forEach(item => {
-        csv += `"${item.funcionario}",${item.quantidadeRegistros},"${formatarMinutosParaHora(item.trabalhado)}","${formatarMinutosParaHora(item.previsto)}","${formatarMinutosParaHora(item.extras)}","${formatarMinutosParaHora(item.negativas)}","${formatarMinutosParaHora(item.saldo)}"\n`;
+        csv += `"${item.funcionario}","${item.departamento || "Sem departamento"}",${item.quantidadeRegistros},"${formatarMinutosParaHora(item.trabalhado)}","${formatarMinutosParaHora(item.previsto)}","${formatarMinutosParaHora(item.extras)}","${formatarMinutosParaHora(item.negativas)}","${formatarMinutosParaHora(item.ajustes || 0)}","${formatarMinutosParaHora(item.saldo)}"\n`;
       });
 
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -1275,6 +2442,128 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+    };
+
+    window.exportarBackupCompleto = function() {
+      const backup = {
+        geradoEm: new Date().toISOString(),
+        registros: registrosOriginais,
+        datasEspeciais,
+        ajustesHoras,
+        cargasFuncionarios
+      };
+
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+
+      link.setAttribute("href", url);
+      link.setAttribute("download", `backup_banco_de_horas_${new Date().toLocaleDateString("pt-BR").replace(/\//g, "-")}.json`);
+      link.style.visibility = "hidden";
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    window.gerarPDFFuncionario = function(indexFuncionario) {
+      const funcionarioDetalhe = detalhesAtuaisPDF[indexFuncionario];
+
+      if (!funcionarioDetalhe) {
+        alert("Funcionário não encontrado para gerar PDF.");
+        return;
+      }
+
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert("Erro: biblioteca do PDF não carregou.");
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF("p", "mm", "a4");
+      const dataAtual = new Date();
+      let y = 18;
+
+      doc.setFontSize(18);
+      doc.setTextColor(31, 58, 147);
+      doc.text("Relatório Individual de Banco de Horas", 14, y);
+      y += 8;
+
+      doc.setFontSize(10);
+      doc.setTextColor(80, 80, 80);
+      doc.text(`Gerado em: ${dataAtual.toLocaleDateString("pt-BR")} ${dataAtual.toLocaleTimeString("pt-BR")}`, 14, y);
+      y += 10;
+
+      doc.setFontSize(13);
+      doc.setTextColor(0, 0, 0);
+      doc.text(`Funcionário: ${funcionarioDetalhe.funcionario}`, 14, y);
+      y += 6;
+
+      doc.autoTable({
+        startY: y,
+        head: [["Trabalhado", "Previsto", "Extras", "Negativas", "Ajustes", "Saldo Final"]],
+        body: [[
+          formatarMinutosParaHora(funcionarioDetalhe.totalTrabalhado),
+          formatarMinutosParaHora(funcionarioDetalhe.totalPrevisto),
+          formatarMinutosParaHora(funcionarioDetalhe.totalExtras),
+          formatarMinutosParaHora(funcionarioDetalhe.totalNegativas),
+          formatarMinutosParaHora(funcionarioDetalhe.totalAjustes || 0),
+          formatarMinutosParaHora(funcionarioDetalhe.saldoFinal)
+        ]],
+        theme: "grid",
+        headStyles: { fillColor: [31, 58, 147] },
+        styles: { fontSize: 10 }
+      });
+
+      y = doc.autoTable.previous.finalY + 10;
+
+      funcionarioDetalhe.meses.forEach((mes) => {
+        if (y > 225) {
+          doc.addPage();
+          y = 16;
+        }
+
+        doc.setFontSize(12);
+        doc.setTextColor(31, 58, 147);
+        doc.text(`Mês/Ano: ${mes.mesAno}`, 14, y);
+        y += 4;
+
+        const bodyMes = mes.registros.map(reg => {
+          let observacao = reg.observacao || "-";
+          if (reg.dataEspecial?.descricao) observacao += ` | ${reg.dataEspecial.descricao}`;
+
+          return [
+            formatarDataBR(reg.data),
+            reg.horariosTexto || "-",
+            formatarMinutosParaHora(reg.duracaoMinutos),
+            formatarMinutosParaHora(reg.previstoDia),
+            formatarMinutosParaHora(reg.saldoDia),
+            observacao
+          ];
+        });
+
+        doc.autoTable({
+          startY: y,
+          head: [["Data", "Horários", "Trabalhado", "Previsto", "Saldo do Dia", "Observação"]],
+          body: bodyMes,
+          theme: "striped",
+          headStyles: { fillColor: [31, 58, 147] },
+          styles: { fontSize: 8.5, cellPadding: 2 },
+          columnStyles: {
+            0: { cellWidth: 22 },
+            1: { cellWidth: 42 },
+            2: { cellWidth: 22 },
+            3: { cellWidth: 22 },
+            4: { cellWidth: 22 },
+            5: { cellWidth: 55 }
+          }
+        });
+
+        y = doc.autoTable.previous.finalY + 8;
+      });
+
+      const nomeSeguro = removerAcentos(funcionarioDetalhe.funcionario).replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+      doc.save(`banco_de_horas_${nomeSeguro || "funcionario"}_${dataAtual.toLocaleDateString("pt-BR").replace(/\//g, "-")}.pdf`);
     };
 
     window.gerarPDFBancoHoras = function() {
@@ -1338,6 +2627,7 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
         formatarMinutosParaHora(item.previsto),
         formatarMinutosParaHora(item.extras),
         formatarMinutosParaHora(item.negativas),
+        formatarMinutosParaHora(item.ajustes || 0),
         formatarMinutosParaHora(item.saldo)
       ]);
 
@@ -1354,6 +2644,7 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
           "Horas Previstas",
           "Horas Extras",
           "Horas Negativas",
+          "Ajustes",
           "Saldo Final"
         ]],
         body: corpoTabelaResumo,
@@ -1386,12 +2677,13 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
 
         doc.autoTable({
           startY: y,
-          head: [["Trabalhado", "Previsto", "Extras", "Negativas", "Saldo Final"]],
+          head: [["Trabalhado", "Previsto", "Extras", "Negativas", "Ajustes", "Saldo Final"]],
           body: [[
             formatarMinutosParaHora(funcionarioDetalhe.totalTrabalhado),
             formatarMinutosParaHora(funcionarioDetalhe.totalPrevisto),
             formatarMinutosParaHora(funcionarioDetalhe.totalExtras),
             formatarMinutosParaHora(funcionarioDetalhe.totalNegativas),
+            formatarMinutosParaHora(funcionarioDetalhe.totalAjustes || 0),
             formatarMinutosParaHora(funcionarioDetalhe.saldoFinal)
           ]],
           theme: "grid",
@@ -1473,15 +2765,33 @@ function calcularRegraDoDia(registro, minutosPrevistosPadrao) {
       doc.save(nomeArquivo);
     };
 
+    function atualizarCampoMesDescontoFolga() {
+      const tipo = document.getElementById("ajusteTipo").value;
+      const campo = document.getElementById("campoMesDescontoFolga");
+      if (tipo === "folga_descontar") {
+        campo.classList.remove("campo-oculto");
+      } else {
+        campo.classList.add("campo-oculto");
+      }
+    }
+
     document.getElementById("regraDataEspecial").addEventListener("change", atualizarCampoCargaPersonalizada);
+    document.getElementById("tipoDataEspecial").addEventListener("change", atualizarCampoCargaPersonalizada);
     document.getElementById("filtroFuncionario").addEventListener("input", () => carregarBancoHoras());
+    document.getElementById("filtroDepartamento").addEventListener("change", () => carregarBancoHoras());
     document.getElementById("filtroMes").addEventListener("change", () => carregarBancoHoras());
     document.getElementById("filtroAno").addEventListener("input", () => carregarBancoHoras());
     document.getElementById("cargaSemanal").addEventListener("change", () => carregarBancoHoras());
+    document.getElementById("ajusteTipo").addEventListener("change", atualizarCampoMesDescontoFolga);
 
+    aplicarModoDaPagina();
     await buscarRegistros();
     await buscarDatasEspeciais();
+    await buscarAjustesHoras();
+    await buscarCargasFuncionarios();
+    await buscarFuncionariosMeta();
     atualizarCampoCargaPersonalizada();
+    atualizarCampoMesDescontoFolga();
     carregarBancoHoras();
   </script>
 </body>
