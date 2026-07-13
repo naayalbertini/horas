@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -257,10 +257,6 @@
       gap: 4px;
     }
 
-    body.modo-chefia .filtros > div:has(#cargaSemanal) {
-      display: none;
-    }
-
     .neutro {
       color: #4b5563;
       font-weight: 700;
@@ -385,107 +381,124 @@
       display: none !important;
     }
 
-    body.modo-chefia .card-todos-registros {
+    body.modo-chefia .filtros.admin-only:has(#listaFuncionariosAdmin) {
+      display: grid !important;
+    }
+
+    body.modo-chefia .carga-funcionario-info {
       display: none !important;
     }
 
-    .painel-tratativas-chefia {
+    body.modo-chefia .filtros > div:has(#cargaSemanal) {
+      display: none;
+    }
+
+    .pagina-tratativas {
       background: #f8fbff;
       border: 1px solid #dbe6f9;
-      align-items: start;
+    }
+
+    body:not(.visualizando-tratativas) .pagina-tratativas {
+      display: none;
+    }
+
+    body:not(.visualizando-gestao) .pagina-gestao {
+      display: none;
+    }
+
+    body:not(.visualizando-departamentos) .pagina-departamentos {
+      display: none;
+    }
+
+    body.visualizando-tratativas .container > :not(.topo):not(.pagina-tratativas) {
+      display: none !important;
+    }
+
+    body.visualizando-gestao .container > :not(.topo):not(.pagina-gestao) {
+      display: none !important;
+    }
+
+    body.visualizando-departamentos .container > :not(.topo):not(.pagina-departamentos) {
+      display: none !important;
+    }
+
+    body.visualizando-tratativas .topo {
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 18px;
+    }
+
+    body.visualizando-gestao .topo {
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 18px;
+    }
+
+    body.visualizando-departamentos .topo {
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 18px;
+    }
+
+    .pagina-departamentos {
+      margin-top: 18px;
     }
 
     .tratativas-cabecalho {
-      grid-column: 1 / -1;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 14px;
+      gap: 16px;
       flex-wrap: wrap;
+      grid-column: 1 / -1;
     }
 
     .tratativas-cabecalho h2 {
       margin: 0;
       color: #1f3a93;
-      font-size: 1.18rem;
+      font-size: 1.25rem;
     }
 
     .tratativas-cabecalho small {
+      color: #5f6b7a;
       display: block;
       margin-top: 5px;
-      color: #5f6b7a;
     }
 
-    .tratativa-resumo-grid {
-      grid-column: 1 / -1;
+    .gestao-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-    }
-
-    .tratativa-resumo-card {
-      padding: 14px;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      background: #fff;
-    }
-
-    .tratativa-resumo-card strong {
-      display: block;
-      color: #1f3a93;
-      font-size: 1.25rem;
-      margin-top: 3px;
-    }
-
-    .painel-gestao-chefia {
-      background: #f8fbff;
-      border: 1px solid #dbe6f9;
-      align-items: start;
-    }
-
-    body:not(.visualizando-gestao-chefia) .pagina-gestao-chefia {
-      display: none;
-    }
-
-    body:not(.visualizando-departamentos-chefia) .pagina-departamentos-chefia {
-      display: none;
-    }
-
-    body.visualizando-gestao-chefia .container > :not(.topo):not(.pagina-gestao-chefia) {
-      display: none !important;
-    }
-
-    body.visualizando-departamentos-chefia .container > :not(.topo):not(.pagina-departamentos-chefia) {
-      display: none !important;
-    }
-
-    body.visualizando-gestao-chefia .topo {
-      margin-bottom: 18px;
-    }
-
-    body.visualizando-departamentos-chefia .topo {
-      margin-bottom: 18px;
-    }
-
-    .pagina-departamentos-chefia {
-      margin-top: 18px;
-    }
-
-    .gestao-layout-chefia {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
       grid-column: 1 / -1;
-      display: grid;
-      grid-template-columns: minmax(360px, 1.2fr) minmax(260px, 0.8fr);
-      gap: 16px;
     }
 
-    .gestao-painel-chefia {
+    .gestao-card {
       background: #fff;
       border: 1px solid #dbe6f9;
       border-radius: 10px;
       padding: 16px;
     }
 
-    .gestao-painel-chefia h3 {
+    .gestao-card strong {
+      display: block;
+      color: #1f3a93;
+      font-size: 1.35rem;
+      margin-top: 4px;
+    }
+
+    .gestao-layout {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.75fr) minmax(360px, 1.25fr);
+      gap: 18px;
+      grid-column: 1 / -1;
+      align-items: start;
+    }
+
+    .gestao-painel {
+      background: #fff;
+      border: 1px solid #dbe6f9;
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .gestao-painel h3 {
       color: #1f3a93;
       margin: 0 0 12px;
       font-size: 1rem;
@@ -658,99 +671,6 @@
       color: #5f6b7a;
       line-height: 1.4;
     }
-    .assinatura-layout {
-      display: grid;
-      grid-template-columns: minmax(320px, 1.1fr) minmax(280px, 0.9fr);
-      gap: 18px;
-      align-items: start;
-    }
-
-    .assinatura-form {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-      align-items: end;
-    }
-
-    .assinatura-form .campo-inteiro,
-    .assinatura-resumo,
-    .assinatura-canvas-area {
-      grid-column: 1 / -1;
-    }
-
-    .assinatura-resumo {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 10px;
-      padding: 14px;
-      border: 1px solid #dbe6f9;
-      border-radius: 10px;
-      background: #f8fbff;
-    }
-
-    .assinatura-resumo div {
-      padding: 10px;
-      border-radius: 8px;
-      background: #fff;
-      border: 1px solid #e5e7eb;
-    }
-
-    .assinatura-resumo strong {
-      display: block;
-      color: #5f6b7a;
-      font-size: 0.82rem;
-      margin-bottom: 4px;
-    }
-
-    .assinatura-canvas-area canvas {
-      width: 100%;
-      height: 190px;
-      display: block;
-      border: 2px dashed #9fb3d9;
-      border-radius: 10px;
-      background: #fff;
-      touch-action: none;
-    }
-
-    .assinatura-acoes {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .assinatura-acoes button {
-      flex: 1;
-      min-width: 180px;
-    }
-
-    .assinatura-lista {
-      max-height: 430px;
-      overflow: auto;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      background: #fff;
-    }
-
-    .assinatura-item {
-      padding: 12px 14px;
-      border-bottom: 1px solid #edf1f7;
-    }
-
-    .assinatura-item:last-child {
-      border-bottom: none;
-    }
-
-    .assinatura-item strong {
-      display: block;
-      color: #1f3a93;
-      margin-bottom: 4px;
-    }
-
-    .assinatura-item small {
-      display: block;
-      color: #5f6b7a;
-      line-height: 1.45;
-    }
 
     @media (max-width: 768px) {
       .container {
@@ -782,16 +702,17 @@
     }
   </style>
 </head>
-<body class="modo-chefia">
+<body>
   <div class="container">
     <div class="topo">
-      <h1><i class="fas fa-business-time"></i> Banco de Horas <span id="modoBadge" class="modo-badge">Chefia</span></h1>
+      <h1><i class="fas fa-business-time"></i> Banco de Horas <span id="modoBadge" class="modo-badge">ADM</span></h1>
       <div class="topo-acoes">
         <a href="index.html" class="btn-link admin-only"><i class="fas fa-arrow-left"></i> Voltar para Registros</a>
         <a href="banco_de_horas_chefes.html" class="btn-link admin-only"><i class="fas fa-eye"></i> Abrir Layout Chefia</a>
-        <button class="btn-secundario" onclick="abrirPaginaBancoChefia()"><i class="fas fa-table"></i> Banco</button>
-        <button class="btn-secundario" onclick="abrirPaginaDepartamentosChefia()"><i class="fas fa-building-user"></i> Departamentos</button>
-        <button class="btn-secundario" onclick="abrirPaginaGestaoChefia()"><i class="fas fa-list-check"></i> Painel Gestão</button>
+        <button class="btn-secundario admin-only" onclick="abrirPaginaBancoHoras()"><i class="fas fa-table"></i> Banco</button>
+        <button class="btn-secundario" onclick="abrirPaginaDepartamentos()"><i class="fas fa-building-user"></i> Departamentos</button>
+        <button class="btn-secundario admin-only" onclick="abrirPaginaGestao()"><i class="fas fa-list-check"></i> Gestão</button>
+        <button class="btn-secundario admin-only" onclick="abrirPaginaTratativas()"><i class="fas fa-clipboard-check"></i> Tratativas</button>
         <button class="btn-secundario" onclick="exportarCSV()"><i class="fas fa-file-csv"></i> Exportar CSV</button>
         <button class="btn-secundario admin-only" onclick="exportarBackupCompleto()"><i class="fas fa-download"></i> Backup Completo</button>
         <button class="btn-pdf" onclick="gerarPDFBancoHoras()"><i class="fas fa-file-pdf"></i> Baixar PDF Completo</button>
@@ -836,126 +757,21 @@
       </div>
 
       <div>
-        <label for="cargaSemanal">Carga semanal</label>
+        <label for="cargaSemanal">Modo de carga semanal padrão</label>
         <select id="cargaSemanal">
-          <option value="40" selected>40 horas semanais</option>
-          <option value="44">44 horas semanais</option>
-          <option value="22">22 horas semanais</option>
+          <option value="40" selected>40h semanais</option>
+          <option value="44">44h semanais</option>
+          <option value="22">22h semanais</option>
           <option value="36">36 horas semanais</option>
           <option value="30">30 horas semanais</option>
         </select>
+        <small style="display:block; color:#64748b; margin-top:4px;">Usado para quem não tiver carga individual cadastrada.</small>
       </div>
 
       <div style="display:flex; align-items:end;">
         <button onclick="carregarBancoHoras()" style="width:100%;">
           <i class="fas fa-search"></i> Calcular Banco
         </button>
-      </div>
-    </div>
-
-    <div class="filtros painel-tratativas-chefia">
-      <div class="tratativas-cabecalho">
-        <div>
-          <h2><i class="fas fa-clipboard-check"></i> Acompanhamento de tratativas</h2>
-          <small>Consulta das horas pagas, horas em folga, pendências e datas escolhidas registradas pelo ADM.</small>
-        </div>
-        <button type="button" onclick="buscarTratativasHorasPDF()" style="background:#1f3a93;">
-          <i class="fas fa-sync-alt"></i> Atualizar
-        </button>
-      </div>
-      <div id="resumoTratativasChefia" class="tratativa-resumo-grid"></div>
-      <div id="listaTratativasChefia" style="grid-column: 1 / -1;"></div>
-    </div>
-
-    <div class="filtros painel-gestao-chefia pagina-gestao-chefia">
-      <div class="tratativas-cabecalho">
-        <div>
-          <h2><i class="fas fa-list-check"></i> Painel de gestão</h2>
-          <small>Verificação separada de pendências, saldos em aberto, meses fechados e movimentações registradas pelo ADM.</small>
-        </div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button type="button" onclick="abrirPaginaBancoChefia()" style="background:#4b5563;">
-            <i class="fas fa-arrow-left"></i> Voltar ao banco
-          </button>
-          <button type="button" onclick="atualizarPainelGestaoChefia()" style="background:#1f3a93;">
-            <i class="fas fa-sync-alt"></i> Atualizar
-          </button>
-        </div>
-      </div>
-
-      <div>
-        <label for="gestaoFiltroMes">Mês</label>
-        <select id="gestaoFiltroMes">
-          <option value="">Todos</option>
-          <option value="01">Janeiro</option>
-          <option value="02">Fevereiro</option>
-          <option value="03">Março</option>
-          <option value="04">Abril</option>
-          <option value="05">Maio</option>
-          <option value="06">Junho</option>
-          <option value="07">Julho</option>
-          <option value="08">Agosto</option>
-          <option value="09">Setembro</option>
-          <option value="10">Outubro</option>
-          <option value="11">Novembro</option>
-          <option value="12">Dezembro</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="gestaoFiltroAno">Ano</label>
-        <input type="number" id="gestaoFiltroAno" placeholder="Ex: 2026">
-      </div>
-
-      <div style="display:flex; gap:10px; align-items:end; flex-wrap:wrap;">
-        <button type="button" onclick="aplicarFiltrosGestao()" style="flex:1; min-width:150px; background:#1f3a93;">
-          <i class="fas fa-search"></i> Filtrar
-        </button>
-        <button type="button" onclick="limparFiltrosGestao()" class="btn-cancelar" style="flex:1; min-width:120px;">
-          <i class="fas fa-eraser"></i> Limpar
-        </button>
-      </div>
-      <div id="resumoGestaoChefia" class="tratativa-resumo-grid"></div>
-
-      <div class="gestao-painel-chefia" style="grid-column: 1 / -1;">
-        <h3><i class="fas fa-notes-medical"></i> Lançar atestado médico</h3>
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap:12px; align-items:end;">
-          <div>
-            <label for="atestadoFuncionario">Funcionário</label>
-            <input type="text" id="atestadoFuncionario" list="listaFuncionariosAtestado" placeholder="Digite para buscar o funcionário">
-            <datalist id="listaFuncionariosAtestado"></datalist>
-          </div>
-          <div>
-            <label for="atestadoData">Data do atestado</label>
-            <input type="date" id="atestadoData">
-          </div>
-          <div>
-            <label for="atestadoHoras">Horas abonadas</label>
-            <input type="number" id="atestadoHoras" placeholder="Ex: 8" min="0" step="0.25">
-          </div>
-          <div>
-            <label for="atestadoDescricao">Observação</label>
-            <input type="text" id="atestadoDescricao" placeholder="Ex: Atestado médico entregue ao RH">
-          </div>
-          <button type="button" onclick="salvarAtestadoMedico()" style="background:#047857;">
-            <i class="fas fa-notes-medical"></i> Salvar atestado
-          </button>
-        </div>
-      </div>
-
-      <div class="gestao-layout-chefia">
-        <div class="gestao-painel-chefia">
-          <h3><i class="fas fa-building-user"></i> Situação por departamento</h3>
-          <div id="listaPendenciasChefia"></div>
-        </div>
-        <div class="gestao-painel-chefia">
-          <h3><i class="fas fa-lock"></i> Meses fechados</h3>
-          <div id="listaFechamentosChefia"></div>
-          <h3 style="margin-top:18px;"><i class="fas fa-clock-rotate-left"></i> Histórico recente</h3>
-          <div id="listaHistoricoTratativasChefia"></div>
-          <h3 style="margin-top:18px;"><i class="fas fa-notes-medical"></i> Relatório de atestado médico</h3>
-          <div id="listaAtestadosMedicos"></div>
-        </div>
       </div>
     </div>
 
@@ -1017,6 +833,24 @@
         <small style="color:#5f6b7a;">Corrija o nome exibido nos relatórios e vincule cada pessoa a um departamento. O ponto original no Firebase não é alterado.</small>
       </div>
 
+      <div style="grid-column: 1 / -1; padding:14px; border:1px solid #bfdbfe; border-radius:10px; background:#eff6ff;">
+        <h3 style="margin:0 0 10px; color:#1f3a93; font-size:1rem;"><i class="fas fa-people-arrows"></i> Mesclar funcionário duplicado</h3>
+        <small style="display:block; color:#475467; margin-bottom:12px;">Use quando aparecerem dois cards da mesma pessoa. Isso altera o nome dentro dos registros de ponto no Firebase.</small>
+        <div style="display:grid; grid-template-columns: 1fr 1fr auto; gap:12px; align-items:end;">
+          <div>
+            <label for="mergeNomeErrado">Nome duplicado / errado</label>
+            <input type="text" id="mergeNomeErrado" placeholder="Ex: MARIOSMARIO">
+          </div>
+          <div>
+            <label for="mergeNomeCorreto">Nome completo correto</label>
+            <input type="text" id="mergeNomeCorreto" placeholder="Ex: Mariosmário Timóteo dos Santos Pereira">
+          </div>
+          <button onclick="mesclarFuncionarioDuplicado()" style="background:#1f3a93;">
+            <i class="fas fa-sync-alt"></i> Mesclar
+          </button>
+        </div>
+      </div>
+
       <div id="listaFuncionariosAdmin" style="grid-column: 1 / -1;"></div>
     </div>
 
@@ -1032,11 +866,11 @@
       </div>
 
       <div>
-        <label for="cargaFuncionarioSemanal">Carga semanal</label>
+        <label for="cargaFuncionarioSemanal">Carga semanal do funcionário</label>
         <select id="cargaFuncionarioSemanal">
-          <option value="44">44 horas semanais</option>
-          <option value="40">40 horas semanais</option>
-          <option value="22">22 horas semanais</option>
+          <option value="40">40h semanais</option>
+          <option value="44">44h semanais</option>
+          <option value="22">22h semanais</option>
           <option value="36">36 horas semanais</option>
           <option value="30">30 horas semanais</option>
         </select>
@@ -1118,6 +952,132 @@
       </div>
     </div>
 
+    <div class="filtros admin-only pagina-tratativas">
+      <div style="grid-column: 1 / -1;">
+        <h2 style="margin:0; color:#1f3a93; font-size:1.15rem;"><i class="fas fa-clipboard-check"></i> Tratativas registradas</h2>
+        <small style="color:#5f6b7a;">Aqui ficam registradas as escolhas feitas ao baixar o PDF pelo ADM. A data da folga pode ser editada se o funcionário trocar o dia.</small>
+      </div>
+      <div style="display:flex; align-items:end;">
+        <button type="button" onclick="abrirPaginaBancoHoras()" style="width:100%; background:#1f3a93;">
+          <i class="fas fa-arrow-left"></i> Voltar ao banco
+        </button>
+      </div>
+      <div id="listaTratativasHorasPDF" style="grid-column: 1 / -1;"></div>
+    </div>
+
+    <div class="filtros admin-only pagina-gestao">
+      <div class="tratativas-cabecalho">
+        <div>
+          <h2 style="margin:0; color:#1f3a93; font-size:1.15rem;"><i class="fas fa-list-check"></i> Gestão do banco de horas</h2>
+          <small>Pendências, fechamento mensal e histórico das tratativas em uma tela separada.</small>
+        </div>
+        <button type="button" onclick="abrirPaginaBancoHoras()" style="background:#1f3a93;">
+          <i class="fas fa-arrow-left"></i> Voltar ao banco
+        </button>
+      </div>
+
+      <div>
+        <label for="gestaoFiltroMes">Mês</label>
+        <select id="gestaoFiltroMes">
+          <option value="">Todos</option>
+          <option value="01">Janeiro</option>
+          <option value="02">Fevereiro</option>
+          <option value="03">Março</option>
+          <option value="04">Abril</option>
+          <option value="05">Maio</option>
+          <option value="06">Junho</option>
+          <option value="07">Julho</option>
+          <option value="08">Agosto</option>
+          <option value="09">Setembro</option>
+          <option value="10">Outubro</option>
+          <option value="11">Novembro</option>
+          <option value="12">Dezembro</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="gestaoFiltroAno">Ano</label>
+        <input type="number" id="gestaoFiltroAno" placeholder="Ex: 2026">
+      </div>
+
+      <div style="display:flex; gap:10px; align-items:end; flex-wrap:wrap;">
+        <button type="button" onclick="aplicarFiltrosGestao()" style="flex:1; min-width:150px; background:#1f3a93;">
+          <i class="fas fa-search"></i> Filtrar
+        </button>
+        <button type="button" onclick="limparFiltrosGestao()" class="btn-cancelar" style="flex:1; min-width:120px;">
+          <i class="fas fa-eraser"></i> Limpar
+        </button>
+      </div>
+
+      <div id="resumoGestaoBanco" class="gestao-grid"></div>
+
+      <div class="gestao-painel" style="grid-column: 1 / -1;">
+        <h3><i class="fas fa-notes-medical"></i> Lançar atestado médico</h3>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap:12px; align-items:end;">
+          <div>
+            <label for="atestadoFuncionario">Funcionário</label>
+            <input type="text" id="atestadoFuncionario" list="listaFuncionariosAtestado" placeholder="Digite para buscar o funcionário">
+            <datalist id="listaFuncionariosAtestado"></datalist>
+          </div>
+          <div>
+            <label for="atestadoData">Data do atestado</label>
+            <input type="date" id="atestadoData">
+          </div>
+          <div>
+            <label for="atestadoHoras">Horas abonadas</label>
+            <input type="number" id="atestadoHoras" placeholder="Ex: 8" min="0" step="0.25">
+          </div>
+          <div>
+            <label for="atestadoDescricao">Observação</label>
+            <input type="text" id="atestadoDescricao" placeholder="Ex: Atestado médico entregue ao RH">
+          </div>
+          <button type="button" onclick="salvarAtestadoMedico()" style="background:#047857;">
+            <i class="fas fa-notes-medical"></i> Salvar atestado
+          </button>
+        </div>
+      </div>
+
+      <div class="gestao-layout">
+        <div class="gestao-painel">
+          <h3><i class="fas fa-lock"></i> Fechamento do mês</h3>
+          <label for="fechamentoAno">Ano</label>
+          <input type="number" id="fechamentoAno" placeholder="Ex: 2026">
+          <label for="fechamentoMes">Mês</label>
+          <select id="fechamentoMes">
+            <option value="">Selecione</option>
+            <option value="01">Janeiro</option>
+            <option value="02">Fevereiro</option>
+            <option value="03">Março</option>
+            <option value="04">Abril</option>
+            <option value="05">Maio</option>
+            <option value="06">Junho</option>
+            <option value="07">Julho</option>
+            <option value="08">Agosto</option>
+            <option value="09">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+          </select>
+          <label for="fechamentoObservacao">Observação</label>
+          <input type="text" id="fechamentoObservacao" placeholder="Ex: Conferido e liberado pela gestão">
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button type="button" onclick="fecharMesBancoHoras()" style="flex:1; background:#1f3a93;"><i class="fas fa-lock"></i> Fechar mês</button>
+            <button type="button" onclick="reabrirMesBancoHoras()" class="btn-cancelar" style="flex:1;"><i class="fas fa-lock-open"></i> Reabrir</button>
+          </div>
+          <div id="listaFechamentosMes" style="margin-top:14px;"></div>
+        </div>
+
+        <div class="gestao-painel">
+          <h3><i class="fas fa-building-user"></i> Situação por departamento</h3>
+          <div id="listaPendenciasBanco"></div>
+          <h3 style="margin-top:18px;"><i class="fas fa-clock-rotate-left"></i> Histórico de tratativas</h3>
+          <div id="listaHistoricoTratativas"></div>
+          <h3 style="margin-top:18px;"><i class="fas fa-notes-medical"></i> Relatório de atestado médico</h3>
+          <div id="listaAtestadosMedicos"></div>
+        </div>
+      </div>
+    </div>
+
     <div class="resumo-geral">
       <div class="card-resumo">
         <h3>Total de funcionários</h3>
@@ -1137,15 +1097,15 @@
       </div>
     </div>
 
-    <div class="pagina-departamentos-chefia">
+    <div class="pagina-departamentos">
       <div class="filtros">
         <div class="tratativas-cabecalho" style="grid-column: 1 / -1;">
           <div>
             <h2 style="margin:0; color:#1f3a93; font-size:1.15rem;"><i class="fas fa-building-user"></i> Departamentos</h2>
-            <small>Consulta separada para abrir departamentos, conferir funcionários e acompanhar saldos detalhados.</small>
+            <small>Consulta separada para abrir departamentos, conferir funcionários, registros, datas especiais e saldos detalhados.</small>
           </div>
           <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <button type="button" onclick="abrirPaginaBancoChefia()" style="background:#4b5563;">
+            <button type="button" onclick="abrirPaginaBancoHoras()" style="background:#4b5563;">
               <i class="fas fa-arrow-left"></i> Voltar ao banco
             </button>
             <button type="button" onclick="carregarBancoHoras()" style="background:#1f3a93;">
@@ -1200,9 +1160,7 @@
         </div>
       </div>
 
-    <div id="registrosPorDepartamento"></div>
-
-    <div class="departamento-card card-todos-registros">
+    <div class="departamento-card">
       <div class="departamento-header" onclick="toggleDepartamento('todos_registros_funcionarios')">
         <div>
           <h2><i class="fas fa-table"></i> Todos os registros de funcionários</h2>
@@ -1213,6 +1171,7 @@
         </div>
       </div>
       <div class="departamento-corpo" id="todos_registros_funcionarios">
+        <div id="registrosPorDepartamento"></div>
         <div class="tabela-wrapper tabela-registros-geral">
       <table>
         <thead>
@@ -1245,13 +1204,13 @@
     <div class="info-regra">
       <strong>Como funciona:</strong><br>
       • Sábado: tudo vira extra.<br>
-      • Data com regra "Não gera débito": não cobra horas do dia e não gera negativo.<br>
-      • Data com regra "Trabalhado vira extra": não cobra horas do dia; se a pessoa vier, tudo vira extra.<br>
-      • Data com regra "Carga personalizada": compara com a carga que você informar naquele dia.<br>
+      • Data com regra “Não gera débito”: não cobra horas do dia e não gera negativo.<br>
+      • Data com regra “Trabalhado vira extra”: não cobra horas do dia; se a pessoa vier, tudo vira extra.<br>
+      • Data com regra “Carga personalizada”: compara com a carga que você informar naquele dia.<br>
       • Para compensação: cadastre a data trabalhada, informe a data compensada e use carga personalizada, normalmente 8h.<br>
-      • Folgas a descontar: use "Folga a descontar em mês escolhido", informe a data da folga, as horas e o mês onde o desconto deve aparecer. O abatimento entra automaticamente no mês selecionado.
+      • Folgas a descontar: use “Folga a descontar em mês escolhido”, informe a data da folga, as horas e o mês onde o desconto deve aparecer. O abatimento entra automaticamente no mês selecionado.
       • Carga individual: cadastre a carga de cada funcionário acima. Quem não tiver cadastro usa a carga padrão do filtro.
-      • Atraso/falta autorizada para descontar de saldo anterior: use "Abonar falta com saldo anterior/2025" em Ajuste manual. Isso soma as horas no mês atual para não ficar negativo e registra a justificativa.
+      • Atraso/falta autorizada para descontar de saldo anterior: use “Abonar falta com saldo anterior/2025” em Ajuste manual. Isso soma as horas no mês atual para não ficar negativo e registra a justificativa.
     </div>
   </div>
 
@@ -1267,6 +1226,7 @@
       setDoc,
       updateDoc,
       deleteDoc,
+      writeBatch,
       doc
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -1287,7 +1247,6 @@
     let ajustesHoras = [];
     let cargasFuncionarios = [];
     let funcionariosMeta = [];
-    let tratativasHorasPDF = [];
     let fechamentosMensais = [];
     let historicoTratativas = [];
     let funcionariosInativosLocais = new Map();
@@ -1300,10 +1259,6 @@
       saldoGeral: 0
     };
     let dataEspecialEditandoId = null;
-    let assinaturasBancoHoras = [];
-    let resumoAssinaturaAtual = null;
-    let assinaturaCanvasConfigurado = false;
-    let assinaturaCanvasVazio = true;
 
     const nomesMeses = [
       "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
@@ -1330,425 +1285,6 @@
       return base || "sem_nome";
     }
 
-    const TRATATIVAS_HORAS_PDF_KEY = "tratativasHorasPDF";
-
-    function carregarTratativasHorasPDFLocal() {
-      try {
-        const lista = JSON.parse(localStorage.getItem(TRATATIVAS_HORAS_PDF_KEY) || "[]");
-        return Array.isArray(lista) ? lista : [];
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function salvarTratativasHorasPDFLocal(lista) {
-      localStorage.setItem(TRATATIVAS_HORAS_PDF_KEY, JSON.stringify(lista));
-    }
-
-    const FECHAMENTOS_MENSAIS_KEY = "fechamentosMensaisBancoHoras";
-    const HISTORICO_TRATATIVAS_KEY = "historicoTratativasHoras";
-
-    function carregarListaLocal(chave) {
-      try {
-        const lista = JSON.parse(localStorage.getItem(chave) || "[]");
-        return Array.isArray(lista) ? lista : [];
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function salvarListaLocal(chave, lista) {
-      localStorage.setItem(chave, JSON.stringify(lista));
-    }
-
-    async function buscarFechamentosMensais() {
-      const locais = carregarListaLocal(FECHAMENTOS_MENSAIS_KEY);
-      const porId = new Map(locais.map(item => [item.id, item]));
-
-      try {
-        const snapshot = await getDocs(collection(db, "fechamentosMensais"));
-        snapshot.forEach(docItem => porId.set(docItem.id, { id: docItem.id, ...docItem.data(), origem: "firebase" }));
-      } catch (error) {
-        console.warn("Nao foi possivel carregar fechamentos do Firebase. Usando dados locais.", error);
-      }
-
-      fechamentosMensais = Array.from(porId.values());
-      salvarListaLocal(FECHAMENTOS_MENSAIS_KEY, fechamentosMensais);
-    }
-
-    async function buscarHistoricoTratativas() {
-      const locais = carregarListaLocal(HISTORICO_TRATATIVAS_KEY);
-      const porId = new Map(locais.map(item => [item.id, item]));
-
-      try {
-        const snapshot = await getDocs(collection(db, "historicoTratativasHoras"));
-        snapshot.forEach(docItem => porId.set(docItem.id, { id: docItem.id, ...docItem.data(), origem: "firebase" }));
-      } catch (error) {
-        console.warn("Nao foi possivel carregar historico do Firebase. Usando dados locais.", error);
-      }
-
-      historicoTratativas = Array.from(porId.values());
-      salvarListaLocal(HISTORICO_TRATATIVAS_KEY, historicoTratativas);
-    }
-
-    function formatarNumeroHoras(valor) {
-      const numero = Number(valor || 0);
-      return numero.toLocaleString("pt-BR", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-    }
-
-    function converterHorasDecimalParaMinutos(valor) {
-      const texto = String(valor ?? "").trim().replace(",", ".");
-      if (texto.includes(":")) {
-        const partes = texto.split(":");
-        const horas = Number(partes[0] || 0) || 0;
-        const minutos = Number(partes[1] || 0) || 0;
-        return Math.round((horas * 60) + minutos);
-      }
-      return Math.round((Number(texto || 0) || 0) * 60);
-    }
-
-    function calcularSaldoRestanteTratativa(tratativa) {
-      const saldo = Number(tratativa.saldoMinutos || 0);
-      const abatido = converterHorasDecimalParaMinutos(tratativa.horasPagas) + converterHorasDecimalParaMinutos(tratativa.horasFolga);
-      if (saldo > 0) return saldo - abatido;
-      if (saldo < 0) return saldo;
-      return 0;
-    }
-
-    function calcularSituacaoFinalTratativa(tratativa) {
-      const saldoOriginal = Number(tratativa.saldoMinutos || 0);
-      const restante = Number(tratativa.saldoRestanteMinutos ?? calcularSaldoRestanteTratativa(tratativa));
-
-      if (saldoOriginal > 0) {
-        if (restante > 0) return `Ainda resta ${formatarMinutosParaHora(restante)} de extra`;
-        if (restante < 0) return `Saldo quitado; abatimento excedeu ${formatarMinutosParaHora(Math.abs(restante))}`;
-        return "Saldo quitado no período";
-      }
-
-      if (saldoOriginal < 0) return `Ainda possui ${formatarMinutosParaHora(Math.abs(saldoOriginal))} de horas negativas`;
-      return "Saldo quitado no período";
-    }
-
-    function formatarTratativaHorasPDF(tratativa) {
-      const partes = [tratativa.status || "Verificando com a gestão"];
-      if (Number(tratativa.horasPagas || 0) > 0) partes.push(`${formatarNumeroHoras(tratativa.horasPagas)}h pagas`);
-      if (Number(tratativa.horasFolga || 0) > 0) partes.push(`${formatarNumeroHoras(tratativa.horasFolga)}h em folga`);
-      if (tratativa.dataFolga) partes.push(`folga em ${formatarDataBR(tratativa.dataFolga)}`);
-      partes.push(tratativa.situacaoFinal || calcularSituacaoFinalTratativa(tratativa));
-      return partes.join(" - ");
-    }
-
-    function renderizarTratativasChefia() {
-      const resumo = document.getElementById("resumoTratativasChefia");
-      const listaContainer = document.getElementById("listaTratativasChefia");
-      if (!resumo || !listaContainer) return;
-
-      const lista = tratativasHorasPDF
-        .slice()
-        .sort((a, b) => (b.atualizadoEm || "").localeCompare(a.atualizadoEm || ""));
-
-      const totais = lista.reduce((acc, item) => {
-        acc.pagas += Number(item.horasPagas || 0);
-        acc.folga += Number(item.horasFolga || 0);
-        if (String(item.opcao || "") === "2") acc.naoPagas += 1;
-        if (String(item.opcao || "") === "4" || !item.opcao) acc.verificando += 1;
-        return acc;
-      }, { pagas: 0, folga: 0, naoPagas: 0, verificando: 0 });
-
-      resumo.innerHTML = `
-        <div class="tratativa-resumo-card">Horas pagas<strong>${formatarNumeroHoras(totais.pagas)}h</strong></div>
-        <div class="tratativa-resumo-card">Horas em folga<strong>${formatarNumeroHoras(totais.folga)}h</strong></div>
-        <div class="tratativa-resumo-card">Horas não pagas<strong>${totais.naoPagas}</strong></div>
-        <div class="tratativa-resumo-card">Verificando com a gestão<strong>${totais.verificando}</strong></div>
-      `;
-
-      if (!lista.length) {
-        listaContainer.innerHTML = '<small style="color:#5f6b7a;">Nenhuma tratativa registrada pelo ADM até agora.</small>';
-        return;
-      }
-
-      listaContainer.innerHTML = `
-        <div class="tabela-wrapper">
-          <table style="min-width:920px;">
-            <thead>
-              <tr>
-                <th>Funcionário</th>
-                <th>Período</th>
-                <th>Tratativa</th>
-                <th>Horas pagas</th>
-                <th>Horas em folga</th>
-                <th>Situação final</th>
-                <th>Data da folga</th>
-                <th>Atualizado em</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${lista.map(item => `
-                <tr>
-                  <td>${escaparHTML(item.funcionario || "")}</td>
-                  <td>${escaparHTML(item.periodoTexto || "")}</td>
-                  <td>${escaparHTML(formatarTratativaHorasPDF(item))}</td>
-                  <td>${formatarNumeroHoras(item.horasPagas)}h</td>
-                  <td>${formatarNumeroHoras(item.horasFolga)}h</td>
-                  <td>${escaparHTML(item.situacaoFinal || calcularSituacaoFinalTratativa(item))}</td>
-                  <td>${item.dataFolga ? escaparHTML(formatarDataBR(item.dataFolga)) : "-"}</td>
-                  <td>${item.atualizadoEm ? escaparHTML(new Date(item.atualizadoEm).toLocaleString("pt-BR")) : "-"}</td>
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-        </div>
-      `;
-    }
-
-    window.buscarTratativasHorasPDF = async function() {
-      const locais = carregarTratativasHorasPDFLocal();
-      const porId = new Map(locais.map(item => [item.id, item]));
-
-      try {
-        const snapshot = await getDocs(collection(db, "tratativasHorasPDF"));
-        snapshot.forEach(docItem => {
-          const dados = docItem.data();
-          porId.set(docItem.id, { id: docItem.id, ...dados, origem: "firebase" });
-        });
-        tratativasHorasPDF = Array.from(porId.values());
-        salvarTratativasHorasPDFLocal(tratativasHorasPDF);
-      } catch (error) {
-        console.warn("Nao foi possivel carregar tratativas do Firebase. Usando tratativas locais.", error);
-        tratativasHorasPDF = locais;
-      }
-
-      renderizarTratativasChefia();
-      renderizarPainelGestaoChefia();
-    };
-
-    function obterPendenciasBancoHorasChefia() {
-      const pendencias = [];
-      const periodoFiltro = obterPeriodoFiltroTextoChefia();
-
-      resultadoAtualCSV.forEach(item => {
-        if (Number(item.saldo || 0) > 0) {
-          pendencias.push({
-            tipo: "Hora extra",
-            funcionario: item.funcionario,
-            departamento: item.departamento || obterDepartamentoFuncionario(item.funcionario),
-            periodo: periodoFiltro,
-            detalhe: `Saldo positivo de ${formatarMinutosParaHora(item.saldo)}`
-          });
-        }
-        if (Number(item.saldo || 0) < 0) {
-          pendencias.push({
-            tipo: "Horas negativas",
-            funcionario: item.funcionario,
-            departamento: item.departamento || obterDepartamentoFuncionario(item.funcionario),
-            periodo: periodoFiltro,
-            detalhe: `Saldo negativo de ${formatarMinutosParaHora(Math.abs(item.saldo))}`
-          });
-        }
-        if ((item.departamento || "Sem departamento") === "Sem departamento") {
-          pendencias.push({
-            tipo: "Cadastro incompleto",
-            funcionario: item.funcionario,
-            departamento: item.departamento || obterDepartamentoFuncionario(item.funcionario),
-            periodo: periodoFiltro,
-            detalhe: "Departamento não informado"
-          });
-        }
-      });
-
-      tratativasHorasPDF.forEach(item => {
-        const restante = calcularSaldoRestanteTratativa(item);
-        if (String(item.opcao || "") === "4" || !item.opcao) {
-          pendencias.push({
-            tipo: "Tratativa pendente",
-            funcionario: item.funcionario,
-            departamento: obterDepartamentoFuncionario(item.funcionario),
-            periodo: item.periodoTexto || "Período não informado",
-            detalhe: "Verificando com a gestão"
-          });
-        }
-        if (restante > 0) {
-          pendencias.push({
-            tipo: "Extra em aberto",
-            funcionario: item.funcionario,
-            departamento: obterDepartamentoFuncionario(item.funcionario),
-            periodo: item.periodoTexto || "Período não informado",
-            detalhe: `Ainda resta ${formatarMinutosParaHora(restante)}`
-          });
-        }
-      });
-
-      return pendencias;
-    }
-
-    function obterPeriodoFiltroTextoChefia() {
-      const ano = document.getElementById("filtroAno")?.value || "Ano não filtrado";
-      const mes = document.getElementById("filtroMes")?.value || "";
-      if (!mes) return ano;
-      const nomesMeses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-      return `${nomesMeses[Number(mes) - 1] || mes}/${ano}`;
-    }
-
-    function renderizarPendenciasPorDepartamentoChefia(pendencias, prefixoId) {
-      if (!pendencias.length) {
-        return '<small style="color:#5f6b7a;">Nenhuma pendência encontrada nos dados carregados.</small>';
-      }
-
-      const grupos = {};
-      pendencias.forEach(item => {
-        const departamento = item.departamento || "Sem departamento";
-        if (!grupos[departamento]) {
-          grupos[departamento] = {
-            nome: departamento,
-            itens: [],
-            negativas: 0,
-            horasExtras: 0,
-            extrasAbertos: 0,
-            tratativasPendentes: 0
-          };
-        }
-        grupos[departamento].itens.push(item);
-        if (item.tipo === "Horas negativas") grupos[departamento].negativas += 1;
-        if (item.tipo === "Hora extra") grupos[departamento].horasExtras += 1;
-        if (item.tipo === "Extra em aberto") grupos[departamento].extrasAbertos += 1;
-        if (item.tipo === "Tratativa pendente") grupos[departamento].tratativasPendentes += 1;
-      });
-
-      return Object.values(grupos)
-        .sort((a, b) => b.itens.length - a.itens.length || a.nome.localeCompare(b.nome, "pt-BR"))
-        .map((grupo, index) => {
-          const corpoId = `${prefixoId}_${index}`;
-          return `
-            <section class="departamento-card" style="margin-top:12px;">
-              <div class="departamento-header" onclick="toggleDepartamento('${corpoId}')">
-                <div>
-                  <h2><i class="fas fa-building-user"></i> ${escaparHTML(grupo.nome)}</h2>
-                  <small>${grupo.itens.length} situação(ões) para verificar neste departamento</small>
-                </div>
-                <div class="departamento-resumo">
-                  <span class="contador-extra">${grupo.horasExtras} com extra</span>
-                  <span class="contador-negativo">${grupo.negativas} devendo</span>
-                  <span>${grupo.extrasAbertos} extras em aberto</span>
-                  <span>${grupo.tratativasPendentes} em gestão</span>
-                  <span class="departamento-acao"><i class="fas fa-chevron-down"></i> Abrir</span>
-                </div>
-              </div>
-              <div class="departamento-corpo" id="${corpoId}">
-                <div class="tabela-wrapper">
-                  <table style="min-width:760px;">
-                    <thead><tr><th>Tipo</th><th>Funcionário</th><th>Período</th><th>Detalhe</th></tr></thead>
-                    <tbody>${grupo.itens.map(item => `
-                      <tr>
-                        <td>${renderizarTipoSituacaoGestaoChefia(item.tipo)}</td>
-                        <td>${escaparHTML(item.funcionario)}</td>
-                        <td>${escaparHTML(item.periodo || "")}</td>
-                        <td>${escaparHTML(item.detalhe)}</td>
-                      </tr>
-                    `).join("")}</tbody>
-                  </table>
-                </div>
-              </div>
-            </section>
-          `;
-        })
-        .join("");
-    }
-
-    function renderizarTipoSituacaoGestaoChefia(tipo) {
-      if (tipo === "Hora extra" || tipo === "Extra em aberto") {
-        return `<span class="tipo-situacao extra">${escaparHTML(tipo)}</span>`;
-      }
-      if (tipo === "Horas negativas") {
-        return `<span class="tipo-situacao negativa">Hora devendo</span>`;
-      }
-      return escaparHTML(tipo);
-    }
-
-    function renderizarPainelGestaoChefia() {
-      const resumo = document.getElementById("resumoGestaoChefia");
-      const listaPendencias = document.getElementById("listaPendenciasChefia");
-      const listaFechamentos = document.getElementById("listaFechamentosChefia");
-      const listaHistorico = document.getElementById("listaHistoricoTratativasChefia");
-      if (!resumo || !listaPendencias || !listaFechamentos || !listaHistorico) return;
-
-      const ordemPendencias = {
-        "Tratativa pendente": 1,
-        "Extra em aberto": 2,
-        "Hora extra": 3,
-        "Horas negativas": 4,
-        "Cadastro incompleto": 5
-      };
-      const pendencias = obterPendenciasBancoHorasChefia()
-        .sort((a, b) => (ordemPendencias[a.tipo] || 99) - (ordemPendencias[b.tipo] || 99) || String(a.funcionario || "").localeCompare(String(b.funcionario || ""), "pt-BR"));
-      const totalPagas = tratativasHorasPDF.reduce((total, item) => total + Number(item.horasPagas || 0), 0);
-      const totalFolgas = tratativasHorasPDF.reduce((total, item) => total + Number(item.horasFolga || 0), 0);
-      const extrasEmAberto = tratativasHorasPDF.reduce((total, item) => total + calcularSaldoRestanteTratativa(item), 0);
-      const verificandoGestao = tratativasHorasPDF.filter(item => String(item.opcao || "") === "4" || !item.opcao).length;
-      const totalNegativos = resultadoAtualCSV.filter(item => Number(item.saldo || 0) < 0).length;
-      const totalComExtra = resultadoAtualCSV.filter(item => Number(item.saldo || 0) > 0).length;
-      const mesesFechados = fechamentosMensais.filter(item => item.status === "fechado").length;
-
-      resumo.innerHTML = `
-        <div class="tratativa-resumo-card">Situações listadas<strong>${pendencias.length}</strong></div>
-        <div class="tratativa-resumo-card">Extras em aberto<strong>${formatarMinutosParaHora(extrasEmAberto)}</strong></div>
-        <div class="tratativa-resumo-card">Funcionários com extra<strong>${totalComExtra}</strong></div>
-        <div class="tratativa-resumo-card">Funcionários negativos<strong>${totalNegativos}</strong></div>
-        <div class="tratativa-resumo-card">Horas pagas<strong>${formatarNumeroHoras(totalPagas)}h</strong></div>
-        <div class="tratativa-resumo-card">Horas em folga<strong>${formatarNumeroHoras(totalFolgas)}h</strong></div>
-        <div class="tratativa-resumo-card">Verificando gestão<strong>${verificandoGestao}</strong></div>
-        <div class="tratativa-resumo-card">Meses fechados<strong>${mesesFechados}</strong></div>
-      `;
-
-      listaPendencias.innerHTML = renderizarPendenciasPorDepartamentoChefia(pendencias, "gestao_pendencias_chefia_departamento");
-
-      const fechados = fechamentosMensais
-        .filter(item => item.status === "fechado")
-        .sort((a, b) => (b.atualizadoEm || "").localeCompare(a.atualizadoEm || ""))
-        .slice(0, 8);
-      listaFechamentos.innerHTML = fechados.length ? fechados
-        .map(item => `<div style="padding:10px 0; border-bottom:1px solid #edf1f7;"><strong>${escaparHTML(item.mes || "")}/${escaparHTML(item.ano || "")}</strong><br><small>Status: fechado${item.atualizadoEm ? ` em ${new Date(item.atualizadoEm).toLocaleDateString("pt-BR")}` : ""}</small><br><small>${escaparHTML(item.observacao || "Sem observação")}</small></div>`)
-        .join("")
-        : '<small style="color:#5f6b7a;">Nenhum mês fechado ainda.</small>';
-
-      listaHistorico.innerHTML = historicoTratativas.length ? historicoTratativas
-        .slice()
-        .sort((a, b) => (b.criadoEm || "").localeCompare(a.criadoEm || ""))
-        .slice(0, 12)
-        .map(item => `<div style="padding:10px 0; border-bottom:1px solid #edf1f7;"><strong>${escaparHTML(item.funcionario || "Sem funcionário")}</strong><br><small>${escaparHTML(item.acao || "")} - ${escaparHTML(item.periodoTexto || "Período não informado")}</small><br><small>${escaparHTML(item.statusAnterior || "Sem status")} para ${escaparHTML(item.statusNovo || "Sem status")} ${item.criadoEm ? `- ${new Date(item.criadoEm).toLocaleString("pt-BR")}` : ""}</small></div>`)
-        .join("")
-        : '<small style="color:#5f6b7a;">Nenhum histórico registrado ainda.</small>';
-
-      renderizarAtestadosMedicos();
-    }
-
-    window.atualizarPainelGestaoChefia = async function() {
-      await buscarTratativasHorasPDF();
-      await buscarFechamentosMensais();
-      await buscarHistoricoTratativas();
-      renderizarPainelGestaoChefia();
-    };
-
-    window.abrirPaginaGestaoChefia = async function() {
-      document.body.classList.remove("visualizando-departamentos-chefia");
-      document.body.classList.add("visualizando-gestao-chefia");
-      sincronizarFiltrosGestaoComBanco();
-      await atualizarPainelGestaoChefia();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-
-    window.abrirPaginaDepartamentosChefia = function() {
-      document.body.classList.remove("visualizando-gestao-chefia");
-      document.body.classList.add("visualizando-departamentos-chefia");
-      sincronizarFiltrosDepartamentosComBanco();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-
-    window.abrirPaginaBancoChefia = function() {
-      document.body.classList.remove("visualizando-gestao-chefia");
-      document.body.classList.remove("visualizando-departamentos-chefia");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-
     function getModoChefia() {
       return window.location.pathname.toLowerCase().includes("chefes") ||
         new URLSearchParams(window.location.search).get("modo") === "chefia";
@@ -1761,6 +1297,39 @@
       if (badge) badge.textContent = "Chefia";
       document.title = "Banco de Horas - Consulta";
     }
+
+    window.abrirPaginaTratativas = function() {
+      document.body.classList.remove("visualizando-gestao");
+      document.body.classList.remove("visualizando-departamentos");
+      document.body.classList.add("visualizando-tratativas");
+      renderizarTratativasHorasPDF();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    window.abrirPaginaGestao = function() {
+      document.body.classList.remove("visualizando-tratativas");
+      document.body.classList.remove("visualizando-departamentos");
+      document.body.classList.add("visualizando-gestao");
+      sincronizarFiltrosGestaoComBanco();
+      preencherCamposFechamentoPadrao();
+      renderizarGestaoBancoHoras();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    window.abrirPaginaDepartamentos = function() {
+      document.body.classList.remove("visualizando-tratativas");
+      document.body.classList.remove("visualizando-gestao");
+      document.body.classList.add("visualizando-departamentos");
+      sincronizarFiltrosDepartamentosComBanco();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    window.abrirPaginaBancoHoras = function() {
+      document.body.classList.remove("visualizando-tratativas");
+      document.body.classList.remove("visualizando-gestao");
+      document.body.classList.remove("visualizando-departamentos");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
     function nomesIguais(nomeA, nomeB) {
       return removerAcentos(String(nomeA || "").trim().toLowerCase()) ===
@@ -1782,6 +1351,23 @@
     function obterNomeOriginalPorExibicao(nome) {
       const perfil = obterPerfilFuncionario(nome);
       return perfil?.nomeOriginal || nome || "Sem nome";
+    }
+
+    function resolverNomeFuncionarioSistema(nomeDigitado) {
+      const direto = obterNomeOriginalPorExibicao(nomeDigitado);
+      if (direto && !nomesIguais(direto, nomeDigitado)) return direto;
+
+      const busca = normalizarNomeBusca(nomeDigitado);
+      if (busca.length < 3) return nomeDigitado;
+
+      const possiveis = obterNomesFuncionariosSistema()
+        .filter(nome => {
+          const original = normalizarNomeBusca(nome);
+          const exibido = normalizarNomeBusca(obterNomeFuncionario(nome));
+          return original.includes(busca) || exibido.includes(busca);
+        });
+
+      return possiveis.length === 1 ? possiveis[0] : nomeDigitado;
     }
 
     function normalizarNomeBusca(nome) {
@@ -1808,23 +1394,6 @@
 
       if (variacoes.some(nome => nome === buscaNormalizada)) return true;
       return permitirParcial && buscaNormalizada.length >= 3 && variacoes.some(nome => nome.includes(buscaNormalizada));
-    }
-
-    function resolverNomeFuncionarioSistema(nomeDigitado) {
-      const direto = obterNomeOriginalPorExibicao(nomeDigitado);
-      if (direto && !nomesIguais(direto, nomeDigitado)) return direto;
-
-      const busca = normalizarNomeBusca(nomeDigitado);
-      if (busca.length < 3) return nomeDigitado;
-
-      const possiveis = obterNomesFuncionariosSistema()
-        .filter(nome => {
-          const original = normalizarNomeBusca(nome);
-          const exibido = normalizarNomeBusca(obterNomeFuncionario(nome));
-          return original.includes(busca) || exibido.includes(busca);
-        });
-
-      return possiveis.length === 1 ? possiveis[0] : nomeDigitado;
     }
 
     function obterDepartamentoFuncionario(nome) {
@@ -2087,9 +1656,9 @@
             id: docItem.id,
             nomeOriginal: d.nomeOriginal || "",
             nomeExibicao: d.nomeExibicao || d.nomeOriginal || "",
+            cpf: d.cpf || "",
             departamento: d.departamento || "",
             empresa: d.empresa || "",
-            cpf: d.cpf || "",
             ativo: typeof d.ativo === "boolean" ? d.ativo : true,
             dataAfastamento: d.dataAfastamento || ""
           });
@@ -2197,7 +1766,7 @@
         if (origem && destino) destino.value = origem.value || "";
       });
       carregarBancoHoras();
-      renderizarPainelGestaoChefia();
+      renderizarGestaoBancoHoras();
     };
 
     window.limparFiltrosGestao = function() {
@@ -2222,13 +1791,17 @@
         const id = gerarIdFuncionario(nomeOriginal);
         const perfil = obterPerfilFuncionario(nomeOriginal);
         const nomeExibicao = perfil?.nomeExibicao || nomeOriginal;
+        const cpf = perfil?.cpf || "";
         const departamento = perfil?.departamento || "";
         const empresa = perfil?.empresa || "";
+        const ativo = perfil?.ativo !== false;
+        const dataAfastamento = perfil?.dataAfastamento || "";
 
         return `
           <tr>
             <td>${escaparHTML(nomeOriginal)}</td>
             <td><input type="text" id="nome_${id}" value="${escaparHTML(nomeExibicao)}" placeholder="Nome para relatório"></td>
+            <td><input type="text" id="cpf_${id}" value="${escaparHTML(cpf)}" placeholder="000.000.000-00"></td>
             <td><input type="text" id="dep_${id}" value="${escaparHTML(departamento)}" placeholder="Ex: Financeiro"></td>
             <td>
               <select id="empresa_${id}">
@@ -2237,6 +1810,13 @@
                 <option value="gaudi" ${empresa === "gaudi" ? "selected" : ""}>Colégio Antoni Gaudi</option>
               </select>
             </td>
+            <td>
+              <select id="ativo_${id}">
+                <option value="true" ${ativo ? "selected" : ""}>Ativo</option>
+                <option value="false" ${!ativo ? "selected" : ""}>Inativo</option>
+              </select>
+            </td>
+            <td><input type="date" id="afast_${id}" value="${escaparHTML(dataAfastamento)}"></td>
             <td><button data-id="${escaparHTML(id)}" data-nome-original="${escaparHTML(nomeOriginal)}" onclick="salvarFuncionarioMeta(this.dataset.id, this.dataset.nomeOriginal)"><i class="fas fa-save"></i> Salvar</button></td>
           </tr>
         `;
@@ -2244,18 +1824,25 @@
 
       container.innerHTML = `
         <div class="tabela-wrapper" style="margin-top:10px;">
-          <table style="min-width:1080px;">
-            <thead><tr><th>Nome no ponto</th><th>Nome exibido</th><th>Departamento</th><th>Empresa</th><th>Ação</th></tr></thead>
+          <table style="min-width:1480px;">
+            <thead><tr><th>Nome no ponto</th><th>Nome exibido</th><th>Departamento</th><th>Ação</th></tr></thead>
             <tbody>${linhas}</tbody>
           </table>
         </div>
       `;
+      const cabecalho = container.querySelector("thead tr");
+      if (cabecalho) {
+        cabecalho.innerHTML = "<th>Nome no ponto</th><th>Nome exibido</th><th>CPF</th><th>Departamento</th><th>Empresa</th><th>Status</th><th>Afastamento</th><th>Acao</th>";
+      }
     }
 
     window.salvarFuncionarioMeta = async function(id, nomeOriginal) {
       const nomeExibicao = document.getElementById(`nome_${id}`).value.trim();
+      const cpf = document.getElementById(`cpf_${id}`).value.trim();
       const departamento = document.getElementById(`dep_${id}`).value.trim();
       const empresa = document.getElementById(`empresa_${id}`).value;
+      const ativo = document.getElementById(`ativo_${id}`).value === "true";
+      const dataAfastamento = document.getElementById(`afast_${id}`).value;
       const perfilAtual = funcionariosMeta.find(item => item.id === id) || {};
 
       if (!nomeExibicao) {
@@ -2264,15 +1851,14 @@
       }
 
       try {
-        const ativoFuncionario = typeof perfilAtual.ativo === "boolean" ? perfilAtual.ativo : true;
         const dadosFuncionario = {
           nomeOriginal,
           nomeExibicao,
-          cpf: perfilAtual.cpf || "",
+          cpf,
           departamento,
           empresa,
-          ativo: ativoFuncionario,
-          dataAfastamento: ativoFuncionario ? "" : (perfilAtual.dataAfastamento || ""),
+          ativo,
+          dataAfastamento: ativo ? "" : (dataAfastamento || ""),
           atualizadoEm: new Date().toISOString()
         };
 
@@ -2284,6 +1870,206 @@
       } catch (error) {
         console.error("Erro ao salvar funcionário:", error);
         alert("O Firebase bloqueou a gravação em 'funcionarios'. Atualize as regras do Firestore e tente novamente.");
+      }
+    };
+
+    window.mesclarFuncionarioDuplicado = async function() {
+      const nomeErrado = document.getElementById("mergeNomeErrado").value.trim();
+      const nomeCorreto = document.getElementById("mergeNomeCorreto").value.trim();
+
+      if (!nomeErrado || !nomeCorreto) {
+        alert("Informe o nome duplicado e o nome completo correto.");
+        return;
+      }
+
+      if (nomesIguais(nomeErrado, nomeCorreto)) {
+        alert("Os dois nomes parecem iguais. Informe o nome duplicado e o nome completo correto.");
+        return;
+      }
+
+      let registrosParaAtualizar = registrosOriginais.filter(item => funcionarioCombinaComBusca(item.funcionario, nomeErrado));
+      let ajustesParaAtualizar = ajustesHoras.filter(item => item.origem !== "local" && funcionarioCombinaComBusca(item.funcionario, nomeErrado));
+      let cargasParaAtualizar = cargasFuncionarios.filter(item => item.origem !== "local" && funcionarioCombinaComBusca(item.funcionario, nomeErrado));
+      let cadastrosDuplicadosParaRemover = funcionariosMeta.filter(item =>
+        !nomesIguais(item.nomeOriginal, nomeCorreto) &&
+        !nomesIguais(item.nomeExibicao, nomeCorreto) &&
+        (
+          funcionarioCombinaComBusca(item.nomeOriginal, nomeErrado) ||
+          funcionarioCombinaComBusca(item.nomeExibicao, nomeErrado)
+        )
+      );
+
+      if (!registrosParaAtualizar.length && !ajustesParaAtualizar.length && !cargasParaAtualizar.length) {
+        const possiveis = obterNomesFuncionariosSistema()
+          .filter(nome => funcionarioCombinaComBusca(nome, nomeErrado, true));
+
+        const nomesPossiveis = Array.from(new Set(possiveis.map(nome => obterNomeFuncionario(nome))))
+          .sort((a, b) => a.localeCompare(b, "pt-BR"));
+
+        if (nomesPossiveis.length === 1) {
+          const nomeEncontrado = nomesPossiveis[0];
+          registrosParaAtualizar = registrosOriginais.filter(item => funcionarioCombinaComBusca(item.funcionario, nomeEncontrado));
+          ajustesParaAtualizar = ajustesHoras.filter(item => item.origem !== "local" && funcionarioCombinaComBusca(item.funcionario, nomeEncontrado));
+          cargasParaAtualizar = cargasFuncionarios.filter(item => item.origem !== "local" && funcionarioCombinaComBusca(item.funcionario, nomeEncontrado));
+          cadastrosDuplicadosParaRemover = funcionariosMeta.filter(item =>
+            !nomesIguais(item.nomeOriginal, nomeCorreto) &&
+            !nomesIguais(item.nomeExibicao, nomeCorreto) &&
+            (
+              funcionarioCombinaComBusca(item.nomeOriginal, nomeEncontrado) ||
+              funcionarioCombinaComBusca(item.nomeExibicao, nomeEncontrado)
+            )
+          );
+        } else if (nomesPossiveis.length > 1) {
+          alert(`Encontrei mais de um funcionario parecido com "${nomeErrado}". Digite um nome mais completo:\n\n${nomesPossiveis.slice(0, 10).join("\n")}`);
+          return;
+        }
+      }
+
+      const total = registrosParaAtualizar.length + ajustesParaAtualizar.length + cargasParaAtualizar.length + cadastrosDuplicadosParaRemover.length;
+      if (!total) {
+        const nomesDisponiveis = obterNomesFuncionariosSistema()
+          .map(nome => obterNomeFuncionario(nome))
+          .filter(Boolean)
+          .slice(0, 20)
+          .join("\n");
+        alert(`Nao encontrei registros com esse nome. Tente escolher um destes nomes que existem no sistema:\n\n${nomesDisponiveis}`);
+        return;
+      }
+
+      if (!confirm(`Mesclar "${nomeErrado}" em "${nomeCorreto}"?\n\nRegistros de ponto: ${registrosParaAtualizar.length}\nAjustes: ${ajustesParaAtualizar.length}\nCargas: ${cargasParaAtualizar.length}\nCadastros duplicados para apagar: ${cadastrosDuplicadosParaRemover.length}`)) {
+        return;
+      }
+
+      try {
+        const dataValida = /^\d{4}-\d{2}-\d{2}$/;
+        const registrosInvalidos = registrosParaAtualizar.filter(item => !dataValida.test(item.data || ""));
+
+        if (registrosInvalidos.length) {
+          alert("Encontrei registro de ponto sem data valida. Corrija esse registro antes de mesclar.");
+          return;
+        }
+
+        const salvarEmLotes = async (colecao, itens, montarDados) => {
+          for (let i = 0; i < itens.length; i += 450) {
+            const lote = writeBatch(db);
+            itens.slice(i, i + 450).forEach(item => {
+              lote.set(doc(db, colecao, item.id), montarDados(item));
+            });
+            await lote.commit();
+          }
+        };
+
+        try {
+          await salvarEmLotes("horas", registrosParaAtualizar, item => ({
+            funcionario: nomeCorreto,
+            data: item.data,
+            horarios: Array.isArray(item.horarios) ? item.horarios : []
+          }));
+        } catch (error) {
+          console.error("Erro ao mesclar registros de ponto:", error);
+          const detalhe = error?.code === "permission-denied"
+            ? "O Firebase bloqueou a colecao horas. As regras precisam aceitar funcionario, data e horarios."
+            : (error?.message || "Erro desconhecido.");
+          alert(`Erro ao mesclar registros de ponto: ${detalhe}`);
+          return;
+        }
+
+        const ajustesValidos = ajustesParaAtualizar.filter(item =>
+          dataValida.test(item.data || "") && Number(item.minutos || 0) > 0
+        );
+        if (ajustesValidos.length) {
+          try {
+            await salvarEmLotes("ajustesHoras", ajustesValidos, item => ({
+              funcionario: nomeCorreto,
+              data: item.data,
+              tipo: item.tipo || "desconto_extra",
+              minutos: Number(item.minutos || 0),
+              descricao: item.descricao || "",
+              criadoEm: item.criadoEm || new Date().toISOString()
+            }));
+          } catch (error) {
+            console.warn("Nao foi possivel mesclar ajustes no Firebase.", error);
+            alert("Os registros de ponto foram mesclados, mas o Firebase bloqueou alguns ajustes. A tela sera atualizada mesmo assim.");
+          }
+        }
+
+        const cargasValidas = cargasParaAtualizar.filter(item => Number(item.cargaSemanal || 0) > 0);
+        if (cargasValidas.length) {
+          try {
+            await salvarEmLotes("cargasFuncionarios", cargasValidas, item => ({
+              funcionario: nomeCorreto,
+              cargaSemanal: Number(item.cargaSemanal || 40)
+            }));
+          } catch (error) {
+            console.warn("Nao foi possivel mesclar cargas no Firebase.", error);
+            alert("Os registros de ponto foram mesclados, mas o Firebase bloqueou a carga semanal individual. A tela sera atualizada mesmo assim.");
+          }
+        }
+
+        const ajustesLocais = carregarAjustesLocais();
+        const ajustesLocaisAtualizados = ajustesLocais.map(item =>
+          funcionarioCombinaComBusca(item.funcionario, nomeErrado) ? { ...item, funcionario: nomeCorreto } : item
+        );
+        salvarAjustesLocais(ajustesLocaisAtualizados);
+
+        const cargasLocais = carregarCargasFuncionariosLocais();
+        const cargasLocaisAtualizadas = cargasLocais.map(item =>
+          funcionarioCombinaComBusca(item.funcionario, nomeErrado) ? { ...item, funcionario: nomeCorreto } : item
+        );
+        salvarCargasFuncionariosLocais(cargasLocaisAtualizadas);
+
+        try {
+          const idsParaRemover = new Set([gerarIdFuncionario(nomeErrado)]);
+          cadastrosDuplicadosParaRemover.forEach(item => {
+            if (item.id) idsParaRemover.add(item.id);
+          });
+
+          for (const idFuncionario of idsParaRemover) {
+            if (idFuncionario && idFuncionario !== gerarIdFuncionario(nomeCorreto)) {
+              await deleteDoc(doc(db, "funcionarios", idFuncionario));
+            }
+          }
+        } catch (e) {
+          console.warn("Não foi possível remover cadastro antigo do funcionário.", e);
+        }
+
+        const perfilCorreto = obterPerfilFuncionario(nomeCorreto) || {};
+        const perfilErrado = obterPerfilFuncionario(nomeErrado) || {};
+        try {
+          const ativoMesclado = typeof perfilCorreto.ativo === "boolean"
+            ? perfilCorreto.ativo
+            : (typeof perfilErrado.ativo === "boolean" ? perfilErrado.ativo : true);
+          await setDoc(doc(db, "funcionarios", gerarIdFuncionario(nomeCorreto)), {
+            nomeOriginal: nomeCorreto,
+            nomeExibicao: nomeCorreto,
+            cpf: perfilCorreto.cpf || perfilErrado.cpf || "",
+            departamento: (perfilCorreto.departamento || perfilErrado.departamento || "").replace("Sem departamento", ""),
+            empresa: perfilCorreto.empresa || perfilErrado.empresa || "",
+            ativo: ativoMesclado,
+            dataAfastamento: ativoMesclado ? "" : (perfilCorreto.dataAfastamento || perfilErrado.dataAfastamento || ""),
+            atualizadoEm: new Date().toISOString()
+          }, { merge: true });
+        } catch (error) {
+          console.warn("Nao foi possivel salvar cadastro do funcionario mesclado.", error);
+          alert("Os registros de ponto foram mesclados, mas o Firebase bloqueou o cadastro do funcionario. Se o card aparecer sem departamento, edite o cadastro depois.");
+        }
+
+        document.getElementById("mergeNomeErrado").value = "";
+        document.getElementById("mergeNomeCorreto").value = "";
+        document.getElementById("filtroFuncionario").value = nomeCorreto;
+
+        await buscarRegistros();
+        await buscarAjustesHoras();
+        await buscarCargasFuncionarios();
+        await buscarFuncionariosMeta();
+        carregarBancoHoras();
+        alert("Funcionário mesclado com sucesso. Agora deve aparecer apenas um card.");
+      } catch (error) {
+        console.error("Erro ao mesclar funcionário:", error);
+        const detalhe = error?.code === "permission-denied"
+          ? "O Firebase bloqueou a alteração. As regras precisam permitir update na coleção horas."
+          : (error?.message || "Erro desconhecido.");
+        alert(`Erro ao mesclar funcionário: ${detalhe}`);
       }
     };
 
@@ -2515,7 +2301,8 @@
             data: d.data || "",
             tipo: d.tipo || "desconto_extra",
             minutos: Number(d.minutos || 0),
-            descricao: d.descricao || ""
+            descricao: d.descricao || "",
+            criadoEm: d.criadoEm || ""
           });
         });
       } catch (error) {
@@ -2731,255 +2518,6 @@
         observacao: "Regra padrão"
       };
     }
-    function obterMesReferenciaAtual() {
-      const agora = new Date();
-      const ano = document.getElementById("filtroAno")?.value || String(agora.getFullYear());
-      const mes = document.getElementById("filtroMes")?.value || String(agora.getMonth() + 1).padStart(2, "0");
-      return `${ano}-${String(mes).padStart(2, "0")}`;
-    }
-
-    function formatarMesReferencia(mesRef) {
-      if (!mesRef || !mesRef.includes("-")) return mesRef || "";
-      const [ano, mes] = mesRef.split("-");
-      return `${nomesMeses[Number(mes) - 1] || mes}/${ano}`;
-    }
-
-    async function buscarAssinaturasBancoHoras() {
-      assinaturasBancoHoras = [];
-      try {
-        const snapshot = await getDocs(collection(db, "assinaturasBancoHoras"));
-        snapshot.forEach(documento => {
-          assinaturasBancoHoras.push({ id: documento.id, ...documento.data() });
-        });
-      } catch (error) {
-        console.warn("Não foi possível carregar assinaturas do Firebase.", error);
-      }
-      renderizarAssinaturasBancoHoras();
-    }
-
-    function renderizarAssinaturasBancoHoras() {
-      const container = document.getElementById("listaAssinaturasMensais");
-      if (!container) return;
-
-      if (!assinaturasBancoHoras.length) {
-        container.innerHTML = `<div class="assinatura-item"><small>Nenhuma assinatura salva ainda.</small></div>`;
-        return;
-      }
-
-      container.innerHTML = assinaturasBancoHoras
-        .slice()
-        .sort((a, b) => (b.assinadoEm || "").localeCompare(a.assinadoEm || ""))
-        .map(item => `
-          <div class="assinatura-item">
-            <strong>${escaparHTML(item.funcionario)}</strong>
-            <small>Departamento: ${escaparHTML(item.departamento || "Sem departamento")}</small>
-            <small>Mês: ${escaparHTML(formatarMesReferencia(item.mesReferencia))}</small>
-            <small>Assinado por: ${escaparHTML(item.nomeAssinante || "-")}</small>
-            <small>Data: ${item.assinadoEm ? new Date(item.assinadoEm).toLocaleString("pt-BR") : "-"}</small>
-            <small>Saldo assinado: ${formatarMinutosParaHora(item.resumo?.saldoFinal || item.saldoMinutos || 0)}</small>
-          </div>
-        `).join("");
-    }
-
-    function atualizarFuncionariosAssinatura() {
-      const select = document.getElementById("assinaturaFuncionario");
-      if (!select) return;
-
-      const valorAtual = select.value;
-      const nomes = (resultadoAtualCSV.length ? resultadoAtualCSV.map(item => item.funcionario) : obterNomesFuncionariosSistema())
-        .filter(Boolean)
-        .sort((a, b) => a.localeCompare(b, "pt-BR"));
-
-      select.innerHTML = `<option value="">Selecione</option>` + nomes
-        .map(nome => `<option value="${escaparHTML(nome)}">${escaparHTML(nome)} - ${escaparHTML(obterDepartamentoFuncionario(nome))}</option>`)
-        .join("");
-
-      if (valorAtual && nomes.some(nome => nomesIguais(nome, valorAtual))) {
-        select.value = valorAtual;
-      }
-    }
-
-    function atualizarMesAssinatura() {
-      const campo = document.getElementById("assinaturaMes");
-      if (campo && !campo.value) campo.value = obterMesReferenciaAtual();
-    }
-
-    function obterResumoMensalAssinatura(funcionario, mesRef) {
-      const detalhe = detalhesAtuaisPDF.find(item => nomesIguais(item.funcionario, funcionario));
-      if (!detalhe) return null;
-
-      const [ano, mes] = mesRef.split("-");
-      const nomeMes = `${nomesMeses[Number(mes) - 1]}/${ano}`;
-      const mesDetalhe = detalhe.meses.find(item => item.mesAno === nomeMes);
-      if (!mesDetalhe) return null;
-
-      const resumo = mesDetalhe.registros.reduce((acc, reg) => {
-        const saldo = Number(reg.saldoDia || 0);
-        acc.trabalhado += Number(reg.duracaoMinutos || 0);
-        acc.previsto += Number(reg.previstoDia || 0);
-        acc.extras += saldo > 0 ? saldo : 0;
-        acc.negativas += saldo < 0 ? Math.abs(saldo) : 0;
-        if (reg.horariosTexto === "Ajuste manual") acc.ajustes += saldo;
-        acc.saldoFinal += saldo;
-        return acc;
-      }, { trabalhado: 0, previsto: 0, extras: 0, negativas: 0, ajustes: 0, saldoFinal: 0 });
-
-      return {
-        funcionario: detalhe.funcionario,
-        departamento: detalhe.departamento || obterDepartamentoFuncionario(detalhe.funcionario),
-        mesReferencia: mesRef,
-        mesTexto: nomeMes,
-        quantidadeRegistros: mesDetalhe.registros.length,
-        resumo
-      };
-    }
-
-    window.carregarResumoAssinatura = function() {
-      const funcionario = document.getElementById("assinaturaFuncionario")?.value || "";
-      const mesRef = document.getElementById("assinaturaMes")?.value || "";
-      const container = document.getElementById("assinaturaResumo");
-      resumoAssinaturaAtual = null;
-
-      if (!container) return;
-      if (!funcionario || !mesRef) {
-        container.innerHTML = `<div><strong>Status</strong> Selecione funcionário e mês para conferir.</div>`;
-        return;
-      }
-
-      const resumo = obterResumoMensalAssinatura(funcionario, mesRef);
-      if (!resumo) {
-        container.innerHTML = `<div><strong>Status</strong> Nenhum registro encontrado para esse funcionário nesse mês.</div>`;
-        return;
-      }
-
-      resumoAssinaturaAtual = resumo;
-      const nomeCampo = document.getElementById("assinaturaNome");
-      if (nomeCampo && !nomeCampo.value) nomeCampo.value = resumo.funcionario;
-
-      container.innerHTML = `
-        <div><strong>Funcionário</strong> ${escaparHTML(resumo.funcionario)}</div>
-        <div><strong>Departamento</strong> ${escaparHTML(resumo.departamento)}</div>
-        <div><strong>Mês</strong> ${escaparHTML(resumo.mesTexto)}</div>
-        <div><strong>Registros</strong> ${resumo.quantidadeRegistros}</div>
-        <div><strong>Trabalhado</strong> ${formatarMinutosParaHora(resumo.resumo.trabalhado)}</div>
-        <div><strong>Previsto</strong> ${formatarMinutosParaHora(resumo.resumo.previsto)}</div>
-        <div><strong>Extras</strong> ${formatarMinutosParaHora(resumo.resumo.extras)}</div>
-        <div><strong>Negativas</strong> ${formatarMinutosParaHora(resumo.resumo.negativas)}</div>
-        <div><strong>Ajustes</strong> ${formatarMinutosParaHora(resumo.resumo.ajustes)}</div>
-        <div class="${obterClasseSaldo(resumo.resumo.saldoFinal)}"><strong>Saldo final</strong> ${formatarMinutosParaHora(resumo.resumo.saldoFinal)}</div>
-      `;
-    };
-
-    function configurarCanvasAssinatura() {
-      const canvas = document.getElementById("assinaturaCanvas");
-      if (!canvas || assinaturaCanvasConfigurado) return;
-
-      const ctx = canvas.getContext("2d");
-      const ajustarTamanho = () => {
-        const rect = canvas.getBoundingClientRect();
-        const ratio = window.devicePixelRatio || 1;
-        canvas.width = Math.max(1, Math.floor(rect.width * ratio));
-        canvas.height = Math.max(1, Math.floor(rect.height * ratio));
-        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-        ctx.lineWidth = 2.5;
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.strokeStyle = "#111827";
-      };
-
-      ajustarTamanho();
-      window.addEventListener("resize", ajustarTamanho);
-
-      let desenhando = false;
-      const ponto = event => {
-        const rect = canvas.getBoundingClientRect();
-        return { x: event.clientX - rect.left, y: event.clientY - rect.top };
-      };
-
-      canvas.addEventListener("pointerdown", event => {
-        desenhando = true;
-        assinaturaCanvasVazio = false;
-        canvas.setPointerCapture(event.pointerId);
-        const p = ponto(event);
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
-      });
-
-      canvas.addEventListener("pointermove", event => {
-        if (!desenhando) return;
-        const p = ponto(event);
-        ctx.lineTo(p.x, p.y);
-        ctx.stroke();
-      });
-
-      const parar = () => { desenhando = false; };
-      canvas.addEventListener("pointerup", parar);
-      canvas.addEventListener("pointerleave", parar);
-      assinaturaCanvasConfigurado = true;
-    }
-
-    window.limparAssinaturaCanvas = function() {
-      const canvas = document.getElementById("assinaturaCanvas");
-      if (!canvas) return;
-      const ctx = canvas.getContext("2d");
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      assinaturaCanvasVazio = true;
-    };
-
-    window.salvarAssinaturaMensal = async function() {
-      const funcionario = document.getElementById("assinaturaFuncionario")?.value || "";
-      const mesRef = document.getElementById("assinaturaMes")?.value || "";
-      const nomeAssinante = (document.getElementById("assinaturaNome")?.value || "").trim();
-      const canvas = document.getElementById("assinaturaCanvas");
-
-      if (!funcionario || !mesRef) {
-        alert("Selecione o funcionário e o mês da assinatura.");
-        return;
-      }
-
-      if (!resumoAssinaturaAtual || !nomesIguais(resumoAssinaturaAtual.funcionario, funcionario) || resumoAssinaturaAtual.mesReferencia !== mesRef) {
-        window.carregarResumoAssinatura();
-      }
-
-      if (!resumoAssinaturaAtual) {
-        alert("Não existe resumo calculado para esse funcionário nesse mês.");
-        return;
-      }
-
-      if (!nomeAssinante) {
-        alert("Digite o nome de quem está assinando.");
-        return;
-      }
-
-      if (!canvas || assinaturaCanvasVazio) {
-        alert("Faça a assinatura no quadro antes de salvar.");
-        return;
-      }
-
-      const id = `${gerarIdFuncionario(funcionario)}_${mesRef}`;
-      const dados = {
-        funcionario: resumoAssinaturaAtual.funcionario,
-        departamento: resumoAssinaturaAtual.departamento,
-        mesReferencia: mesRef,
-        mesTexto: resumoAssinaturaAtual.mesTexto,
-        quantidadeRegistros: resumoAssinaturaAtual.quantidadeRegistros,
-        saldoMinutos: resumoAssinaturaAtual.resumo.saldoFinal,
-        resumo: resumoAssinaturaAtual.resumo,
-        assinaturaImagem: canvas.toDataURL("image/png"),
-        nomeAssinante,
-        assinadoEm: new Date().toISOString(),
-        status: "assinado"
-      };
-
-      try {
-        await setDoc(doc(db, "assinaturasBancoHoras", id), dados);
-        alert("Assinatura salva com sucesso no Firebase!");
-        window.limparAssinaturaCanvas();
-      } catch (error) {
-        console.error("Erro ao salvar assinatura:", error);
-        alert("Erro ao salvar assinatura. Verifique se as regras do Firebase permitem a coleção assinaturasBancoHoras.");
-      }
-    };
 
     function renderizarResumo(resultado) {
       document.getElementById("totalFuncionarios").textContent = resultado.totalFuncionarios;
@@ -3070,7 +2608,7 @@
                         .sort((a, b) => a.funcionario.localeCompare(b.funcionario, "pt-BR"))
                         .map(item => `
                           <tr>
-                            <td><div class="funcionario-identificacao"><strong>${item.funcionario}</strong>${renderizarStatusFuncionario(item.funcionario)}</div></td>
+                            <td><div class="funcionario-identificacao"><strong>${item.funcionario}</strong>${renderizarStatusFuncionario(item.funcionario)}<small class="carga-funcionario-info" style="color:#5f6b7a;">Carga: ${item.cargaSemanal || obterCargaSemanalFuncionario(item.funcionario)}h/semana</small></div></td>
                             <td>${item.quantidadeRegistros}</td>
                             <td>${formatarMinutosParaHora(item.trabalhado)}</td>
                             <td>${formatarMinutosParaHora(item.previsto)}</td>
@@ -3097,7 +2635,7 @@
 
       tbody.innerHTML = linhas.map(item => `
         <tr>
-          <td><div class="funcionario-identificacao"><strong>${item.funcionario}</strong>${renderizarStatusFuncionario(item.funcionario)}</div></td>
+          <td><div class="funcionario-identificacao"><strong>${item.funcionario}</strong>${renderizarStatusFuncionario(item.funcionario)}<small class="carga-funcionario-info" style="color:#5f6b7a;">Carga: ${item.cargaSemanal || obterCargaSemanalFuncionario(item.funcionario)}h/semana</small></div></td>
           <td>${item.departamento || "Sem departamento"}</td>
           <td>${item.quantidadeRegistros}</td>
           <td>${formatarMinutosParaHora(item.trabalhado)}</td>
@@ -3648,6 +3186,11 @@
         return;
       }
 
+      const [anoDataEspecial, mesDataEspecial] = data.split("-");
+      if (mesEstaFechado(anoDataEspecial, mesDataEspecial) && !confirm(`O mês ${mesDataEspecial}/${anoDataEspecial} está fechado. Deseja alterar mesmo assim?`)) {
+        return;
+      }
+
       if (tipo === "compensacao" && !dataCompensada) {
         alert("Informe qual data será compensada.");
         return;
@@ -3730,6 +3273,10 @@
       if (!dataOriginalFolga) { alert("Informe a data da folga/ajuste."); return; }
       if (tipo === "folga_descontar" && !mesDesconto) { alert("Informe em qual mês a folga será descontada."); return; }
       if (horasInformadas === "") { alert("Informe a quantidade de horas."); return; }
+      const [anoAjuste, mesAjuste] = data.split("-");
+      if (mesEstaFechado(anoAjuste, mesAjuste) && !confirm(`O mês ${mesAjuste}/${anoAjuste} está fechado. Deseja lançar este ajuste mesmo assim?`)) {
+        return;
+      }
 
       const horas = Number(horasInformadas);
       if (Number.isNaN(horas) || horas <= 0) { alert("Informe uma quantidade de horas válida."); return; }
@@ -3870,7 +3417,7 @@
 
       await buscarAjustesHoras();
       carregarBancoHoras();
-      renderizarPainelGestaoChefia();
+      renderizarGestaoBancoHoras();
     };
 
     window.excluirAjusteHoras = async function(id) {
@@ -3990,7 +3537,6 @@
         renderizarTabela(linhas);
         renderizarDetalhes(detalhesAtuaisPDF);
         renderizarResumo(ultimoResumoPDF);
-        renderizarPainelGestaoChefia();
 
       } catch (error) {
         console.error("Erro ao carregar banco de horas:", error);
@@ -4048,119 +3594,26 @@
       link.click();
       document.body.removeChild(link);
     };
+
     const EMPRESAS_BANCO_HORAS = {
-      tracos: {
-        nome: "Escola Tracos e Letras",
-        cnpj: "03.570.177/0001-11"
-      },
-      gaudi: {
-        nome: "Colegio Antoni Gaudi",
-        cnpj: "45.701.401/0001-07"
-      }
+      tracos: { nome: "Escola Tracos e Letras", cnpj: "27.690.153/0001-18" },
+      gaudi: { nome: "Colegio Antoni Gaudi", cnpj: "14.002.136/0001-82" }
     };
-
-    function obterEmpresaFuncionario(nome, departamento = "") {
-      const perfil = obterPerfilFuncionario(nome) || {};
-      const empresaCadastrada = perfil.empresa || perfil.unidade || "";
-      if (empresaCadastrada === "tracos") return EMPRESAS_BANCO_HORAS.tracos;
-      if (empresaCadastrada === "gaudi") return EMPRESAS_BANCO_HORAS.gaudi;
-
-      const base = removerAcentos(`${empresaCadastrada} ${departamento} ${perfil.departamento || ""} ${nome || ""}`.toLowerCase());
-
-      if (base.includes("gaudi") || base.includes("antoni") || base.includes("colegio")) return EMPRESAS_BANCO_HORAS.gaudi;
-      if (base.includes("tracos") || base.includes("letras") || base.includes("escola")) return EMPRESAS_BANCO_HORAS.tracos;
-
-      return { nome: "Empresa nao informada", cnpj: "-" };
-    }
-
-    function adicionarCabecalhoEmpresasPDF(doc, titulo) {
-      doc.setFontSize(13);
-      doc.setTextColor(31, 58, 147);
-      doc.text(titulo, 14, 12);
-
-      doc.setFontSize(8.5);
-      doc.setTextColor(60, 60, 60);
-      doc.text(`${EMPRESAS_BANCO_HORAS.tracos.nome} - CNPJ: ${EMPRESAS_BANCO_HORAS.tracos.cnpj}`, 14, 18);
-      doc.text(`${EMPRESAS_BANCO_HORAS.gaudi.nome} - CNPJ: ${EMPRESAS_BANCO_HORAS.gaudi.cnpj}`, 14, 23);
-    }
-    function solicitarTratativaHorasPDF() {
-      const resposta = prompt(
-        "Antes de baixar o PDF, escolha a tratativa das horas:\n\n" +
-        "1 - Horas pagas\n" +
-        "2 - Horas não pagas\n" +
-        "3 - Horas serão tiradas em folgas\n" +
-        "4 - Verificando com a gestão\n\n" +
-        "Digite o número da opção:"
-      );
-
-      if (resposta === null) return null;
-
-      const opcoes = {
-        "1": "Horas pagas",
-        "2": "Horas não pagas",
-        "3": "Horas serão tiradas em folgas",
-        "4": "Verificando com a gestão"
-      };
-
-      return opcoes[String(resposta).trim()] || "Verificando com a gestão";
-    }
-
-    function desenharTratativaHorasPDF(doc, y, tratativaHoras) {
-      const opcoes = [
-        "Horas pagas",
-        "Horas não pagas",
-        "Horas serão tiradas em folgas",
-        "Verificando com a gestão"
-      ];
-
-      doc.setFontSize(9);
-      doc.setTextColor(30, 41, 59);
-      doc.setFont(undefined, "bold");
-      doc.text("Tratativa das horas", 14, y);
-      doc.setFont(undefined, "normal");
-      y += 7;
-
-      opcoes.forEach((opcao, index) => {
-        const x = index < 2 ? 18 : 108;
-        const linhaY = y + (index % 2) * 8;
-        doc.setDrawColor(71, 85, 105);
-        doc.rect(x, linhaY - 3.5, 3.8, 3.8);
-        if (opcao === tratativaHoras) {
-          doc.setFillColor(30, 41, 59);
-          doc.rect(x + 0.7, linhaY - 2.8, 2.4, 2.4, "F");
-        }
-        doc.setFontSize(8.5);
-        doc.setTextColor(51, 65, 85);
-        doc.text(opcao, x + 6, linhaY);
-      });
-
-      return y + 19;
-    }
-
-    function adicionarCamposAssinaturaPDF(doc, y, tratativaHoras = "Verificando com a gestão") {
-      const alturaPagina = doc.internal.pageSize.height;
-      if (y > alturaPagina - 44) {
-        doc.addPage();
-        y = 42;
-      }
-
-      y = desenharTratativaHorasPDF(doc, y, tratativaHoras);
-
-      doc.setDrawColor(80, 80, 80);
-      doc.line(14, y, 92, y);
-      doc.line(112, y, 190, y);
-      y += 5;
-
-      doc.setFontSize(8.5);
-      doc.text("Assinatura da Direcao", 31, y);
-      doc.text("Assinatura do Funcionario", 124, y);
-      y += 7;
-      doc.text("Data: ____/____/______", 14, y);
-      return y + 8;
-    }
 
     function textoPDF(valor) {
       return removerAcentos(String(valor ?? ""));
+    }
+
+    function obterEmpresaFuncionario(nome, departamento = "") {
+      const perfil = obterPerfilFuncionario(nome) || {};
+      if (perfil.empresa && EMPRESAS_BANCO_HORAS[perfil.empresa]) {
+        return EMPRESAS_BANCO_HORAS[perfil.empresa];
+      }
+
+      const base = removerAcentos(`${departamento} ${perfil.departamento || ""}`.toLowerCase());
+      if (base.includes("gaudi")) return EMPRESAS_BANCO_HORAS.gaudi;
+      if (base.includes("tracos") || base.includes("traco")) return EMPRESAS_BANCO_HORAS.tracos;
+      return { nome: "Empresa nao informada", cnpj: "-" };
     }
 
     function aplicarRodapePDF(doc, titulo) {
@@ -4209,8 +3662,8 @@
     }
 
     function desenharResumoCardsPDF(doc, cards, y) {
-      const largura = 35;
-      const gap = 1.5;
+      const largura = 29;
+      const gap = 1.7;
       cards.forEach((card, index) => {
         const x = 14 + index * (largura + gap);
         doc.setFillColor(248, 250, 252);
@@ -4228,115 +3681,833 @@
       return y + 26;
     }
 
+    function solicitarTratativaHorasPDF() {
+      const resposta = prompt(
+        "Antes de baixar o PDF, escolha a tratativa das horas:\n\n" +
+        "1 - Horas pagas\n" +
+        "2 - Horas não pagas\n" +
+        "3 - Horas serão tiradas em folgas\n" +
+        "4 - Verificando com a gestão\n\n" +
+        "Digite o número da opção:"
+      );
+
+      if (resposta === null) return null;
+
+      const opcoes = {
+        "1": "Horas pagas",
+        "2": "Horas não pagas",
+        "3": "Horas serão tiradas em folgas",
+        "4": "Verificando com a gestão"
+      };
+
+      return opcoes[String(resposta).trim()] || "Verificando com a gestão";
+    }
+
+    const TRATATIVAS_HORAS_PDF_KEY = "tratativasHorasPDF";
+
+    function carregarTratativasHorasPDF() {
+      try {
+        const lista = JSON.parse(localStorage.getItem(TRATATIVAS_HORAS_PDF_KEY) || "[]");
+        return Array.isArray(lista) ? lista : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function salvarTratativasHorasPDF(lista) {
+      localStorage.setItem(TRATATIVAS_HORAS_PDF_KEY, JSON.stringify(lista));
+    }
+
+    const FECHAMENTOS_MENSAIS_KEY = "fechamentosMensaisBancoHoras";
+    const HISTORICO_TRATATIVAS_KEY = "historicoTratativasHoras";
+
+    function carregarListaLocal(chave) {
+      try {
+        const lista = JSON.parse(localStorage.getItem(chave) || "[]");
+        return Array.isArray(lista) ? lista : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function salvarListaLocal(chave, lista) {
+      localStorage.setItem(chave, JSON.stringify(lista));
+    }
+
+    function gerarIdFechamento(ano, mes) {
+      return `${ano}_${mes}`;
+    }
+
+    function obterMesAnoFiltroAtual() {
+      const ano = document.getElementById("filtroAno")?.value || new Date().getFullYear();
+      const mes = document.getElementById("filtroMes")?.value || String(new Date().getMonth() + 1).padStart(2, "0");
+      return { ano: String(ano), mes: String(mes).padStart(2, "0") };
+    }
+
+    function preencherCamposFechamentoPadrao() {
+      const atual = obterMesAnoFiltroAtual();
+      const ano = document.getElementById("fechamentoAno");
+      const mes = document.getElementById("fechamentoMes");
+      if (ano && !ano.value) ano.value = atual.ano;
+      if (mes && !mes.value) mes.value = atual.mes;
+    }
+
+    function mesEstaFechado(ano, mes) {
+      const id = gerarIdFechamento(ano, mes);
+      return fechamentosMensais.some(item => item.id === id && item.status === "fechado");
+    }
+
+    async function buscarFechamentosMensais() {
+      const locais = carregarListaLocal(FECHAMENTOS_MENSAIS_KEY);
+      const porId = new Map(locais.map(item => [item.id, item]));
+
+      try {
+        const snapshot = await getDocs(collection(db, "fechamentosMensais"));
+        snapshot.forEach(docItem => porId.set(docItem.id, { id: docItem.id, ...docItem.data(), origem: "firebase" }));
+      } catch (error) {
+        console.warn("Nao foi possivel carregar fechamentos do Firebase. Usando dados locais.", error);
+      }
+
+      fechamentosMensais = Array.from(porId.values());
+      salvarListaLocal(FECHAMENTOS_MENSAIS_KEY, fechamentosMensais);
+    }
+
+    async function buscarHistoricoTratativas() {
+      const locais = carregarListaLocal(HISTORICO_TRATATIVAS_KEY);
+      const porId = new Map(locais.map(item => [item.id, item]));
+
+      try {
+        const snapshot = await getDocs(collection(db, "historicoTratativasHoras"));
+        snapshot.forEach(docItem => porId.set(docItem.id, { id: docItem.id, ...docItem.data(), origem: "firebase" }));
+      } catch (error) {
+        console.warn("Nao foi possivel carregar historico de tratativas do Firebase. Usando dados locais.", error);
+      }
+
+      historicoTratativas = Array.from(porId.values());
+      salvarListaLocal(HISTORICO_TRATATIVAS_KEY, historicoTratativas);
+    }
+
+    async function registrarHistoricoTratativa(acao, tratativaAnterior, tratativaNova) {
+      const registro = {
+        id: `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+        acao,
+        funcionario: tratativaNova?.funcionario || tratativaAnterior?.funcionario || "",
+        periodoTexto: tratativaNova?.periodoTexto || tratativaAnterior?.periodoTexto || "",
+        statusAnterior: tratativaAnterior?.status || "",
+        statusNovo: tratativaNova?.status || "",
+        horasPagasAnterior: Number(tratativaAnterior?.horasPagas || 0),
+        horasPagasNovo: Number(tratativaNova?.horasPagas || 0),
+        horasFolgaAnterior: Number(tratativaAnterior?.horasFolga || 0),
+        horasFolgaNovo: Number(tratativaNova?.horasFolga || 0),
+        dataFolgaAnterior: tratativaAnterior?.dataFolga || "",
+        dataFolgaNova: tratativaNova?.dataFolga || "",
+        criadoEm: new Date().toISOString()
+      };
+
+      historicoTratativas = [registro, ...historicoTratativas].slice(0, 300);
+      salvarListaLocal(HISTORICO_TRATATIVAS_KEY, historicoTratativas);
+
+      try {
+        await setDoc(doc(db, "historicoTratativasHoras", registro.id), registro);
+      } catch (error) {
+        console.warn("Firebase bloqueou o historico da tratativa. Ficou salvo no navegador.", error);
+      }
+    }
+
+    async function buscarTratativasHorasPDF() {
+      const locais = carregarTratativasHorasPDF();
+      const porId = new Map(locais.map(item => [item.id, item]));
+
+      try {
+        const snapshot = await getDocs(collection(db, "tratativasHorasPDF"));
+        snapshot.forEach(docItem => {
+          const dados = docItem.data();
+          porId.set(docItem.id, { id: docItem.id, ...dados, origem: "firebase" });
+        });
+        salvarTratativasHorasPDF(Array.from(porId.values()));
+      } catch (error) {
+        console.warn("Nao foi possivel carregar tratativas do Firebase. Usando tratativas locais.", error);
+      }
+
+      renderizarTratativasHorasPDF();
+    }
+
+    function gerarIdTratativaHoras(funcionario, periodoTexto) {
+      return `${gerarIdFuncionario(funcionario)}_${removerAcentos(String(periodoTexto || "periodo").toLowerCase()).replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "")}`;
+    }
+
+    async function salvarTratativaHorasPDF(tratativa) {
+      const lista = carregarTratativasHorasPDF().filter(item => item.id !== tratativa.id);
+      const anterior = carregarTratativasHorasPDF().find(item => item.id === tratativa.id) || null;
+      lista.push(tratativa);
+      salvarTratativasHorasPDF(lista);
+      renderizarTratativasHorasPDF();
+
+      try {
+        await setDoc(doc(db, "tratativasHorasPDF", tratativa.id), {
+          funcionario: tratativa.funcionario || "",
+          periodoTexto: tratativa.periodoTexto || "",
+          opcao: tratativa.opcao || "",
+          status: tratativa.status || "",
+          horasPagas: Number(tratativa.horasPagas || 0),
+          horasFolga: Number(tratativa.horasFolga || 0),
+          dataFolga: tratativa.dataFolga || "",
+          saldoMinutos: Number(tratativa.saldoMinutos || 0),
+          atualizadoEm: tratativa.atualizadoEm || new Date().toISOString()
+        });
+      } catch (error) {
+        console.warn("Firebase bloqueou o salvamento da tratativa. Ficou salvo no navegador.", error);
+      }
+
+      await registrarHistoricoTratativa(anterior ? "atualizacao_pdf" : "criacao_pdf", anterior, tratativa);
+    }
+
+    function converterHorasDecimalParaMinutos(valor) {
+      const texto = String(valor ?? "").trim().replace(",", ".");
+      if (texto.includes(":")) {
+        const partes = texto.split(":");
+        const horas = Number(partes[0] || 0) || 0;
+        const minutos = Number(partes[1] || 0) || 0;
+        return Math.round((horas * 60) + minutos);
+      }
+      return Math.round((Number(texto || 0) || 0) * 60);
+    }
+
+    function calcularSaldoRestanteTratativa(tratativa) {
+      const saldo = Number(tratativa.saldoMinutos || 0);
+      const abatido = converterHorasDecimalParaMinutos(tratativa.horasPagas) + converterHorasDecimalParaMinutos(tratativa.horasFolga);
+      if (saldo > 0) return saldo - abatido;
+      if (saldo < 0) return saldo;
+      return 0;
+    }
+
+    function calcularSituacaoFinalTratativa(tratativa) {
+      const saldoOriginal = Number(tratativa.saldoMinutos || 0);
+      const restante = Number(tratativa.saldoRestanteMinutos ?? calcularSaldoRestanteTratativa(tratativa));
+
+      if (saldoOriginal > 0) {
+        if (restante > 0) return `Ainda resta ${formatarMinutosParaHora(restante)} de extra`;
+        if (restante < 0) return `Saldo quitado; abatimento excedeu ${formatarMinutosParaHora(Math.abs(restante))}`;
+        return "Saldo quitado no período";
+      }
+
+      if (saldoOriginal < 0) return `Ainda possui ${formatarMinutosParaHora(Math.abs(saldoOriginal))} de horas negativas`;
+      return "Saldo quitado no período";
+    }
+
+    function formatarTratativaHorasPDF(tratativa) {
+      const partes = [tratativa.status || "Verificando com a gestão"];
+      if (Number(tratativa.horasPagas || 0) > 0) partes.push(`${tratativa.horasPagas}h pagas`);
+      if (Number(tratativa.horasFolga || 0) > 0) partes.push(`${tratativa.horasFolga}h em folga`);
+      if (tratativa.dataFolga) partes.push(`folga em ${formatarDataBR(tratativa.dataFolga)}`);
+      partes.push(tratativa.situacaoFinal || calcularSituacaoFinalTratativa(tratativa));
+      return partes.join(" - ");
+    }
+
+    function renderizarTratativasHorasPDF() {
+      const container = document.getElementById("listaTratativasHorasPDF");
+      if (!container) return;
+
+      const lista = carregarTratativasHorasPDF()
+        .slice()
+        .sort((a, b) => (b.atualizadoEm || "").localeCompare(a.atualizadoEm || ""));
+
+      if (!lista.length) {
+        container.innerHTML = '<small style="color:#5f6b7a;">Nenhuma tratativa registrada ainda. Gere um PDF pelo ADM para registrar.</small>';
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="tabela-wrapper">
+          <table style="min-width:980px;">
+            <thead>
+              <tr><th>Funcionário</th><th>Período</th><th>Tratativa</th><th>Horas pagas</th><th>Horas em folga</th><th>Data da folga</th><th>Ação</th></tr>
+            </thead>
+            <tbody>
+              ${lista.map(item => `
+                <tr>
+                  <td>${escaparHTML(item.funcionario || "")}</td>
+                  <td>${escaparHTML(item.periodoTexto || "")}</td>
+                  <td>
+                    <select id="tratativa_status_${escaparHTML(item.id)}">
+                      <option value="1" ${item.opcao === "1" ? "selected" : ""}>Horas pagas</option>
+                      <option value="2" ${item.opcao === "2" ? "selected" : ""}>Horas não pagas</option>
+                      <option value="3" ${item.opcao === "3" ? "selected" : ""}>Horas serão tiradas em folgas</option>
+                      <option value="4" ${item.opcao === "4" ? "selected" : ""}>Verificando com a gestão</option>
+                    </select>
+                    <small style="display:block; color:#64748b; margin-top:4px;">${escaparHTML(formatarTratativaHorasPDF(item))}</small>
+                  </td>
+                  <td><input type="number" step="0.25" min="0" id="tratativa_pagas_${escaparHTML(item.id)}" value="${escaparHTML(item.horasPagas || 0)}"></td>
+                  <td><input type="number" step="0.25" min="0" id="tratativa_folga_horas_${escaparHTML(item.id)}" value="${escaparHTML(item.horasFolga || 0)}"></td>
+                  <td><input type="date" id="tratativa_folga_${escaparHTML(item.id)}" value="${escaparHTML(item.dataFolga || "")}"></td>
+                  <td>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                      <button type="button" data-id="${escaparHTML(item.id)}" onclick="atualizarDataFolgaTratativa(this.dataset.id)" style="padding:8px 12px;"><i class="fas fa-save"></i> Salvar</button>
+                      <button type="button" class="btn-excluir" data-id="${escaparHTML(item.id)}" onclick="excluirTratativaHorasPDF(this.dataset.id)"><i class="fas fa-trash"></i> Excluir</button>
+                    </div>
+                  </td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    window.excluirTratativaHorasPDF = async function(id) {
+      const lista = carregarTratativasHorasPDF();
+      const item = lista.find(registro => registro.id === id);
+      if (!item) return;
+
+      const nome = item.funcionario || "esta tratativa";
+      const periodo = item.periodoTexto ? ` do período ${item.periodoTexto}` : "";
+      if (!confirm(`Excluir a tratativa de ${nome}${periodo}?`)) return;
+
+      salvarTratativasHorasPDF(lista.filter(registro => registro.id !== id));
+      renderizarTratativasHorasPDF();
+
+      try {
+        await deleteDoc(doc(db, "tratativasHorasPDF", id));
+        alert("Tratativa excluída com sucesso.");
+      } catch (error) {
+        console.warn("Firebase bloqueou a exclusão da tratativa. Foi removida deste navegador.", error);
+        alert("A tratativa foi removida desta tela, mas o Firebase bloqueou a exclusão online. Verifique se a regra permite delete em tratativasHorasPDF.");
+      }
+    };
+    window.atualizarDataFolgaTratativa = async function(id) {
+      const campo = document.getElementById(`tratativa_folga_${id}`);
+      const campoStatus = document.getElementById(`tratativa_status_${id}`);
+      const campoPagas = document.getElementById(`tratativa_pagas_${id}`);
+      const campoFolgaHoras = document.getElementById(`tratativa_folga_horas_${id}`);
+      const lista = carregarTratativasHorasPDF();
+      const item = lista.find(registro => registro.id === id);
+      if (!item || !campo) return;
+
+      const opcoes = {
+        "1": "Horas pagas",
+        "2": "Horas não pagas",
+        "3": "Horas serão tiradas em folgas",
+        "4": "Verificando com a gestão"
+      };
+
+      item.opcao = campoStatus?.value || item.opcao || "4";
+      const anterior = { ...item };
+      item.status = opcoes[item.opcao] || "Verificando com a gestão";
+      item.horasPagas = Number(String(campoPagas?.value || "0").replace(",", ".")) || 0;
+      item.horasFolga = Number(String(campoFolgaHoras?.value || "0").replace(",", ".")) || 0;
+      item.dataFolga = campo.value;
+      item.saldoRestanteMinutos = calcularSaldoRestanteTratativa(item);
+      item.situacaoFinal = calcularSituacaoFinalTratativa(item);
+      item.atualizadoEm = new Date().toISOString();
+      salvarTratativasHorasPDF(lista);
+      try {
+        await setDoc(doc(db, "tratativasHorasPDF", id), {
+          funcionario: item.funcionario || "",
+          periodoTexto: item.periodoTexto || "",
+          opcao: item.opcao || "",
+          status: item.status || "",
+          horasPagas: Number(item.horasPagas || 0),
+          horasFolga: Number(item.horasFolga || 0),
+          dataFolga: item.dataFolga || "",
+          saldoMinutos: Number(item.saldoMinutos || 0),
+          atualizadoEm: item.atualizadoEm
+        });
+      } catch (error) {
+        console.warn("Firebase bloqueou a atualizacao da data da folga. Ficou salvo no navegador.", error);
+      }
+      renderizarTratativasHorasPDF();
+      await registrarHistoricoTratativa("edicao_manual", anterior, item);
+      alert("Data de folga atualizada.");
+    };
+
+    function obterPendenciasBancoHoras() {
+      const tratativas = carregarTratativasHorasPDF();
+      const pendencias = [];
+      const periodoFiltro = obterPeriodoFiltroTextoGestao();
+
+      resultadoAtualCSV.forEach(item => {
+        if (Number(item.saldo || 0) > 0) {
+          pendencias.push({
+            tipo: "Hora extra",
+            funcionario: item.funcionario,
+            departamento: item.departamento || obterDepartamentoFuncionario(item.funcionario),
+            periodo: periodoFiltro,
+            detalhe: `Saldo positivo de ${formatarMinutosParaHora(item.saldo)}`
+          });
+        }
+        if (Number(item.saldo || 0) < 0) {
+          pendencias.push({
+            tipo: "Horas negativas",
+            funcionario: item.funcionario,
+            departamento: item.departamento || obterDepartamentoFuncionario(item.funcionario),
+            periodo: periodoFiltro,
+            detalhe: `Saldo negativo de ${formatarMinutosParaHora(Math.abs(item.saldo))}`
+          });
+        }
+        if (!obterPerfilFuncionario(item.funcionario)?.cpf) {
+          pendencias.push({
+            tipo: "Cadastro incompleto",
+            funcionario: item.funcionario,
+            departamento: item.departamento || obterDepartamentoFuncionario(item.funcionario),
+            periodo: periodoFiltro,
+            detalhe: "CPF não informado"
+          });
+        }
+        if ((item.departamento || "Sem departamento") === "Sem departamento") {
+          pendencias.push({
+            tipo: "Cadastro incompleto",
+            funcionario: item.funcionario,
+            departamento: item.departamento || obterDepartamentoFuncionario(item.funcionario),
+            periodo: periodoFiltro,
+            detalhe: "Departamento não informado"
+          });
+        }
+      });
+
+      tratativas.forEach(item => {
+        const restante = calcularSaldoRestanteTratativa(item);
+        if (String(item.opcao || "") === "4" || !item.opcao) {
+          pendencias.push({
+            tipo: "Tratativa pendente",
+            funcionario: item.funcionario,
+            departamento: obterDepartamentoFuncionario(item.funcionario),
+            periodo: item.periodoTexto || "Período não informado",
+            detalhe: "Verificando com a gestão"
+          });
+        }
+        if (restante > 0) {
+          pendencias.push({
+            tipo: "Extra em aberto",
+            funcionario: item.funcionario,
+            departamento: obterDepartamentoFuncionario(item.funcionario),
+            periodo: item.periodoTexto || "Período não informado",
+            detalhe: `Ainda resta ${formatarMinutosParaHora(restante)}`
+          });
+        }
+      });
+
+      return pendencias;
+    }
+
+    function obterPeriodoFiltroTextoGestao() {
+      const ano = document.getElementById("filtroAno")?.value || "Ano não filtrado";
+      const mes = document.getElementById("filtroMes")?.value || "";
+      if (!mes) return ano;
+      return `${nomesMeses[Number(mes) - 1] || mes}/${ano}`;
+    }
+
+    function renderizarPendenciasPorDepartamento(pendencias, prefixoId) {
+      if (!pendencias.length) {
+        return '<small style="color:#5f6b7a;">Nenhuma pendência encontrada nos dados carregados.</small>';
+      }
+
+      const grupos = {};
+      pendencias.forEach(item => {
+        const departamento = item.departamento || "Sem departamento";
+        if (!grupos[departamento]) {
+          grupos[departamento] = {
+            nome: departamento,
+            itens: [],
+            negativas: 0,
+            horasExtras: 0,
+            extrasAbertos: 0,
+            tratativasPendentes: 0
+          };
+        }
+        grupos[departamento].itens.push(item);
+        if (item.tipo === "Horas negativas") grupos[departamento].negativas += 1;
+        if (item.tipo === "Hora extra") grupos[departamento].horasExtras += 1;
+        if (item.tipo === "Extra em aberto") grupos[departamento].extrasAbertos += 1;
+        if (item.tipo === "Tratativa pendente") grupos[departamento].tratativasPendentes += 1;
+      });
+
+      return Object.values(grupos)
+        .sort((a, b) => b.itens.length - a.itens.length || a.nome.localeCompare(b.nome, "pt-BR"))
+        .map((grupo, index) => {
+          const corpoId = `${prefixoId}_${index}`;
+          return `
+            <section class="departamento-card" style="margin-top:12px;">
+              <div class="departamento-header" onclick="toggleDepartamento('${corpoId}')">
+                <div>
+                  <h2><i class="fas fa-building-user"></i> ${escaparHTML(grupo.nome)}</h2>
+                  <small>${grupo.itens.length} situação(ões) para verificar neste departamento</small>
+                </div>
+                <div class="departamento-resumo">
+                  <span class="contador-extra">${grupo.horasExtras} com extra</span>
+                  <span class="contador-negativo">${grupo.negativas} devendo</span>
+                  <span>${grupo.extrasAbertos} extras em aberto</span>
+                  <span>${grupo.tratativasPendentes} em gestão</span>
+                  <span class="departamento-acao"><i class="fas fa-chevron-down"></i> Abrir</span>
+                </div>
+              </div>
+              <div class="departamento-corpo" id="${corpoId}">
+                <div class="tabela-wrapper">
+                  <table style="min-width:800px;">
+                    <thead><tr><th>Tipo</th><th>Funcionário</th><th>Período</th><th>Detalhe</th></tr></thead>
+                    <tbody>${grupo.itens.map(item => `
+                      <tr>
+                        <td>${renderizarTipoSituacaoGestao(item.tipo)}</td>
+                        <td>${escaparHTML(item.funcionario)}</td>
+                        <td>${escaparHTML(item.periodo || "")}</td>
+                        <td>${escaparHTML(item.detalhe)}</td>
+                      </tr>
+                    `).join("")}</tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          `;
+        })
+        .join("");
+    }
+
+    function renderizarTipoSituacaoGestao(tipo) {
+      if (tipo === "Hora extra" || tipo === "Extra em aberto") {
+        return `<span class="tipo-situacao extra">${escaparHTML(tipo)}</span>`;
+      }
+      if (tipo === "Horas negativas") {
+        return `<span class="tipo-situacao negativa">Hora devendo</span>`;
+      }
+      return escaparHTML(tipo);
+    }
+
+    function renderizarGestaoBancoHoras() {
+      const resumo = document.getElementById("resumoGestaoBanco");
+      const listaPendencias = document.getElementById("listaPendenciasBanco");
+      const listaFechamentos = document.getElementById("listaFechamentosMes");
+      const listaHistorico = document.getElementById("listaHistoricoTratativas");
+      if (!resumo || !listaPendencias || !listaFechamentos || !listaHistorico) return;
+
+      const tratativas = carregarTratativasHorasPDF();
+      const ordemPendencias = {
+        "Tratativa pendente": 1,
+        "Extra em aberto": 2,
+        "Hora extra": 3,
+        "Horas negativas": 4,
+        "Cadastro incompleto": 5
+      };
+      const pendencias = obterPendenciasBancoHoras()
+        .sort((a, b) => (ordemPendencias[a.tipo] || 99) - (ordemPendencias[b.tipo] || 99) || String(a.funcionario || "").localeCompare(String(b.funcionario || ""), "pt-BR"));
+      const totalPagas = tratativas.reduce((total, item) => total + Number(item.horasPagas || 0), 0);
+      const totalFolgas = tratativas.reduce((total, item) => total + Number(item.horasFolga || 0), 0);
+      const extrasEmAberto = tratativas.reduce((total, item) => total + calcularSaldoRestanteTratativa(item), 0);
+      const verificandoGestao = tratativas.filter(item => String(item.opcao || "") === "4" || !item.opcao).length;
+      const totalNegativos = resultadoAtualCSV.filter(item => Number(item.saldo || 0) < 0).length;
+      const totalComExtra = resultadoAtualCSV.filter(item => Number(item.saldo || 0) > 0).length;
+      const mesesFechados = fechamentosMensais.filter(item => item.status === "fechado").length;
+
+      resumo.innerHTML = `
+        <div class="gestao-card">Situações listadas<strong>${pendencias.length}</strong></div>
+        <div class="gestao-card">Extras em aberto<strong>${formatarMinutosParaHora(extrasEmAberto)}</strong></div>
+        <div class="gestao-card">Funcionários com extra<strong>${totalComExtra}</strong></div>
+        <div class="gestao-card">Funcionários negativos<strong>${totalNegativos}</strong></div>
+        <div class="gestao-card">Horas pagas registradas<strong>${totalPagas.toLocaleString("pt-BR", { maximumFractionDigits: 2 })}h</strong></div>
+        <div class="gestao-card">Horas em folga<strong>${totalFolgas.toLocaleString("pt-BR", { maximumFractionDigits: 2 })}h</strong></div>
+        <div class="gestao-card">Verificando gestão<strong>${verificandoGestao}</strong></div>
+        <div class="gestao-card">Meses fechados<strong>${mesesFechados}</strong></div>
+      `;
+
+      listaPendencias.innerHTML = renderizarPendenciasPorDepartamento(pendencias, "gestao_pendencias_departamento");
+
+      listaFechamentos.innerHTML = fechamentosMensais.length ? fechamentosMensais
+        .slice()
+        .sort((a, b) => (b.atualizadoEm || "").localeCompare(a.atualizadoEm || ""))
+        .slice(0, 8)
+        .map(item => `<div style="padding:10px 0; border-bottom:1px solid #edf1f7;"><strong>${escaparHTML(item.mes || "")}/${escaparHTML(item.ano || "")}</strong><br><small>Status: ${escaparHTML(item.status || "")}${item.atualizadoEm ? ` em ${new Date(item.atualizadoEm).toLocaleDateString("pt-BR")}` : ""}</small><br><small>${escaparHTML(item.observacao || "Sem observação")}</small></div>`)
+        .join("")
+        : '<small style="color:#5f6b7a;">Nenhum mês fechado ainda.</small>';
+
+      listaHistorico.innerHTML = historicoTratativas.length ? historicoTratativas
+        .slice()
+        .sort((a, b) => (b.criadoEm || "").localeCompare(a.criadoEm || ""))
+        .slice(0, 20)
+        .map(item => `<div style="padding:10px 0; border-bottom:1px solid #edf1f7;"><strong>${escaparHTML(item.funcionario || "Sem funcionário")}</strong><br><small>${escaparHTML(item.acao || "")} - ${escaparHTML(item.periodoTexto || "Período não informado")}</small><br><small>${escaparHTML(item.statusAnterior || "Sem status")} para ${escaparHTML(item.statusNovo || "Sem status")} ${item.criadoEm ? `- ${new Date(item.criadoEm).toLocaleString("pt-BR")}` : ""}</small></div>`)
+        .join("")
+        : '<small style="color:#5f6b7a;">Nenhum histórico registrado ainda.</small>';
+
+      renderizarAtestadosMedicos();
+    }
+
+    window.fecharMesBancoHoras = async function() {
+      const ano = document.getElementById("fechamentoAno")?.value;
+      const mes = document.getElementById("fechamentoMes")?.value;
+      const observacao = document.getElementById("fechamentoObservacao")?.value || "";
+      if (!ano || !mes) {
+        alert("Informe ano e mês para fechar.");
+        return;
+      }
+      if (!confirm(`Fechar o mês ${mes}/${ano}? Depois disso, use Reabrir antes de alterar lançamentos desse período.`)) return;
+
+      const id = gerarIdFechamento(ano, mes);
+      const dados = { id, ano, mes, status: "fechado", observacao, atualizadoEm: new Date().toISOString() };
+      fechamentosMensais = fechamentosMensais.filter(item => item.id !== id).concat(dados);
+      salvarListaLocal(FECHAMENTOS_MENSAIS_KEY, fechamentosMensais);
+
+      try {
+        await setDoc(doc(db, "fechamentosMensais", id), dados);
+      } catch (error) {
+        console.warn("Firebase bloqueou o fechamento mensal. Ficou salvo no navegador.", error);
+        alert("Fechamento salvo no navegador. Para salvar online, atualize as regras do Firebase.");
+      }
+      renderizarGestaoBancoHoras();
+    };
+
+    window.reabrirMesBancoHoras = async function() {
+      const ano = document.getElementById("fechamentoAno")?.value;
+      const mes = document.getElementById("fechamentoMes")?.value;
+      if (!ano || !mes) {
+        alert("Informe ano e mês para reabrir.");
+        return;
+      }
+      if (!confirm(`Reabrir o mês ${mes}/${ano}?`)) return;
+
+      const id = gerarIdFechamento(ano, mes);
+      const dados = { id, ano, mes, status: "aberto", observacao: "Reaberto pelo ADM", atualizadoEm: new Date().toISOString() };
+      fechamentosMensais = fechamentosMensais.filter(item => item.id !== id).concat(dados);
+      salvarListaLocal(FECHAMENTOS_MENSAIS_KEY, fechamentosMensais);
+
+      try {
+        await setDoc(doc(db, "fechamentosMensais", id), dados);
+      } catch (error) {
+        console.warn("Firebase bloqueou a reabertura mensal. Ficou salvo no navegador.", error);
+      }
+      renderizarGestaoBancoHoras();
+    };
+
+    function solicitarTratativaHorasDetalhadaPDF(funcionario, periodoTexto, saldoMinutos) {
+      const id = gerarIdTratativaHoras(funcionario, periodoTexto);
+      const existente = carregarTratativasHorasPDF().find(item => item.id === id) || {};
+      const resposta = prompt(
+        "Antes de baixar o PDF, escolha a tratativa das horas:\n\n" +
+        "1 - Horas pagas\n" +
+        "2 - Horas não pagas\n" +
+        "3 - Horas serão tiradas em folgas\n" +
+        "4 - Verificando com a gestão\n\n" +
+        `Saldo do relatório: ${formatarMinutosParaHora(saldoMinutos || 0)}\n` +
+        "Digite o número da opção:",
+        existente.opcao || ""
+      );
+
+      if (resposta === null) return null;
+
+      const opcoes = {
+        "1": "Horas pagas",
+        "2": "Horas não pagas",
+        "3": "Horas serão tiradas em folgas",
+        "4": "Verificando com a gestão"
+      };
+      const opcao = ["1", "2", "3", "4"].includes(String(resposta).trim()) ? String(resposta).trim() : "4";
+      const tratativa = {
+        id,
+        funcionario,
+        periodoTexto,
+        opcao,
+        status: opcoes[opcao],
+        horasPagas: 0,
+        horasFolga: 0,
+        dataFolga: existente.dataFolga || "",
+        saldoMinutos: Number(saldoMinutos || 0),
+        saldoRestanteMinutos: Number(saldoMinutos || 0),
+        situacaoFinal: "",
+        atualizadoEm: new Date().toISOString()
+      };
+
+      if (opcao === "1") {
+        const horasPagas = prompt("Quantas horas foram pagas?", existente.horasPagas || "");
+        if (horasPagas === null) return null;
+        tratativa.horasPagas = Number(String(horasPagas).replace(",", ".")) || 0;
+
+        const horasFolga = prompt("Vai tirar alguma hora em folga? Se sim, informe quantas horas. Se não, deixe 0.", existente.horasFolga || "0");
+        if (horasFolga === null) return null;
+        tratativa.horasFolga = Number(String(horasFolga).replace(",", ".")) || 0;
+      }
+
+      if (opcao === "3") {
+        const horasFolga = prompt("Quantas horas serão tiradas em folga?", existente.horasFolga || "");
+        if (horasFolga === null) return null;
+        tratativa.horasFolga = Number(String(horasFolga).replace(",", ".")) || 0;
+      }
+
+      tratativa.saldoRestanteMinutos = calcularSaldoRestanteTratativa(tratativa);
+      tratativa.situacaoFinal = calcularSituacaoFinalTratativa(tratativa);
+
+      if (tratativa.horasFolga > 0 || opcao === "3") {
+        const dataFolga = prompt("Qual data o funcionário escolheu para tirar a folga? Use o formato AAAA-MM-DD.", existente.dataFolga || "");
+        if (dataFolga === null) return null;
+        tratativa.dataFolga = dataFolga.trim();
+      }
+
+      salvarTratativaHorasPDF(tratativa);
+      return tratativa;
+    }
+
+    function desenharTratativaHorasPDF(doc, y, tratativaHoras) {
+      const statusTratativa = typeof tratativaHoras === "string" ? tratativaHoras : (tratativaHoras?.status || "Verificando com a gestão");
+      const opcoes = [
+        "Horas pagas",
+        "Horas não pagas",
+        "Horas serão tiradas em folgas",
+        "Verificando com a gestão"
+      ];
+
+      doc.setFontSize(9);
+      doc.setTextColor(30, 41, 59);
+      doc.setFont(undefined, "bold");
+      doc.text("Tratativa das horas", 14, y);
+      doc.setFont(undefined, "normal");
+      y += 7;
+
+      opcoes.forEach((opcao, index) => {
+        const x = index < 2 ? 18 : 108;
+        const linhaY = y + (index % 2) * 8;
+        doc.setDrawColor(71, 85, 105);
+        doc.rect(x, linhaY - 3.5, 3.8, 3.8);
+        if (opcao === statusTratativa) {
+          doc.setFillColor(30, 41, 59);
+          doc.rect(x + 0.7, linhaY - 2.8, 2.4, 2.4, "F");
+        }
+        doc.setFontSize(8.5);
+        doc.setTextColor(51, 65, 85);
+        doc.text(opcao, x + 6, linhaY);
+      });
+
+      y += 19;
+
+      if (typeof tratativaHoras === "object" && tratativaHoras) {
+        const detalhes = [];
+        if (Number(tratativaHoras.horasPagas || 0) > 0) detalhes.push(`Horas pagas: ${tratativaHoras.horasPagas}h`);
+        if (Number(tratativaHoras.horasFolga || 0) > 0) detalhes.push(`Horas em folga: ${tratativaHoras.horasFolga}h`);
+        detalhes.push(tratativaHoras.situacaoFinal || calcularSituacaoFinalTratativa(tratativaHoras));
+        if (tratativaHoras.dataFolga) detalhes.push(`Data escolhida para folga: ${formatarDataBR(tratativaHoras.dataFolga)}`);
+        if (detalhes.length) {
+          doc.setFontSize(8);
+          doc.setTextColor(71, 85, 105);
+          doc.text(detalhes.join("   |   "), 18, y - 4);
+        }
+      }
+
+      return y;
+    }
+
+    function adicionarAssinaturasPDF(doc, y, tratativaHoras) {
+      const alturaPagina = doc.internal.pageSize.height;
+      if (y > alturaPagina - 44) {
+        doc.addPage();
+        y = 42;
+      }
+
+      y = desenharTratativaHorasPDF(doc, y, tratativaHoras);
+
+      doc.setDrawColor(71, 85, 105);
+      doc.line(18, y, 90, y);
+      doc.line(118, y, 190, y);
+      doc.setFontSize(8);
+      doc.text("Assinatura da chefia/responsavel", 29, y + 5);
+      doc.text("Assinatura do funcionario", 133, y + 5);
+      doc.text("Data: ____/____/______", 14, y + 15);
+      return y + 22;
+    }
+
     window.gerarPDFFuncionario = function(indexFuncionario) {
       const funcionarioDetalhe = detalhesAtuaisPDF[indexFuncionario];
 
       if (!funcionarioDetalhe) {
-        alert("Funcionario nao encontrado para gerar PDF.");
+        alert("Funcionário não encontrado para gerar PDF.");
         return;
       }
 
       if (!window.jspdf || !window.jspdf.jsPDF) {
-        alert("Erro: biblioteca do PDF nao carregou.");
+        alert("Erro: biblioteca do PDF não carregou.");
         return;
       }
-
-      const tratativaHoras = "Verificando com a gestão";
 
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF("p", "mm", "a4");
       const dataAtual = new Date();
-      const filtroMes = document.getElementById("filtroMes")?.value || "";
-      const filtroAno = document.getElementById("filtroAno")?.value || "";
-      const mesesRelatorio = funcionarioDetalhe.meses.filter(mes => {
-        if (!filtroMes && !filtroAno) return true;
-        const [nomeMes, anoMes] = mes.mesAno.split("/");
-        const numeroMes = String(nomesMeses.indexOf(nomeMes) + 1).padStart(2, "0");
-        return (!filtroMes || numeroMes === filtroMes) && (!filtroAno || anoMes === filtroAno);
-      });
-      const mesRelatorio = mesesRelatorio[0] || funcionarioDetalhe.meses[0];
+      let y = 18;
 
-      if (!mesRelatorio) {
-        alert("Nao ha dados mensais para gerar o PDF deste funcionario.");
-        return;
-      }
+      doc.setFontSize(18);
+      doc.setTextColor(31, 58, 147);
+      doc.text("Relatório Individual de Banco de Horas", 14, y);
+      y += 8;
 
-      const resumoMes = mesRelatorio.registros.reduce((acc, reg) => {
-        const saldo = Number(reg.saldoDia || 0);
-        acc.trabalhado += Number(reg.duracaoMinutos || 0);
-        acc.previsto += Number(reg.previstoDia || 0);
-        acc.extras += saldo > 0 ? saldo : 0;
-        acc.negativas += saldo < 0 ? Math.abs(saldo) : 0;
-        acc.saldo += saldo;
-        return acc;
-      }, { trabalhado: 0, previsto: 0, extras: 0, negativas: 0, saldo: 0 });
-
-      adicionarCabecalhoEmpresasPDF(doc, "Resumo mensal de banco de horas");
-
-      doc.setFontSize(8.5);
+      doc.setFontSize(10);
       doc.setTextColor(80, 80, 80);
-      doc.text(`Gerado em: ${dataAtual.toLocaleDateString("pt-BR")} ${dataAtual.toLocaleTimeString("pt-BR")}`, 14, 29);
+      doc.text(`Gerado em: ${dataAtual.toLocaleDateString("pt-BR")} ${dataAtual.toLocaleTimeString("pt-BR")}`, 14, y);
+      y += 10;
 
-      doc.setFontSize(9.5);
+      doc.setFontSize(13);
       doc.setTextColor(0, 0, 0);
-      const empresaFuncionario = obterEmpresaFuncionario(funcionarioDetalhe.funcionario, funcionarioDetalhe.departamento);
-      const perfilFuncionario = obterPerfilFuncionario(funcionarioDetalhe.funcionario) || {};
-      const cpfFuncionario = perfilFuncionario.cpf || "Nao informado";
-      doc.text(`Funcionario: ${removerAcentos(funcionarioDetalhe.funcionario)}`, 14, 37);
-      doc.text(`CPF: ${cpfFuncionario}`, 14, 43);
-      doc.text(`Empresa empregadora: ${empresaFuncionario.nome} - CNPJ: ${empresaFuncionario.cnpj}`, 14, 49);
-      doc.text(`Departamento: ${removerAcentos(funcionarioDetalhe.departamento || "Sem departamento")}`, 14, 55);
-      doc.text(`Periodo: ${removerAcentos(mesRelatorio.mesAno)}`, 14, 61);
+      doc.text(`Funcionário: ${funcionarioDetalhe.funcionario}`, 14, y);
+      y += 6;
 
       doc.autoTable({
-        startY: 67,
-        head: [["Trabalhado", "Previsto", "Extras", "Negativas", "Saldo final"]],
+        startY: y,
+        head: [["Trabalhado", "Previsto", "Extras", "Negativas", "Ajustes", "Saldo Final"]],
         body: [[
-          formatarMinutosParaHora(resumoMes.trabalhado),
-          formatarMinutosParaHora(resumoMes.previsto),
-          formatarMinutosParaHora(resumoMes.extras),
-          formatarMinutosParaHora(resumoMes.negativas),
-          formatarMinutosParaHora(resumoMes.saldo)
+          formatarMinutosParaHora(funcionarioDetalhe.totalTrabalhado),
+          formatarMinutosParaHora(funcionarioDetalhe.totalPrevisto),
+          formatarMinutosParaHora(funcionarioDetalhe.totalExtras),
+          formatarMinutosParaHora(funcionarioDetalhe.totalNegativas),
+          formatarMinutosParaHora(funcionarioDetalhe.totalAjustes || 0),
+          formatarMinutosParaHora(funcionarioDetalhe.saldoFinal)
         ]],
         theme: "grid",
         headStyles: { fillColor: [31, 58, 147] },
-        styles: { fontSize: 8, cellPadding: 1.5 }
+        styles: { fontSize: 10 }
       });
 
-      const linhasDia = mesRelatorio.registros
-        .slice()
-        .sort((a, b) => (a.data || "").localeCompare(b.data || ""))
-        .map(reg => [
-          formatarDataBR(reg.data),
-          formatarMinutosParaHora(reg.duracaoMinutos),
-          formatarMinutosParaHora(reg.previstoDia),
-          formatarMinutosParaHora(reg.saldoDia)
-        ]);
+      y = doc.autoTable.previous.finalY + 10;
 
-      doc.autoTable({
-        startY: doc.autoTable.previous.finalY + 5,
-        head: [["Dia", "Trabalhado", "Previsto", "Saldo do dia"]],
-        body: linhasDia,
-        theme: "striped",
-        headStyles: { fillColor: [31, 58, 147] },
-        styles: { fontSize: 6.8, cellPadding: 1.1, overflow: "linebreak" },
-        margin: { left: 14, right: 14 },
-        pageBreak: "avoid",
-        rowPageBreak: "avoid",
-        columnStyles: {
-          0: { cellWidth: 38 },
-          1: { cellWidth: 45 },
-          2: { cellWidth: 45 },
-          3: { cellWidth: 45 }
+      funcionarioDetalhe.meses.forEach((mes) => {
+        if (y > 225) {
+          doc.addPage();
+          y = 16;
         }
-      });
 
-      adicionarCamposAssinaturaPDF(doc, doc.autoTable.previous.finalY + 8);
+        doc.setFontSize(12);
+        doc.setTextColor(31, 58, 147);
+        doc.text(`Mês/Ano: ${mes.mesAno}`, 14, y);
+        y += 4;
+
+        const bodyMes = mes.registros.map(reg => {
+          let observacao = reg.observacao || "-";
+          if (reg.dataEspecial?.descricao) observacao += ` | ${reg.dataEspecial.descricao}`;
+
+          return [
+            formatarDataBR(reg.data),
+            reg.horariosTexto || "-",
+            formatarMinutosParaHora(reg.duracaoMinutos),
+            formatarMinutosParaHora(reg.previstoDia),
+            formatarMinutosParaHora(reg.saldoDia),
+            observacao
+          ];
+        });
+
+        doc.autoTable({
+          startY: y,
+          head: [["Data", "Horários", "Trabalhado", "Previsto", "Saldo do Dia", "Observação"]],
+          body: bodyMes,
+          theme: "striped",
+          headStyles: { fillColor: [31, 58, 147] },
+          styles: { fontSize: 8.5, cellPadding: 2 },
+          columnStyles: {
+            0: { cellWidth: 22 },
+            1: { cellWidth: 42 },
+            2: { cellWidth: 22 },
+            3: { cellWidth: 22 },
+            4: { cellWidth: 22 },
+            5: { cellWidth: 55 }
+          }
+        });
+
+        y = doc.autoTable.previous.finalY + 8;
+      });
 
       const nomeSeguro = removerAcentos(funcionarioDetalhe.funcionario).replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_+|_+$/g, "");
-      const mesSeguro = removerAcentos(mesRelatorio.mesAno).replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_+|_+$/g, "");
-      doc.save(`banco_de_horas_${nomeSeguro || "funcionario"}_${mesSeguro || "mes"}.pdf`);
+      doc.save(`banco_de_horas_${nomeSeguro || "funcionario"}_${dataAtual.toLocaleDateString("pt-BR").replace(/\//g, "-")}.pdf`);
     };
+
     window.gerarPDFFuncionario = function(indexFuncionario) {
       const funcionarioDetalhe = detalhesAtuaisPDF[indexFuncionario];
 
@@ -4349,8 +4520,6 @@
         alert("Erro: biblioteca do PDF nao carregou.");
         return;
       }
-
-      const tratativaHoras = "Verificando com a gestão";
 
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF("p", "mm", "a4");
@@ -4381,6 +4550,8 @@
       const perfil = obterPerfilFuncionario(funcionarioDetalhe.funcionario) || {};
       const empresa = obterEmpresaFuncionario(funcionarioDetalhe.funcionario, funcionarioDetalhe.departamento);
       const periodoTexto = mesesParaPDF.map(mes => mes.mesAno).join(", ");
+      const tratativaHoras = solicitarTratativaHorasDetalhadaPDF(funcionarioDetalhe.funcionario, periodoTexto, resumoRelatorio.saldo);
+      if (!tratativaHoras) return;
 
       desenharCabecalhoPDF(doc, "Relatorio individual de banco de horas", `Periodo: ${periodoTexto || "Nao informado"}`);
 
@@ -4408,6 +4579,7 @@
 
       y = desenharSecaoPDF(doc, "Resumo do periodo", y);
       y = desenharResumoCardsPDF(doc, [
+        { label: "Registros", valor: String(resumoRelatorio.registros), color: [30, 41, 59] },
         { label: "Trabalhado", valor: formatarMinutosParaHora(resumoRelatorio.trabalhado), color: [30, 64, 175] },
         { label: "Previsto", valor: formatarMinutosParaHora(resumoRelatorio.previsto), color: [67, 56, 202] },
         { label: "Extras", valor: formatarMinutosParaHora(resumoRelatorio.extras), color: [5, 150, 105] },
@@ -4424,30 +4596,28 @@
 
         y = desenharSecaoPDF(doc, `Detalhamento - ${textoPDF(mes.mesAno)}`, y);
 
-        const linhasDia = mes.registros
-          .slice()
-          .sort((a, b) => (a.data || "").localeCompare(b.data || ""))
-          .map(reg => {
-            const observacoes = [];
-            if (reg.sabado) observacoes.push("Sabado trabalhado");
-            if (reg.dataEspecial?.tipo) observacoes.push(formatarTipoEspecial(reg.dataEspecial.tipo));
-            if (reg.dataEspecial?.regra) observacoes.push(formatarRegraEspecial(reg.dataEspecial.regra));
-            if (reg.observacao) observacoes.push(reg.observacao);
-            if (reg.dataEspecial?.descricao) observacoes.push(reg.dataEspecial.descricao);
-            return [
-              formatarDataBR(reg.data),
-              reg.horariosTexto || "-",
-              formatarMinutosParaHora(reg.duracaoMinutos),
-              formatarMinutosParaHora(reg.previstoDia),
-              formatarMinutosParaHora(reg.saldoDia),
-              textoPDF(observacoes.join(" | ") || "-")
-            ];
-          });
+        const bodyMes = mes.registros.map(reg => {
+          const observacoes = [];
+          if (reg.sabado) observacoes.push("Sabado trabalhado");
+          if (reg.dataEspecial?.tipo) observacoes.push(formatarTipoEspecial(reg.dataEspecial.tipo));
+          if (reg.dataEspecial?.regra) observacoes.push(formatarRegraEspecial(reg.dataEspecial.regra));
+          if (reg.observacao) observacoes.push(reg.observacao);
+          if (reg.dataEspecial?.descricao) observacoes.push(reg.dataEspecial.descricao);
+
+          return [
+            formatarDataBR(reg.data),
+            reg.horariosTexto || "-",
+            formatarMinutosParaHora(reg.duracaoMinutos),
+            formatarMinutosParaHora(reg.previstoDia),
+            formatarMinutosParaHora(reg.saldoDia),
+            textoPDF(observacoes.join(" | ") || "-")
+          ];
+        });
 
         doc.autoTable({
           startY: y,
           head: [["Data", "Horarios", "Trabalhado", "Previsto", "Saldo do dia", "Observacoes"]],
-          body: linhasDia,
+          body: bodyMes,
           theme: "striped",
           headStyles: { fillColor: [30, 41, 59], textColor: [255, 255, 255], fontSize: 6.8, halign: "center", cellPadding: 1 },
           alternateRowStyles: { fillColor: [248, 250, 252] },
@@ -4460,7 +4630,6 @@
               data.cell.styles.fontStyle = "bold";
             }
           },
-          margin: { left: 14, right: 14 },
           columnStyles: {
             0: { cellWidth: 22 },
             1: { cellWidth: 42 },
@@ -4468,13 +4637,14 @@
             3: { cellWidth: 22 },
             4: { cellWidth: 22 },
             5: { cellWidth: 55 }
-          }
+          },
+          margin: { left: 14, right: 14 }
         });
 
         y = doc.autoTable.previous.finalY + 8;
       });
 
-      adicionarCamposAssinaturaPDF(doc, y, tratativaHoras);
+      adicionarAssinaturasPDF(doc, y, tratativaHoras);
       aplicarRodapePDF(doc, "Relatorio individual de banco de horas");
 
       const nomeSeguro = removerAcentos(funcionarioDetalhe.funcionario).replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_+|_+$/g, "");
@@ -4655,7 +4825,6 @@
           });
 
           y = doc.autoTable.previous.finalY + 8;
-          y = adicionarCamposAssinaturaPDF(doc, y);
         });
 
         if (idx < detalhesAtuaisPDF.length - 1) {
@@ -4730,15 +4899,10 @@
     await buscarHistoricoTratativas();
     atualizarCampoCargaPersonalizada();
     atualizarCampoMesDescontoFolga();
-    await carregarBancoHoras();
+    carregarBancoHoras();
   </script>
 </body>
 </html>
-
-
-
-
-
 
 
 
