@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://unpkg.com/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
     /* Estilos base (Otimizados) */
@@ -24,6 +25,15 @@
         padding: 40px; 
         border-radius: 10px;
         box-shadow: 0 6px 20px rgba(0,0,0,0.08); 
+    }
+    .credito-sistema {
+        width: 95%;
+        max-width: 1200px;
+        margin: -12px auto 24px;
+        text-align: center;
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 600;
     }
     h2 {
         text-align: center;
@@ -146,11 +156,1038 @@
     .acoes button.editar:hover { background: #e67e22; }
     .acoes button.excluir { background: #e74c3c; }
     .acoes button.excluir:hover { background: #c0392b; }
+    .importacao-ponto {
+        background: #f8fbff;
+        border: 1px solid #d8e6f5;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 25px 0;
+    }
+    .importacao-acoes {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+    .importacao-acoes button { margin-top: 0; }
+    .btn-importar { background: #6c5ce7; }
+    .btn-importar:hover { background: #5948d8; }
+    .btn-confirmar-importacao { background: #0984e3; }
+    .btn-confirmar-importacao:hover { background: #0874c7; }
+    .btn-confirmar-importacao:disabled {
+        background: #9aa7b2;
+        cursor: not-allowed;
+        transform: none;
+    }
+    #resumoImportacao {
+        margin-top: 15px;
+        padding: 12px;
+        background: #fff;
+        border: 1px solid #e3e9ef;
+        border-radius: 6px;
+        color: #2d3436;
+        line-height: 1.5;
+    }
+    #previewImportacao {
+        margin-top: 12px;
+        max-height: 260px;
+        overflow: auto;
+        border: 1px solid #e3e9ef;
+        border-radius: 6px;
+        background: #fff;
+    }
+    #previewImportacao table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+    }
+    #previewImportacao th,
+    #previewImportacao td {
+        padding: 8px;
+        border-bottom: 1px solid #edf1f5;
+        text-align: left;
+        vertical-align: top;
+    }
+    #previewImportacao th {
+        background: #eef3f7;
+        color: #1f3a93;
+        position: sticky;
+        top: 0;
+    }
+    .aviso-importacao {
+        color: #b7791f;
+        font-weight: 600;
+    }
+    .pendencia-importacao {
+        color: #c2410c;
+        font-weight: 700;
+    }
+    #previewImportacao tr.linha-pendente td {
+        background: #fff7ed;
+    }
+    .resumo-funcionarios-importacao {
+        padding: 12px;
+        border-bottom: 1px solid #edf1f5;
+        background: #f8fafc;
+        line-height: 1.5;
+    }
+    .resumo-funcionarios-importacao > div {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+    }
+    .chip-importacao {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid #cbd5e1;
+        border-radius: 999px;
+        background: #fff;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 5px 9px;
+        white-space: nowrap;
+    }
+    .chip-importacao-alerta {
+        border-color: #fed7aa;
+        background: #fff7ed;
+        color: #9a3412;
+    }
+    .btn-importacao-mini {
+        border: 0;
+        border-radius: 6px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 800;
+        margin: 0;
+        padding: 7px 10px;
+        width: auto;
+    }
+    .btn-importacao-preencher {
+        background: #2563eb;
+    }
+    .btn-importacao-ok {
+        background: #15803d;
+        cursor: default;
+    }
+    .chip-importacao .btn-importacao-mini {
+        margin-left: 8px;
+        padding: 4px 8px;
+    }
+    .hora-zerada-importacao {
+        margin: 10px 12px 12px;
+        padding: 12px;
+        border: 1px solid #fde68a;
+        border-radius: 6px;
+        background: #fffbeb;
+        color: #92400e;
+        line-height: 1.5;
+    }
+    .hora-zerada-importacao strong {
+        display: block;
+        margin-bottom: 8px;
+    }
+    .erro-importacao {
+        color: #c0392b;
+        font-weight: 600;
+    }
+    .gestao-inativos {
+        background: #fffaf0;
+        border: 1px solid #f1d6a8;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 0 0 30px;
+    }
+    .gestao-inativos-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 1fr;
+        gap: 12px;
+        align-items: end;
+    }
+    .gestao-inativos-grid button { margin-top: 0; }
+    .btn-inativo { background: #d35400; }
+    .btn-inativo:hover { background: #b84900; }
+    .btn-ativo { background: #16a085; }
+    .btn-ativo:hover { background: #12856f; }
+    #listaInativosResumo {
+        margin-top: 12px;
+        color: #5f4b32;
+        line-height: 1.5;
+    }
+    .status-funcionario {
+        display: inline-block;
+        margin-left: 8px;
+        padding: 4px 8px;
+        border-radius: 14px;
+        font-size: 12px;
+        font-weight: 700;
+        background: #e8f6ef;
+        color: #117a52;
+        vertical-align: middle;
+    }
+    .status-funcionario.inativo {
+        background: #fdebd0;
+        color: #a04000;
+    }
+    .pasta-ano {
+        border: 1px solid #d4e0e4;
+        border-radius: 8px;
+        margin-bottom: 26px;
+        overflow: hidden;
+        background: #ffffff;
+    }
+    .ano-header {
+        background: #1f3a93;
+        color: #fff;
+        padding: 16px 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.25em;
+        font-weight: 700;
+    }
+    .ano-header i { transition: transform 0.3s; }
+    .ano-header.open i { transform: rotate(90deg); }
+    .ano-total {
+        font-size: 0.85em;
+        background: rgba(255,255,255,0.16);
+        padding: 5px 10px;
+        border-radius: 20px;
+    }
+    .conteudo-ano {
+        padding: 18px;
+        background: #f8fafc;
+    }
+    @media (max-width: 700px) {
+        .importacao-acoes { grid-template-columns: 1fr; }
+        .gestao-inativos-grid { grid-template-columns: 1fr; }
+    }
+    /* Visual profissional - camada nova */
+    :root {
+        --ui-bg: #edf1f5;
+        --ui-surface: #ffffff;
+        --ui-soft: #f7f9fc;
+        --ui-line: #d9e1ea;
+        --ui-line-strong: #c6d2df;
+        --ui-text: #1f2933;
+        --ui-muted: #64748b;
+        --ui-primary: #2557a7;
+        --ui-primary-dark: #1d4380;
+        --ui-success: #16805a;
+        --ui-warning: #b7791f;
+        --ui-danger: #c2413b;
+        --ui-shadow: 0 18px 45px rgba(31, 41, 55, 0.10);
+        --ui-shadow-soft: 0 8px 24px rgba(31, 41, 55, 0.08);
+        --ui-radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        background: linear-gradient(180deg, #e8eef6 0, var(--ui-bg) 260px), var(--ui-bg);
+        color: var(--ui-text);
+        padding: 24px;
+    }
+
+    .container {
+        width: min(1280px, 100%);
+        max-width: none;
+        margin: 0 auto 28px;
+        background: transparent;
+        padding: 0;
+        box-shadow: none;
+    }
+
+    .container > h2:first-child {
+        background: var(--ui-primary);
+        color: #fff;
+        border: 0;
+        border-radius: var(--ui-radius) var(--ui-radius) 0 0;
+        box-shadow: var(--ui-shadow);
+        font-size: 26px;
+        margin: 0;
+        padding: 24px 28px;
+        text-align: left;
+    }
+
+    .container > h2:first-child::after {
+        content: "Controle de entrada, saida, importacao e relatorios";
+        display: block;
+        color: rgba(255,255,255,0.82);
+        font-size: 14px;
+        font-weight: 500;
+        margin-top: 6px;
+    }
+
+    h2 {
+        align-items: center;
+        border: 0;
+        color: var(--ui-primary-dark);
+        display: flex;
+        font-size: 18px;
+        gap: 10px;
+        margin: 0 0 18px;
+        padding: 0;
+        text-align: left;
+    }
+
+    h2 i {
+        color: var(--ui-primary);
+        font-size: 18px;
+    }
+
+    label {
+        color: #334155;
+        font-size: 13px;
+        font-weight: 700;
+        margin: 0 0 7px;
+    }
+
+    input, select {
+        min-height: 44px;
+        padding: 10px 12px;
+        margin: 0 0 14px;
+        border: 1px solid var(--ui-line-strong);
+        border-radius: 6px;
+        background: #fff;
+        color: var(--ui-text);
+        font-size: 14px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus, select:focus {
+        border-color: var(--ui-primary);
+        box-shadow: 0 0 0 3px rgba(37, 87, 167, 0.14);
+        outline: none;
+    }
+
+    input[type="file"] { padding: 9px 12px; }
+
+    button {
+        width: auto;
+        min-height: 42px;
+        padding: 10px 14px;
+        background: var(--ui-primary);
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 700;
+        margin: 0;
+        transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+        white-space: nowrap;
+    }
+
+    button:hover {
+        background: var(--ui-primary-dark);
+        box-shadow: 0 8px 18px rgba(37, 87, 167, 0.18);
+    }
+
+    button:disabled {
+        background: #94a3b8;
+        box-shadow: none;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .container > label:first-of-type,
+    .container > input#funcionario,
+    .container > datalist + label,
+    .container > input#data,
+    #blocos,
+    #totalDuracaoDia,
+    .container > button[onclick="window.addBloco()"],
+    #btnSalvar,
+    .container > .btn-pdf {
+        background: var(--ui-surface);
+    }
+
+    .container > label:first-of-type {
+        display: block;
+        margin-top: 0;
+        padding: 26px 28px 0;
+        border-left: 1px solid var(--ui-line);
+        border-right: 1px solid var(--ui-line);
+    }
+
+    .container > input#funcionario,
+    .container > input#data {
+        display: block;
+        width: calc(100% - 56px);
+        margin-left: 28px;
+        margin-right: 28px;
+    }
+
+    .container > datalist + label {
+        padding: 4px 28px 0;
+        border-left: 1px solid var(--ui-line);
+        border-right: 1px solid var(--ui-line);
+    }
+
+    #blocos {
+        padding: 4px 28px 0;
+        border-left: 1px solid var(--ui-line);
+        border-right: 1px solid var(--ui-line);
+    }
+
+    #blocos .registro {
+        box-shadow: none;
+        margin-bottom: 12px;
+    }
+
+    #totalDuracaoDia {
+        width: calc(100% - 56px);
+        margin: 8px 28px 16px;
+        padding: 14px 16px;
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 6px;
+        color: var(--ui-primary-dark);
+        font-weight: 800;
+    }
+
+    .container > button[onclick="window.addBloco()"],
+    #btnSalvar,
+    .container > .btn-pdf {
+        margin: 0 0 26px 28px;
+    }
+
+    .container > .btn-pdf { background: var(--ui-success); }
+    .container > .btn-pdf:hover { background: #126b4b; }
+
+    #filtros,
+    .importacao-ponto,
+    .gestao-inativos,
+    #lista {
+        background: var(--ui-surface);
+        border: 1px solid var(--ui-line);
+        box-shadow: var(--ui-shadow-soft);
+    }
+
+    .importacao-ponto,
+    .gestao-inativos,
+    #lista {
+        border-radius: var(--ui-radius);
+        padding: 22px;
+    }
+
+    .importacao-ponto {
+        margin: 0 0 22px;
+    }
+
+    .importacao-acoes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 4px;
+    }
+
+    .btn-importar { background: #5b4bb7; }
+    .btn-importar:hover { background: #493b98; }
+    .btn-confirmar-importacao { background: var(--ui-primary); }
+
+    #resumoImportacao {
+        background: var(--ui-soft);
+        border: 1px solid var(--ui-line);
+        border-radius: 6px;
+        color: var(--ui-muted);
+        margin-top: 16px;
+        padding: 13px 14px;
+    }
+
+    #previewImportacao {
+        border: 1px solid var(--ui-line);
+        border-radius: 6px;
+        max-height: 280px;
+    }
+
+    #previewImportacao th {
+        background: #f1f5f9;
+        color: var(--ui-primary-dark);
+    }
+
+    #previewImportacao th,
+    #previewImportacao td {
+        padding: 10px 12px;
+    }
+
+    #filtros {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(130px, 1fr));
+        gap: 14px;
+        border-radius: var(--ui-radius);
+        margin: 0 0 22px;
+        padding: 20px;
+    }
+
+    #filtros > div { min-width: 0; }
+    #filtros button {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .gestao-inativos {
+        margin: 0 0 22px;
+    }
+
+    .gestao-inativos-grid {
+        grid-template-columns: minmax(240px, 1fr) auto auto;
+    }
+
+    .btn-inativo { background: #b45309; }
+    .btn-inativo:hover { background: #92400e; }
+    .btn-ativo { background: var(--ui-success); }
+    .btn-ativo:hover { background: #126b4b; }
+
+    #listaInativosResumo {
+        color: var(--ui-muted);
+        margin-top: 12px;
+    }
+
+    .aviso-importacao { color: var(--ui-warning); }
+    .pendencia-importacao { color: #c2410c; }
+    .erro-importacao { color: var(--ui-danger); }
+
+    #lista {
+        min-height: 96px;
+    }
+
+    .agrupamento-funcionario {
+        border: 1px solid var(--ui-line);
+        border-left: 4px solid var(--ui-primary);
+        border-radius: var(--ui-radius);
+        padding: 18px;
+        margin-bottom: 20px;
+        background: #fff;
+        box-shadow: 0 8px 20px rgba(31, 41, 55, 0.06);
+    }
+
+    .agrupamento-funcionario h2 {
+        color: var(--ui-primary-dark);
+        font-size: 20px;
+        margin: 0;
+    }
+
+    .agrupamento-funcionario .btn-pdf {
+        background: var(--ui-primary) !important;
+        margin: 0 !important;
+    }
+
+    .agrupamento-mes {
+        border: 1px solid var(--ui-line);
+        border-radius: var(--ui-radius);
+        margin-top: 16px;
+    }
+
+    .mes-header {
+        background: #f1f5f9;
+        color: var(--ui-text);
+        font-size: 16px;
+        font-weight: 800;
+        padding: 14px 16px;
+    }
+
+    .mes-header:hover { background: #e7edf5; }
+    .mes-header .total-mes-header {
+        border: 1px solid #c7d8ef;
+        color: var(--ui-primary);
+        border-radius: 999px;
+    }
+
+    .registros-agrupados-mes { background: var(--ui-soft); }
+    .agrupamento-semana {
+        border: 1px solid var(--ui-line);
+        border-radius: var(--ui-radius);
+        padding: 14px;
+    }
+
+    .semana-header {
+        color: #475569;
+        border-bottom: 1px solid #e7edf3;
+        font-size: 15px;
+    }
+
+    .registros-agrupados-semana {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 12px;
+    }
+
+    .registro {
+        border: 1px solid #e5ebf2;
+        border-radius: var(--ui-radius);
+        box-shadow: 0 4px 14px rgba(31, 41, 55, 0.06);
+        min-width: 0;
+    }
+
+    .registro p {
+        color: #475569;
+        margin: 6px 0;
+    }
+
+    .registro strong {
+        color: var(--ui-primary-dark);
+        font-weight: 800;
+    }
+
+    .total-semana {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 6px;
+        color: var(--ui-primary-dark);
+        font-weight: 800;
+    }
+
+    .acoes button {
+        min-height: 34px;
+        padding: 8px 10px;
+    }
+
+    .acoes button.editar { background: #d97706; }
+    .acoes button.editar:hover { background: #b45309; }
+    .acoes button.excluir { background: var(--ui-danger); }
+    .acoes button.excluir:hover { background: #a6332f; }
+
+    .atalhos-sistema {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        display: grid;
+        gap: 10px;
+        width: min(260px, calc(100vw - 48px));
+        z-index: 10;
+    }
+
+    .atalhos-sistema button {
+        width: 100%;
+        box-shadow: var(--ui-shadow);
+    }
+
+    .btn-chefia {
+        background: var(--ui-success);
+    }
+
+    .btn-chefia:hover {
+        background: #126b4b;
+    }
+
+    .btn-ti {
+        background: #334155;
+    }
+
+    .btn-ti:hover {
+        background: #1f2937;
+    }
+
+    .modal-pin-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(15, 23, 42, 0.52);
+        backdrop-filter: blur(4px);
+        padding: 20px;
+    }
+
+    .modal-pin-overlay.aberto {
+        display: flex;
+    }
+
+    .modal-pin {
+        width: min(420px, 100%);
+        background: #fff;
+        border: 1px solid #dbe4ef;
+        border-radius: 14px;
+        box-shadow: 0 28px 70px rgba(15, 23, 42, 0.28);
+        overflow: hidden;
+    }
+
+    .modal-pin-header {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        padding: 22px 24px 18px;
+        background: #f8fafc;
+        border-bottom: 1px solid #e5edf5;
+    }
+
+    .modal-pin-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #1f3a93;
+        color: #fff;
+        font-size: 18px;
+        flex: 0 0 auto;
+    }
+
+    .modal-pin-header h3 {
+        margin: 0;
+        color: #102a56;
+        font-size: 1.15rem;
+    }
+
+    .modal-pin-header span {
+        display: block;
+        color: #64748b;
+        font-size: 13px;
+        margin-top: 3px;
+    }
+
+    .modal-pin-body {
+        padding: 22px 24px 24px;
+    }
+
+    .modal-pin-body input {
+        text-align: center;
+        font-size: 24px;
+        font-weight: 800;
+        letter-spacing: 10px;
+        padding-left: 22px;
+    }
+
+    .modal-pin-erro {
+        min-height: 18px;
+        color: #c2413b;
+        font-size: 13px;
+        font-weight: 700;
+        margin: 2px 0 14px;
+        text-align: center;
+    }
+
+    .modal-pin-acoes {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .modal-pin-acoes .btn-cancelar-pin {
+        background: #64748b;
+    }
+
+    .modal-pin-acoes .btn-cancelar-pin:hover {
+        background: #475569;
+    }
+
+    .app-nav {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(150px, 1fr));
+        gap: 10px;
+        background: #fff;
+        border: 1px solid var(--ui-line);
+        border-top: 0;
+        border-radius: 0 0 var(--ui-radius) var(--ui-radius);
+        box-shadow: var(--ui-shadow-soft);
+        margin: 0 0 22px;
+        padding: 14px;
+    }
+
+    .app-nav-btn {
+        background: #f1f5f9;
+        color: #334155;
+        box-shadow: none;
+        justify-content: center;
+    }
+
+    .app-nav-btn:hover,
+    .app-nav-btn.active {
+        background: var(--ui-primary);
+        color: #fff;
+    }
+
+    .app-page {
+        display: none;
+        background: #fff;
+        border: 1px solid var(--ui-line);
+        border-radius: var(--ui-radius);
+        box-shadow: var(--ui-shadow-soft);
+        margin-bottom: 22px;
+        padding: 24px;
+    }
+
+    .app-page.active {
+        display: block;
+    }
+
+    .page-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .page-title h2 {
+        margin: 0;
+    }
+
+    .page-title span {
+        color: var(--ui-muted);
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .funcionarios-layout {
+        display: grid;
+        gap: 18px;
+    }
+
+    .gestao-inativos {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .gestao-inativos-grid,
+    .renomear-grid {
+        display: grid;
+        grid-template-columns: minmax(220px, 1.2fr) minmax(180px, 0.8fr) auto auto;
+        gap: 12px;
+        align-items: end;
+        background: var(--ui-soft);
+        border: 1px solid var(--ui-line);
+        border-radius: var(--ui-radius);
+        padding: 16px;
+    }
+
+    .renomear-grid {
+        grid-template-columns: minmax(220px, 1fr) minmax(220px, 1fr) auto;
+    }
+
+    .renomear-funcionario {
+        border-top: 1px solid var(--ui-line);
+        margin-top: 22px;
+        padding-top: 22px;
+    }
+
+    .nota-funcionarios {
+        color: var(--ui-muted);
+        font-size: 13px;
+        margin-top: 10px;
+    }
+
+    .lista-inativos {
+        display: grid;
+        gap: 10px;
+        margin-top: 16px;
+    }
+
+    .inativo-card {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+        align-items: center;
+        border: 1px solid #fed7aa;
+        border-left: 4px solid #f97316;
+        border-radius: var(--ui-radius);
+        background: #fff7ed;
+        padding: 12px 14px;
+    }
+
+    .inativo-card strong {
+        display: block;
+        color: #7c2d12;
+        font-size: 15px;
+    }
+
+    .inativo-card span {
+        color: #9a3412;
+        font-size: 13px;
+    }
+
+    .badge-inativo {
+        background: #ffedd5;
+        border: 1px solid #fdba74;
+        border-radius: 999px;
+        color: #9a3412;
+        font-size: 12px;
+        font-weight: 800;
+        padding: 5px 9px;
+    }
+
+    .empty-state {
+        background: var(--ui-soft);
+        border: 1px dashed var(--ui-line-strong);
+        border-radius: var(--ui-radius);
+        color: var(--ui-muted);
+        padding: 16px;
+        text-align: center;
+    }
+
+    #page-importacao .importacao-ponto,
+    #page-funcionarios .gestao-inativos {
+        border: 0;
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    #page-importacao .importacao-ponto > h2,
+    #page-funcionarios .gestao-inativos > h2 {
+        display: none;
+    }
+
+    #page-registro {
+        display: none;
+        grid-template-columns: repeat(2, minmax(220px, 1fr));
+        column-gap: 18px;
+        align-items: end;
+    }
+
+    #page-registro.active {
+        display: grid;
+    }
+
+    #page-registro .page-title,
+    #page-registro #blocos,
+    #page-registro #totalDuracaoDia,
+    #page-registro .registro-acoes {
+        grid-column: 1 / -1;
+    }
+
+    .registro-acoes {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(180px, 1fr));
+        gap: 12px;
+        position: sticky;
+        bottom: 0;
+        z-index: 5;
+        background: rgba(255,255,255,0.96);
+        border: 1px solid var(--ui-line);
+        border-radius: var(--ui-radius);
+        box-shadow: var(--ui-shadow-soft);
+        padding: 12px;
+    }
+
+    .registro-acoes button {
+        align-items: center;
+        display: inline-flex;
+        justify-content: center;
+        margin: 0 !important;
+        min-height: 52px;
+        opacity: 1;
+        padding: 12px 16px;
+        visibility: visible;
+    }
+
+    .registro-acoes #btnSalvar {
+        background: #7c3aed !important;
+        color: #fff !important;
+        border: 0;
+        box-shadow: none;
+        font-weight: 800;
+    }
+
+    .registro-acoes #btnSalvar:hover {
+        background: #6d28d9 !important;
+        box-shadow: 0 8px 18px rgba(124, 58, 237, 0.22);
+    }
+
+    .registro-acoes #btnSalvar:empty::before {
+        content: "Salvar Registro";
+    }
+
+    #page-registro button {
+        width: 100%;
+    }
+
+    #page-registro .btn-pdf {
+        background: var(--ui-success);
+    }
+
+    #page-registros > h2 {
+        margin-top: 22px;
+    }
+
+    @media (max-width: 1000px) {
+        #filtros { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
+        .app-nav { grid-template-columns: repeat(2, 1fr); }
+        .gestao-inativos-grid,
+        .renomear-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 700px) {
+        body { padding: 12px; }
+        .container > h2:first-child {
+            font-size: 22px;
+            padding: 20px;
+        }
+        .container > label:first-of-type,
+        .container > datalist + label,
+        #blocos {
+            padding-left: 18px;
+            padding-right: 18px;
+        }
+        .container > input#funcionario,
+        .container > input#data,
+        #totalDuracaoDia {
+            width: calc(100% - 36px);
+            margin-left: 18px;
+            margin-right: 18px;
+        }
+        .container > button[onclick="window.addBloco()"],
+        #btnSalvar,
+        .container > .btn-pdf {
+            width: calc(100% - 36px);
+            margin-left: 18px;
+            margin-bottom: 10px;
+        }
+        .importacao-ponto,
+        #filtros,
+        .gestao-inativos,
+        #lista {
+            padding: 16px;
+        }
+        #filtros { grid-template-columns: 1fr; }
+        #filtros button,
+        .importacao-acoes button,
+        .gestao-inativos-grid button {
+            width: 100%;
+        }
+        #page-registro,
+        #page-registro.active {
+            display: block;
+        }
+        #page-registro button {
+            margin-bottom: 10px;
+        }
+        .registro-acoes {
+            grid-template-columns: 1fr;
+            position: static;
+        }
+        .app-nav { grid-template-columns: 1fr; }
+        .atalhos-sistema {
+            position: static;
+            width: 100%;
+            margin-top: 14px;
+        }
+    }
 </style>
 </head>
 <body>
 <div class="container">
     <h2><i class="fas fa-clock"></i> Registro de Horas</h2>
+    <nav class="app-nav" aria-label="Navegacao principal">
+        <button type="button" class="app-nav-btn active" data-page="page-registro" onclick="window.mostrarPagina('page-registro')">
+            <i class="fas fa-clock"></i> Registro
+        </button>
+        <button type="button" class="app-nav-btn" data-page="page-importacao" onclick="window.mostrarPagina('page-importacao')">
+            <i class="fas fa-file-import"></i> Importacao
+        </button>
+        <button type="button" class="app-nav-btn" data-page="page-funcionarios" onclick="window.mostrarPagina('page-funcionarios')">
+            <i class="fas fa-users-cog"></i> Funcionarios
+        </button>
+        <button type="button" class="app-nav-btn" data-page="page-registros" onclick="window.mostrarPagina('page-registros')">
+            <i class="fas fa-folder-open"></i> Registros
+        </button>
+    </nav>
 
     <label>Funcionário:</label>
     <input type="text" id="funcionario" list="listaFuncionarios" required>
@@ -167,10 +1204,40 @@
 
     <button onclick="window.addBloco()"><i class="fas fa-plus"></i> Adicionar Entrada/Saída</button>
     <button id="btnSalvar" onclick="window.salvarDados()"><i class="fas fa-save"></i> Salvar Registro</button>
-    <button class="btn-pdf" onclick="window.gerarPDF()"><i class="fas fa-file-pdf"></i> Gerar PDF de **Todos** os Registros</button>
+    <button class="btn-pdf" onclick="window.gerarPDF()"><i class="fas fa-file-pdf"></i> Gerar PDF de Todos os Registros</button>
+
+    <div class="importacao-ponto">
+        <h2><i class="fas fa-file-import"></i> Importar Planilha do Ponto</h2>
+        <label for="arquivoPonto">Arquivo de comparecimento (.xls, .xlsx ou .csv):</label>
+        <input type="file" id="arquivoPonto" accept=".xls,.xlsx,.csv">
+        <div class="importacao-acoes">
+            <button type="button" class="btn-importar" onclick="window.prepararImportacaoPonto()">
+                <i class="fas fa-search"></i> Ler e Conferir Planilha
+            </button>
+            <button type="button" class="btn-confirmar-importacao" onclick="window.confirmarImportacaoPonto()" disabled id="btnConfirmarImportacao">
+                <i class="fas fa-cloud-upload-alt"></i> Importar Registros Conferidos
+            </button>
+        </div>
+        <div id="resumoImportacao">Selecione a planilha do ponto para conferir os registros antes de salvar.</div>
+        <div id="previewImportacao"></div>
+    </div>
 
     <h2><i class="fas fa-filter"></i> Filtros de Busca</h2>
     <div id="filtros">
+        <div>
+            <label for="filtroAno">Pasta do Ano:</label>
+            <select id="filtroAno" onchange="window.aplicarFiltro()">
+                <option value="">Todos os anos</option>
+            </select>
+        </div>
+        <div>
+            <label for="filtroStatusFuncionario">Status:</label>
+            <select id="filtroStatusFuncionario" onchange="window.aplicarFiltro()">
+                <option value="ativos">Funcionarios ativos</option>
+                <option value="todos">Todos</option>
+                <option value="inativos">Funcionarios inativos</option>
+            </select>
+        </div>
         <div>
             <label for="filtroFuncionario">Filtrar por Funcionário:</label>
             <input type="text" id="filtroFuncionario" placeholder="Nome completo ou parte do nome" onkeyup="window.aplicarFiltro()">
@@ -189,16 +1256,81 @@
     </div>
     
     <h2><i class="fas fa-folder-open"></i> Registros Agrupados por Mês e Semana</h2>
+    <div class="gestao-inativos">
+        <h2><i class="fas fa-user-slash"></i> Funcionarios</h2>
+        <div class="gestao-inativos-grid">
+            <div>
+                <label for="funcionarioStatus">Funcionario:</label>
+                <input type="text" id="funcionarioStatus" list="listaFuncionarios" placeholder="Nome completo do funcionario">
+            </div>
+            <div>
+                <label for="dataAfastamento">Data do afastamento:</label>
+                <input type="date" id="dataAfastamento">
+            </div>
+            <button type="button" class="btn-inativo" onclick="window.marcarFuncionarioInativo()">
+                <i class="fas fa-user-minus"></i> Marcar como inativo
+            </button>
+            <button type="button" class="btn-ativo" onclick="window.marcarFuncionarioAtivo()">
+                <i class="fas fa-user-check"></i> Reativar
+            </button>
+        </div>
+        <div id="listaInativosResumo" class="lista-inativos"></div>
+
+        <div class="renomear-funcionario">
+            <h2><i class="fas fa-id-card"></i> Corrigir nome do funcionario</h2>
+            <div class="renomear-grid">
+                <div>
+                    <label for="nomeFuncionarioAtual">Nome atual nos registros:</label>
+                    <input type="text" id="nomeFuncionarioAtual" list="listaFuncionarios" placeholder="Como esta hoje">
+                </div>
+                <div>
+                    <label for="nomeFuncionarioNovo">Nome completo correto:</label>
+                    <input type="text" id="nomeFuncionarioNovo" placeholder="Nome completo">
+                </div>
+                <button type="button" onclick="window.renomearFuncionario()">
+                    <i class="fas fa-sync-alt"></i> Atualizar nome
+                </button>
+            </div>
+            <div class="nota-funcionarios">Essa acao atualiza o nome em todos os registros de horas desse funcionario.</div>
+        </div>
+    </div>
     <div id="lista"></div>
 </div>
-<button onclick="window.location.href='banco-horas.html'">
-  <i class="fas fa-business-time"></i> Ver Banco de Horas
-</button>
+<div class="atalhos-sistema">
+    <button type="button" class="btn-chefia" onclick="window.location.href='banco_de_horas_chefes.html'">
+      <i class="fas fa-business-time"></i> Banco de Horas Chefia
+    </button>
+    <button type="button" class="btn-ti" onclick="window.abrirConfiguracoesTI()">
+      <i class="fas fa-shield-alt"></i> Configurações T.I
+    </button>
+</div>
+<div id="modalPinTI" class="modal-pin-overlay" role="dialog" aria-modal="true" aria-labelledby="modalPinTitulo">
+    <div class="modal-pin">
+        <div class="modal-pin-header">
+            <div class="modal-pin-icon"><i class="fas fa-shield-alt"></i></div>
+            <div>
+                <h3 id="modalPinTitulo">Configurações T.I</h3>
+                <span>Acesso restrito ao painel administrativo</span>
+            </div>
+        </div>
+        <div class="modal-pin-body">
+            <label for="pinTI">PIN de acesso</label>
+            <input type="password" id="pinTI" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="****">
+            <div id="pinTIErro" class="modal-pin-erro"></div>
+            <div class="modal-pin-acoes">
+                <button type="button" class="btn-cancelar-pin" onclick="window.fecharModalTI()">Cancelar</button>
+                <button type="button" onclick="window.validarPinTI()"><i class="fas fa-unlock"></i> Entrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="credito-sistema">Desenvolvido por Nay Cordeiro - IT</div>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, getDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // ATENÇÃO: Use suas próprias credenciais do Firebase!
+    // ATENÇÃƒO: Use suas próprias credenciais do Firebase!
     const firebaseConfig = {
         apiKey: "AIzaSyDJWyk_B2rl6_dSKLL7s5cgQiyE7yr9ts0", 
         authDomain: "registrohoras-7a805.firebaseapp.com",
@@ -215,7 +1347,13 @@
     let todosOsRegistros = []; 
     let registrosGlobais = []; 
     let registrosAgrupados = {}; 
-    let canonicalNamesMap = new Map(); 
+    let canonicalNamesMap = new Map();
+    let funcionariosMeta = [];
+    let importacaoPendente = [];
+    let importacaoPreviewAtual = [];
+    let importacaoSemBatidasAtual = [];
+    let importacaoItemEmPreenchimento = null;
+    let funcionariosInativos = new Map();
 
     // #######################################################
     // FUNÇÕES AUXILIARES DE TEXTO, DATA E CÁLCULO
@@ -318,9 +1456,16 @@
         return `${hFormatado}h ${mFormatado}m`;
     }
 
+    function formatarMinutosParaHorario(minutosTotais) {
+        const minutosDia = ((minutosTotais % 1440) + 1440) % 1440;
+        const h = Math.floor(minutosDia / 60);
+        const m = minutosDia % 60;
+        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    }
+
     function calcularDuracaoTotal(horarios) {
         let duracaoMinutos = 0;
-        const horas = Array.isArray(horarios) ? horarios : []; 
+        const horas = normalizarHorariosSemDuplicidade(Array.isArray(horarios) ? horarios : []); 
         
         for (const h of horas) {
             if (h.entrada && h.saida) {
@@ -333,6 +1478,38 @@
             }
         }
         return duracaoMinutos;
+    }
+
+    function normalizarHorariosSemDuplicidade(horarios = []) {
+        const ordenados = (horarios || [])
+            .filter((horario) => horario?.entrada && horario?.saida && parseTime(horario.saida) > parseTime(horario.entrada))
+            .map((horario) => ({ entrada: horario.entrada, saida: horario.saida }))
+            .sort((a, b) => parseTime(a.entrada) - parseTime(b.entrada) || parseTime(a.saida) - parseTime(b.saida));
+
+        const limpos = [];
+        ordenados.forEach((horario) => {
+            const atual = limpos[limpos.length - 1];
+            if (!atual) {
+                limpos.push(horario);
+                return;
+            }
+
+            const inicioAtual = parseTime(atual.entrada);
+            const fimAtual = parseTime(atual.saida);
+            const inicioNovo = parseTime(horario.entrada);
+            const fimNovo = parseTime(horario.saida);
+
+            if (horario.entrada === atual.entrada && horario.saida === atual.saida) return;
+            if (inicioNovo <= fimAtual) {
+                atual.entrada = formatarMinutosParaHorario(Math.min(inicioAtual, inicioNovo));
+                atual.saida = formatarMinutosParaHorario(Math.max(fimAtual, fimNovo));
+                return;
+            }
+
+            limpos.push(horario);
+        });
+
+        return limpos;
     }
 
     window.calcularDuracaoAtualDia = function() {
@@ -354,19 +1531,1278 @@
     }
     
     // #######################################################
-    // FUNÇÕES DE NOME CANÔNICO
+    // FUNÇÕES DE NOME CANÃ”NICO
     // #######################################################
     
+    function registrarAliasFuncionario(alias, nomeCanonico) {
+        const chave = normalizarTexto(alias);
+        const nome = String(nomeCanonico || '').trim();
+        if (!chave || !nome) return;
+        canonicalNamesMap.set(chave, nome);
+    }
+
+    function registrarFuncionarioMetaComoAlias(item) {
+        const nomeOriginal = String(item.nomeOriginal || '').trim();
+        const nomeExibicao = String(item.nomeExibicao || nomeOriginal).trim();
+        const nomeCanonico = nomeExibicao || nomeOriginal;
+        if (!nomeCanonico) return;
+
+        registrarAliasFuncionario(nomeOriginal, nomeCanonico);
+        registrarAliasFuncionario(nomeExibicao, nomeCanonico);
+    }
+
+    function obterPartesNome(nome) {
+        return normalizarTexto(nome)
+            .split(/\s+/)
+            .filter(parte => parte.length >= 3 && !['dos','das','des','de','da','do','e'].includes(parte));
+    }
+
+    function pontuarNomeFuncionario(nomeDigitado, nomeCandidato) {
+        const digitado = normalizarTexto(nomeDigitado);
+        const candidato = normalizarTexto(nomeCandidato);
+        if (!digitado || !candidato) return 0;
+        if (digitado === candidato) return 100;
+        if (candidato.includes(digitado) || digitado.includes(candidato)) return 85;
+
+        const partesDigitado = obterPartesNome(digitado);
+        const partesCandidato = obterPartesNome(candidato);
+        if (!partesDigitado.length || !partesCandidato.length) return 0;
+
+        const encontradas = partesDigitado.filter(parteDigitada =>
+            partesCandidato.some(parteCandidato =>
+                parteCandidato === parteDigitada ||
+                parteCandidato.startsWith(parteDigitada) ||
+                parteDigitada.startsWith(parteCandidato)
+            )
+        );
+
+        return encontradas.length ? Math.round((encontradas.length / partesDigitado.length) * 75) : 0;
+    }
+
+    function resolverFuncionarioPorAproximacao(nomeDigitado) {
+        const candidatos = Array.from(new Set([
+            ...canonicalNamesMap.values(),
+            ...funcionariosMeta.map(item => item.nomeOriginal),
+            ...funcionariosMeta.map(item => item.nomeExibicao)
+        ].filter(Boolean)));
+
+        const ranqueados = candidatos
+            .map(nome => ({ nome, score: pontuarNomeFuncionario(nomeDigitado, nome) }))
+            .filter(item => item.score >= 70)
+            .sort((a, b) => b.score - a.score || a.nome.length - b.nome.length);
+
+        if (!ranqueados.length) return '';
+        if (ranqueados.length > 1 && ranqueados[0].score === ranqueados[1].score && normalizarTexto(ranqueados[0].nome) !== normalizarTexto(ranqueados[1].nome)) {
+            return '';
+        }
+        return ranqueados[0].nome;
+    }
+
+    async function buscarFuncionariosMeta() {
+        funcionariosMeta = [];
+        try {
+            const snapshot = await getDocs(collection(db, 'funcionarios'));
+            snapshot.forEach(docItem => {
+                const d = docItem.data();
+                funcionariosMeta.push({
+                    id: docItem.id,
+                    nomeOriginal: d.nomeOriginal || '',
+                    nomeExibicao: d.nomeExibicao || d.nomeOriginal || '',
+                    ativo: d.ativo !== false
+                });
+            });
+        } catch (error) {
+            console.warn('Nao foi possivel carregar a lista de funcionarios cadastrados.', error);
+        }
+    }
+
     function getCanonicalName(funcionarioInput) {
-        const nomeInput = funcionarioInput.trim();
-        const nomeNormalizado = removerAcentos(nomeInput).toLowerCase();
+        const nomeInput = String(funcionarioInput || '').trim();
+        const nomeNormalizado = normalizarTexto(nomeInput);
+        if (!nomeNormalizado) return nomeInput;
         
         if (canonicalNamesMap.has(nomeNormalizado)) {
             return canonicalNamesMap.get(nomeNormalizado);
         }
+
+        const aproximado = resolverFuncionarioPorAproximacao(nomeInput);
+        if (aproximado) {
+            registrarAliasFuncionario(nomeInput, aproximado);
+            return aproximado;
+        }
         
         canonicalNamesMap.set(nomeNormalizado, nomeInput); 
         return nomeInput;
+    }
+
+    function resolverFuncionarioExistente(nomeDigitado) {
+        const normalizado = normalizarTexto(nomeDigitado);
+        if (!normalizado) return '';
+
+        if (canonicalNamesMap.has(normalizado)) {
+            return canonicalNamesMap.get(normalizado);
+        }
+
+        const nomes = Array.from(canonicalNamesMap.values());
+        return nomes.find(nome => normalizarTexto(nome) === normalizado) || resolverFuncionarioPorAproximacao(nomeDigitado) || '';
+    }
+
+    function registrosDoFuncionario(nomeDigitado) {
+        const normalizado = normalizarTexto(nomeDigitado);
+        const nomeExistente = resolverFuncionarioExistente(nomeDigitado);
+        const normalizadoExistente = normalizarTexto(nomeExistente || nomeDigitado);
+
+        return todosOsRegistros.filter(registro => {
+            const nomeRegistro = normalizarTexto(registro.funcionario);
+            return nomeRegistro === normalizado || nomeRegistro === normalizadoExistente;
+        });
+    }
+
+    function carregarFuncionariosInativos() {
+        funcionariosInativos = new Map();
+        try {
+            const detalhes = JSON.parse(localStorage.getItem('funcionariosInativosDetalhes') || '{}');
+            if (detalhes && typeof detalhes === 'object' && !Array.isArray(detalhes)) {
+                Object.entries(detalhes).forEach(([chave, info]) => {
+                    funcionariosInativos.set(chave, {
+                        nome: info.nome || chave,
+                        dataAfastamento: info.dataAfastamento || ''
+                    });
+                });
+                return;
+            }
+        } catch (e) {}
+
+        try {
+            const nomesAntigos = JSON.parse(localStorage.getItem('funcionariosInativos') || '[]');
+            if (Array.isArray(nomesAntigos)) {
+                nomesAntigos.forEach(nome => {
+                    funcionariosInativos.set(normalizarTexto(nome), { nome, dataAfastamento: '' });
+                });
+                salvarFuncionariosInativos();
+            }
+        } catch (e) {
+            funcionariosInativos = new Map();
+        }
+    }
+
+    function salvarFuncionariosInativos() {
+        const objeto = {};
+        funcionariosInativos.forEach((info, chave) => {
+            objeto[chave] = info;
+        });
+        localStorage.setItem('funcionariosInativosDetalhes', JSON.stringify(objeto));
+    }
+
+    function obterInfoInativo(nome) {
+        return funcionariosInativos.get(normalizarTexto(nome));
+    }
+
+    function funcionarioEstaInativo(nome) {
+        return funcionariosInativos.has(normalizarTexto(nome));
+    }
+
+    function atualizarResumoInativos() {
+        const resumo = document.getElementById('listaInativosResumo');
+        if (!resumo) return;
+
+        const nomes = Array.from(canonicalNamesMap.values())
+            .filter(nome => funcionarioEstaInativo(nome))
+            .sort((a, b) => a.localeCompare(b));
+
+        if (!nomes.length) {
+            resumo.innerHTML = '<div class="empty-state">Nenhum funcionario inativo marcado.</div>';
+            return;
+        }
+
+        resumo.innerHTML = nomes.map(nome => {
+            const info = obterInfoInativo(nome) || {};
+            const data = info.dataAfastamento ? formatarDataBR(info.dataAfastamento) : 'Data de afastamento nao informada';
+            return `
+                <div class="inativo-card">
+                    <div>
+                        <strong>${escaparHTML(nome)}</strong>
+                        <span>Afastamento: ${escaparHTML(data)}</span>
+                    </div>
+                    <span class="badge-inativo">INATIVO</span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function atualizarFiltroAnos() {
+        const select = document.getElementById('filtroAno');
+        if (!select) return;
+
+        const valorAtual = select.value;
+        const anos = Array.from(new Set(todosOsRegistros
+            .map(registro => getSortableDate(registro.data).slice(0, 4))
+            .filter(Boolean)))
+            .sort((a, b) => b.localeCompare(a));
+
+        select.innerHTML = '<option value="">Todos os anos</option>';
+        anos.forEach(ano => {
+            const option = document.createElement('option');
+            option.value = ano;
+            option.textContent = `Pasta ${ano}`;
+            select.appendChild(option);
+        });
+
+        if (anos.includes(valorAtual)) select.value = valorAtual;
+    }
+
+    function obterNomeStatusDigitado() {
+        const input = document.getElementById('funcionarioStatus');
+        return input ? input.value.trim() : '';
+    }
+
+    window.marcarFuncionarioInativo = function() {
+        const nome = obterNomeStatusDigitado();
+        const dataAfastamento = document.getElementById('dataAfastamento')?.value || '';
+        if (!nome) {
+            alert('Informe o nome do funcionario.');
+            return;
+        }
+
+        const nomeCanonico = resolverFuncionarioExistente(nome);
+        if (!nomeCanonico) {
+            alert('Esse funcionario nao foi encontrado nos registros. Primeiro corrija/importa o nome, depois marque como inativo.');
+            return;
+        }
+
+        funcionariosInativos.set(normalizarTexto(nomeCanonico), {
+            nome: nomeCanonico,
+            dataAfastamento
+        });
+        salvarFuncionariosInativos();
+        atualizarResumoInativos();
+        window.aplicarFiltro();
+    }
+
+    window.marcarFuncionarioAtivo = function() {
+        const nome = obterNomeStatusDigitado();
+        if (!nome) {
+            alert('Informe o nome do funcionario.');
+            return;
+        }
+
+        const nomeCanonico = resolverFuncionarioExistente(nome) || nome;
+        funcionariosInativos.delete(normalizarTexto(nomeCanonico));
+        salvarFuncionariosInativos();
+        atualizarResumoInativos();
+        window.aplicarFiltro();
+    }
+
+    window.renomearFuncionario = async function() {
+        const nomeAtual = document.getElementById('nomeFuncionarioAtual')?.value.trim();
+        const nomeNovo = document.getElementById('nomeFuncionarioNovo')?.value.trim();
+
+        if (!nomeAtual || !nomeNovo) {
+            alert('Preencha o nome atual e o nome completo correto.');
+            return;
+        }
+
+        const nomeExistente = resolverFuncionarioExistente(nomeAtual);
+        const registrosParaAtualizar = registrosDoFuncionario(nomeAtual);
+
+        if (!registrosParaAtualizar.length) {
+            alert('Nao encontrei registros com esse nome atual. Escolha o nome atual pela lista de funcionarios.');
+            return;
+        }
+
+        const nomesEncontrados = Array.from(new Set(registrosParaAtualizar.map(registro => registro.funcionario))).sort();
+        if (!confirm(`Atualizar ${registrosParaAtualizar.length} registro(s) de "${nomeExistente || nomeAtual}" para "${nomeNovo}"?\n\nNomes que serao mesclados:\n${nomesEncontrados.join('\n')}`)) {
+            return;
+        }
+
+        try {
+            const dataValida = /^\d{4}-\d{2}-\d{2}$/;
+            const registrosInvalidos = registrosParaAtualizar.filter(registro => !dataValida.test(registro.data || ""));
+
+            if (registrosInvalidos.length) {
+                alert('Encontrei registro sem data valida. Corrija esse registro antes de atualizar o nome.');
+                return;
+            }
+
+            for (let i = 0; i < registrosParaAtualizar.length; i += 450) {
+                const lote = writeBatch(db);
+                registrosParaAtualizar.slice(i, i + 450).forEach(registro => {
+                    lote.set(doc(db, "horas", registro.id), {
+                        funcionario: nomeNovo,
+                        data: registro.data,
+                        horarios: Array.isArray(registro.horarios) ? registro.horarios : []
+                    });
+                });
+                await lote.commit();
+            }
+
+            const chaveAntiga = normalizarTexto(nomeExistente || nomeAtual);
+            const infoInativo = funcionariosInativos.get(chaveAntiga);
+            if (infoInativo) {
+                funcionariosInativos.delete(chaveAntiga);
+                funcionariosInativos.set(normalizarTexto(nomeNovo), {
+                    ...infoInativo,
+                    nome: nomeNovo
+                });
+                salvarFuncionariosInativos();
+            }
+
+            document.getElementById('nomeFuncionarioAtual').value = '';
+            document.getElementById('nomeFuncionarioNovo').value = '';
+            await window.carregarTodosOsDados();
+            document.getElementById('filtroFuncionario').value = nomeNovo;
+            window.mostrarPagina('page-registros');
+            alert('Nome atualizado e registros mesclados em um unico funcionario.');
+        } catch (e) {
+            console.error('Erro ao atualizar nome:', e);
+            const detalhe = e?.code === 'permission-denied'
+                ? 'O Firebase bloqueou a alteracao. A regra da colecao horas precisa aceitar funcionario, data e horarios.'
+                : (e?.message || 'Erro desconhecido.');
+            alert(`Erro ao atualizar nome: ${detalhe}`);
+        }
+    }
+
+    function criarPagina(id, tituloHTML, subtitulo) {
+        const page = document.createElement('section');
+        page.id = id;
+        page.className = `app-page ${id === 'page-registro' ? 'active' : ''}`;
+        page.innerHTML = `
+            <div class="page-title">
+                <h2>${tituloHTML}</h2>
+                <span>${subtitulo}</span>
+            </div>
+        `;
+        return page;
+    }
+
+    function moverParaPagina(page, elementos) {
+        elementos.forEach(elemento => {
+            if (elemento) page.appendChild(elemento);
+        });
+    }
+
+    function inicializarPaginas() {
+        if (document.getElementById('page-registro')) return;
+
+        const container = document.querySelector('.container');
+        const nav = document.querySelector('.app-nav');
+        if (!container || !nav) return;
+
+        const funcionarioInput = document.getElementById('funcionario');
+        const dataInput = document.getElementById('data');
+        const labelFuncionario = funcionarioInput?.previousElementSibling;
+        const datalist = document.getElementById('listaFuncionarios');
+        const labelData = dataInput?.previousElementSibling;
+        const blocosDiv = document.getElementById('blocos');
+        const totalDiv = document.getElementById('totalDuracaoDia');
+        const btnAdd = document.querySelector('button[onclick="window.addBloco()"]');
+        const btnSalvar = document.getElementById('btnSalvar');
+        const btnPdf = document.querySelector('.container > .btn-pdf');
+        const barraAcoes = document.createElement('div');
+        barraAcoes.className = 'registro-acoes';
+        [btnAdd, btnSalvar, btnPdf].forEach(botao => {
+            if (botao) barraAcoes.appendChild(botao);
+        });
+        const importacao = document.querySelector('.importacao-ponto');
+        const filtrosTitulo = Array.from(container.querySelectorAll('h2')).find(h => h.textContent.includes('Filtros'));
+        const filtros = document.getElementById('filtros');
+        const tituloRegistros = Array.from(container.querySelectorAll('h2')).find(h => h.textContent.includes('Registros Agrupados'));
+        const funcionarios = document.querySelector('.gestao-inativos');
+        const lista = document.getElementById('lista');
+
+        const pageRegistro = criarPagina('page-registro', '<i class="fas fa-clock"></i> Lancamento de Horas', 'Entrada e saida do dia');
+        const pageImportacao = criarPagina('page-importacao', '<i class="fas fa-file-import"></i> Importar Planilha do Ponto', 'Conferir antes de salvar');
+        const pageFuncionarios = criarPagina('page-funcionarios', '<i class="fas fa-users-cog"></i> Funcionarios', 'Nomes completos e inativos');
+        const pageRegistros = criarPagina('page-registros', '<i class="fas fa-folder-open"></i> Registros', 'Filtros, anos e relatorios');
+
+        moverParaPagina(pageRegistro, [labelFuncionario, funcionarioInput, datalist, labelData, dataInput, blocosDiv, totalDiv, barraAcoes]);
+        moverParaPagina(pageImportacao, [importacao]);
+        moverParaPagina(pageFuncionarios, [funcionarios]);
+        moverParaPagina(pageRegistros, [filtrosTitulo, filtros, tituloRegistros, lista]);
+
+        container.appendChild(pageRegistro);
+        container.appendChild(pageImportacao);
+        container.appendChild(pageFuncionarios);
+        container.appendChild(pageRegistros);
+    }
+
+    window.mostrarPagina = function(pageId) {
+        document.querySelectorAll('.app-page').forEach(page => {
+            page.classList.toggle('active', page.id === pageId);
+        });
+        document.querySelectorAll('.app-nav-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.page === pageId);
+        });
+    }
+
+    // #######################################################
+    // IMPORTACAO DE PLANILHA DO PONTO
+    // #######################################################
+
+    function escaparHTML(valor) {
+        return String(valor ?? '').replace(/[&<>"']/g, (char) => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        }[char]));
+    }
+
+    function normalizarTexto(valor) {
+        return removerAcentos(String(valor ?? '').trim()).toLowerCase();
+    }
+
+    function excelSerialParaDataISO(valor) {
+        const numero = Number(valor);
+        if (!Number.isFinite(numero) || numero < 20000 || numero > 80000) return '';
+        const data = new Date(Math.round((numero - 25569) * 86400 * 1000));
+        return `${data.getUTCFullYear()}-${String(data.getUTCMonth() + 1).padStart(2, '0')}-${String(data.getUTCDate()).padStart(2, '0')}`;
+    }
+
+    function parseDataPlanilha(valor) {
+        if (valor instanceof Date && !Number.isNaN(valor.getTime())) {
+            return `${valor.getFullYear()}-${String(valor.getMonth() + 1).padStart(2, '0')}-${String(valor.getDate()).padStart(2, '0')}`;
+        }
+
+        if (typeof valor === 'number') return excelSerialParaDataISO(valor);
+
+        const texto = String(valor ?? '').trim();
+        if (!texto) return '';
+
+        const serial = excelSerialParaDataISO(texto.replace(',', '.'));
+        if (serial) return serial;
+
+        let match = texto.match(/\b(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})\b/);
+        if (match) {
+            const [, ano, mes, dia] = match;
+            return `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+        }
+
+        match = texto.match(/\b(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2,4})\b/);
+        if (match) {
+            let [, dia, mes, ano] = match;
+            if (ano.length === 2) ano = `20${ano}`;
+            return `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+        }
+
+        return '';
+    }
+
+    function parseHorariosPlanilha(valor) {
+        if (valor instanceof Date && !Number.isNaN(valor.getTime())) {
+            return [`${String(valor.getHours()).padStart(2, '0')}:${String(valor.getMinutes()).padStart(2, '0')}`];
+        }
+
+        if (typeof valor === 'number' && valor > 0 && valor < 1) {
+            const minutos = Math.round(valor * 24 * 60);
+            return [`${String(Math.floor(minutos / 60)).padStart(2, '0')}:${String(minutos % 60).padStart(2, '0')}`];
+        }
+
+        const texto = String(valor ?? '');
+        const horarios = [];
+        const regex = /\b([01]?\d|2[0-3])[:h.]([0-5]\d)\b/g;
+        let match;
+
+        while ((match = regex.exec(texto)) !== null) {
+            horarios.push(`${String(match[1]).padStart(2, '0')}:${match[2]}`);
+        }
+
+        return horarios;
+    }
+
+    function pareceNomeFuncionario(valor) {
+        const texto = String(valor ?? '').trim();
+        const normalizado = normalizarTexto(texto);
+        if (texto.length < 3) return false;
+        if (!/\p{L}/u.test(texto)) return false;
+        if (parseDataPlanilha(texto)) return false;
+        if (parseHorariosPlanilha(texto).length) return false;
+        if (normalizado.match(/funcionario|colaborador|empregado|nome|data|hora|entrada|saida|total|empresa|departamento|cargo|matricula|pis|periodo|folha|relatorio|comparecimento|registro/)) return false;
+        return true;
+    }
+
+    function extrairNomeRotulo(linha) {
+        for (let i = 0; i < linha.length; i++) {
+            const atual = normalizarTexto(linha[i]);
+            if (atual.match(/funcionario|colaborador|empregado/) && linha[i + 1] && pareceNomeFuncionario(linha[i + 1])) {
+                return String(linha[i + 1]).trim();
+            }
+        }
+        return '';
+    }
+
+    function detectarCabecalho(linha) {
+        const mapa = {};
+        linha.forEach((celula, index) => {
+            const texto = normalizarTexto(celula);
+            if (!texto) return;
+            if (!mapa.nome && texto.match(/funcionario|colaborador|empregado|nome/)) mapa.nome = index;
+            if (!mapa.data && texto.match(/\bdata\b|dia/)) mapa.data = index;
+            if (texto.match(/entrada|ent\.?|inicio/)) {
+                mapa.entradas = mapa.entradas || [];
+                mapa.entradas.push(index);
+            }
+            if (texto.match(/saida|sai\.?|fim/)) {
+                mapa.saidas = mapa.saidas || [];
+                mapa.saidas.push(index);
+            }
+            if (texto.match(/horario|batida|marcacao|ponto|comparecimento/)) {
+                mapa.horarios = mapa.horarios || [];
+                mapa.horarios.push(index);
+            }
+        });
+
+        const temHorarios = (mapa.entradas && mapa.entradas.length) || (mapa.saidas && mapa.saidas.length) || (mapa.horarios && mapa.horarios.length);
+        return (mapa.data || mapa.nome) && temHorarios ? mapa : null;
+    }
+
+    function criarChaveRegistro(funcionario, data) {
+        const nomeCanonico = getCanonicalName(funcionario);
+        return `${normalizarTexto(nomeCanonico)}|${data}`;
+    }
+
+    function agruparRegistro(registros, registro, avisos) {
+        const chave = criarChaveRegistro(registro.funcionario, registro.data);
+        if (!registros.has(chave)) {
+            registros.set(chave, {
+                funcionario: registro.funcionario,
+                data: registro.data,
+                horarios: [],
+                origemLinhas: [],
+                origens: [],
+                pendencias: [],
+                ajustes: []
+            });
+        }
+
+        const existente = registros.get(chave);
+        registro.horarios.forEach((horario) => {
+            if (!existente.horarios.some((h) => h.entrada === horario.entrada && h.saida === horario.saida)) {
+                existente.horarios.push(horario);
+            }
+        });
+        existente.horarios = normalizarHorariosSemDuplicidade(existente.horarios);
+        existente.pendencias = filtrarPendenciasNaoUsadas(existente.pendencias, existente.horarios);
+        existente.origemLinhas.push(...registro.origemLinhas);
+        if (registro.origem && !existente.origens.includes(registro.origem)) {
+            existente.origens.push(registro.origem);
+        }
+        (registro.ajustes || []).forEach((ajuste) => {
+            if (ajuste && !existente.ajustes.includes(ajuste)) {
+                existente.ajustes.push(ajuste);
+            }
+        });
+        filtrarPendenciasNaoUsadas(registro.pendencias || [], existente.horarios).forEach((pendencia) => {
+            const chavePendencia = `${pendencia.horario || ''}|${pendencia.mensagem || ''}`;
+            if (!existente.pendencias.some((item) => `${item.horario || ''}|${item.mensagem || ''}` === chavePendencia)) {
+                existente.pendencias.push(pendencia);
+            }
+        });
+        existente.pendencias = filtrarPendenciasNaoUsadas(existente.pendencias, existente.horarios);
+
+        if (registro.aviso) avisos.push(registro.aviso);
+    }
+
+    function filtrarPendenciasNaoUsadas(pendencias = [], horarios = []) {
+        const horariosCompletos = new Set();
+        (horarios || []).forEach((horario) => {
+            if (horario?.entrada) horariosCompletos.add(horario.entrada);
+            if (horario?.saida) horariosCompletos.add(horario.saida);
+        });
+
+        return (pendencias || []).filter((pendencia) => pendencia?.horario && !horariosCompletos.has(pendencia.horario));
+    }
+
+    function criarParesPorSequenciaHorarios(horarios) {
+        return analisarBatidasPlanilha(horarios).pares;
+    }
+
+    function analisarBatidasPlanilha(horarios) {
+        const horariosLimpos = limparBatidasDuplicadas(horarios);
+        const pares = [];
+        const ajustes = [];
+
+        if (horariosLimpos.length === 3) {
+            const entradaManha = horariosLimpos[0];
+            const saidaAlmoco = horariosLimpos[1];
+            const saidaFimDia = horariosLimpos[2];
+            const voltaAlmoco = formatarMinutosParaHorario(parseTime(saidaAlmoco) + 60);
+
+            if (parseTime(saidaAlmoco) > parseTime(entradaManha) && parseTime(saidaFimDia) > parseTime(voltaAlmoco)) {
+                pares.push({ entrada: entradaManha, saida: saidaAlmoco });
+                pares.push({ entrada: voltaAlmoco, saida: saidaFimDia, automatico: true, motivo: 'Volta do almoço preenchida automaticamente com 1 hora de intervalo.' });
+                ajustes.push(`Volta do almoço preenchida automaticamente: ${voltaAlmoco}.`);
+                return { batidas: horariosLimpos, pares, pendencias: [], ajustes };
+            }
+        }
+
+        for (let i = 0; i + 1 < horariosLimpos.length; i += 2) {
+            const entrada = horariosLimpos[i];
+            const saida = horariosLimpos[i + 1];
+            if (parseTime(saida) > parseTime(entrada)) {
+                pares.push({ entrada, saida });
+            }
+        }
+
+        const pendencias = [];
+        if (horariosLimpos.length % 2 !== 0) {
+            const horario = horariosLimpos[horariosLimpos.length - 1];
+            pendencias.push({
+                horario,
+                mensagem: `Falta preencher a batida correspondente a ${horario}.`
+            });
+        }
+
+        return { batidas: horariosLimpos, pares, pendencias, ajustes };
+    }
+
+    function limparBatidasDuplicadas(horarios) {
+        const ordenados = (horarios || [])
+            .filter(Boolean)
+            .slice()
+            .sort((a, b) => parseTime(a) - parseTime(b));
+        const limpos = [];
+
+        ordenados.forEach((horario) => {
+            const anterior = limpos[limpos.length - 1];
+            if (!anterior || Math.abs(parseTime(horario) - parseTime(anterior)) > 10) {
+                limpos.push(horario);
+            }
+        });
+
+        return limpos;
+    }
+
+    function criarParesPorTextoEntradaSaida(texto) {
+        const pares = [];
+        const conteudo = String(texto || '');
+        const regex = /(entrada|entrou|entra|in[íi]cio|inicio|sa[ií]da|saiu|sai|fim)[^\d]{0,20}([01]?\d|2[0-3])[:h.]([0-5]\d)/gi;
+        let entradaPendente = '';
+        let match;
+
+        while ((match = regex.exec(conteudo)) !== null) {
+            const rotulo = normalizarTexto(match[1]);
+            const horario = `${String(match[2]).padStart(2, '0')}:${match[3]}`;
+            if (rotulo.match(/entrada|entrou|entra|inicio/)) {
+                entradaPendente = horario;
+            } else if (rotulo.match(/saida|saiu|sai|fim/) && entradaPendente && parseTime(horario) > parseTime(entradaPendente)) {
+                pares.push({ entrada: entradaPendente, saida: horario });
+                entradaPendente = '';
+            }
+        }
+
+        return pares;
+    }
+
+    function adicionarParesUnicos(destino, novosPares) {
+        novosPares.forEach((par) => {
+            if (!destino.some((existente) => existente.entrada === par.entrada && existente.saida === par.saida)) {
+                destino.push(par);
+            }
+        });
+    }
+
+    function ordenarParesHorarios(horarios) {
+        return (horarios || [])
+            .slice()
+            .sort((a, b) => parseTime(a.entrada) - parseTime(b.entrada) || parseTime(a.saida) - parseTime(b.saida));
+    }
+
+    function limparHorariosParaSalvar(horarios = []) {
+        return normalizarHorariosSemDuplicidade(horarios);
+    }
+
+    function extrairRegistrosDaPlanilha(linhas) {
+        const registros = new Map();
+        const avisos = [];
+        const semBatidas = [];
+        let funcionarioAtual = '';
+        let cabecalhoAtual = null;
+
+        extrairRegistrosFormatoCalendario(linhas, registros, avisos, semBatidas);
+
+        linhas.forEach((linhaOriginal, indice) => {
+            const linha = Array.isArray(linhaOriginal) ? linhaOriginal : [];
+            const valores = linha.map((celula) => String(celula ?? '').trim());
+            if (!valores.some(Boolean)) return;
+
+            const nomePorRotulo = extrairNomeRotulo(valores);
+            if (nomePorRotulo) funcionarioAtual = nomePorRotulo;
+
+            const possivelCabecalho = detectarCabecalho(valores);
+            if (possivelCabecalho) {
+                cabecalhoAtual = possivelCabecalho;
+                return;
+            }
+
+            let funcionario = funcionarioAtual;
+            let data = '';
+            let horarios = [];
+            let paresCabecalho = [];
+
+            if (cabecalhoAtual) {
+                if (cabecalhoAtual.nome !== undefined && pareceNomeFuncionario(valores[cabecalhoAtual.nome])) {
+                    funcionario = valores[cabecalhoAtual.nome];
+                }
+                if (cabecalhoAtual.data !== undefined) {
+                    data = parseDataPlanilha(valores[cabecalhoAtual.data]);
+                }
+
+                const entradas = cabecalhoAtual.entradas || [];
+                const saidas = cabecalhoAtual.saidas || [];
+                const pares = Math.max(entradas.length, saidas.length);
+
+                for (let i = 0; i < pares; i++) {
+                    const entradasCelula = parseHorariosPlanilha(valores[entradas[i]] || '');
+                    const saidasCelula = parseHorariosPlanilha(valores[saidas[i]] || '');
+                    const paresNaCelula = Math.max(entradasCelula.length, saidasCelula.length);
+
+                    for (let j = 0; j < paresNaCelula; j++) {
+                        const entrada = entradasCelula[j];
+                        const saida = saidasCelula[j];
+                        if (entrada && saida && parseTime(saida) > parseTime(entrada)) {
+                            paresCabecalho.push({ entrada, saida });
+                        }
+                    }
+                }
+
+                (cabecalhoAtual.horarios || []).forEach((coluna) => {
+                    horarios.push(...parseHorariosPlanilha(valores[coluna]));
+                });
+            }
+
+            if (!funcionario) {
+                const nomeLinha = valores.find(pareceNomeFuncionario);
+                if (nomeLinha) funcionario = nomeLinha;
+            }
+
+            if (!data) {
+                const dataLinha = valores.map(parseDataPlanilha).find(Boolean);
+                if (dataLinha) data = dataLinha;
+            }
+
+            if (!horarios.length && !paresCabecalho.length) {
+                horarios = valores.flatMap(parseHorariosPlanilha);
+            }
+
+            const horariosLinhaInteira = valores.flatMap(parseHorariosPlanilha);
+            const analiseLinha = analisarBatidasPlanilha(horariosLinhaInteira.length ? horariosLinhaInteira : horarios);
+            const paresLinhaInteira = analiseLinha.pares;
+            const paresHorario = paresLinhaInteira.length > paresCabecalho.length
+                ? [...paresLinhaInteira]
+                : [...paresCabecalho];
+            adicionarParesUnicos(paresHorario, criarParesPorSequenciaHorarios(horarios));
+            adicionarParesUnicos(paresHorario, criarParesPorTextoEntradaSaida(valores.join(' ')));
+
+            if (funcionario && data && (paresHorario.length || analiseLinha.pendencias.length)) {
+                agruparRegistro(registros, {
+                    funcionario: getCanonicalName(funcionario),
+                    data,
+                    horarios: ordenarParesHorarios(paresHorario),
+                    origemLinhas: [indice + 1],
+                    ajustes: analiseLinha.ajustes,
+                    pendencias: analiseLinha.pendencias,
+                    aviso: analiseLinha.pendencias.length ? `Linha ${indice + 1}: existe batida sem par. Confira antes de fechar o banco de horas.` : ''
+                }, avisos);
+            }
+        });
+
+        return { registros: Array.from(registros.values()), avisos, semBatidas };
+    }
+
+    function obterPeriodoPlanilha(linhas) {
+        for (const linha of linhas) {
+            const texto = (Array.isArray(linha) ? linha : []).map((celula) => String(celula ?? '')).join(' ');
+            const match = texto.match(/(\d{4})[-/](\d{2})[-/](\d{2})\s*~\s*(\d{4})[-/](\d{2})[-/](\d{2})/);
+            if (match) {
+                return {
+                    inicio: `${match[1]}-${match[2]}-${match[3]}`,
+                    fim: `${match[4]}-${match[5]}-${match[6]}`,
+                    ano: match[1],
+                    mes: match[2]
+                };
+            }
+        }
+        return null;
+    }
+
+    function obterDataPorDiaDoPeriodo(dia, periodo) {
+        if (!periodo || !dia) return '';
+        const diaNum = Number(dia);
+        if (!Number.isInteger(diaNum) || diaNum < 1 || diaNum > 31) return '';
+        const data = `${periodo.ano}-${periodo.mes}-${String(diaNum).padStart(2, '0')}`;
+        return data >= periodo.inicio && data <= periodo.fim ? data : '';
+    }
+
+    function extrairNomeLinhaFuncionario(linha) {
+        const valores = (Array.isArray(linha) ? linha : []).map((celula) => String(celula ?? '').trim());
+        for (let i = 0; i < valores.length; i++) {
+            if (normalizarTexto(valores[i]).match(/^nome\s*:?\s*$/)) {
+                for (let j = i + 1; j < valores.length; j++) {
+                    if (pareceNomeFuncionario(valores[j])) return valores[j];
+                }
+            }
+            const match = valores[i].match(/nome\s*:\s*(.+)$/i);
+            if (match && pareceNomeFuncionario(match[1])) return match[1].trim();
+        }
+        return '';
+    }
+
+    function linhaEhCabecalhoDias(linha) {
+        const valores = (Array.isArray(linha) ? linha : []).map((celula) => String(celula ?? '').trim());
+        const dias = valores.filter((valor) => /^\d{1,2}$/.test(valor)).map(Number);
+        return dias.length >= 3 && dias.every((dia) => dia >= 1 && dia <= 31);
+    }
+
+    function extrairRegistrosFormatoCalendario(linhas, registros, avisos, semBatidas = []) {
+        const periodo = obterPeriodoPlanilha(linhas);
+        if (!periodo) return;
+
+        for (let i = 0; i < linhas.length - 1; i++) {
+            const linhaDias = Array.isArray(linhas[i]) ? linhas[i] : [];
+            if (!linhaEhCabecalhoDias(linhaDias)) continue;
+
+            const linhaFuncionario = Array.isArray(linhas[i + 1]) ? linhas[i + 1] : [];
+            const funcionario = extrairNomeLinhaFuncionario(linhaFuncionario);
+            if (!funcionario) continue;
+
+            const linhaHorarios = Array.isArray(linhas[i + 2]) ? linhas[i + 2] : [];
+            let encontrouBatidaFuncionario = false;
+            linhaDias.forEach((celulaDia, coluna) => {
+                const dia = String(celulaDia ?? '').trim();
+                if (!/^\d{1,2}$/.test(dia)) return;
+                const data = obterDataPorDiaDoPeriodo(dia, periodo);
+                if (!data) return;
+
+                const horarios = parseHorariosPlanilha(linhaHorarios[coluna] || '');
+                if (horarios.length) encontrouBatidaFuncionario = true;
+                const analise = analisarBatidasPlanilha(horarios);
+                const pares = analise.pares;
+                if (!pares.length && !analise.pendencias.length) return;
+
+                agruparRegistro(registros, {
+                    funcionario: getCanonicalName(funcionario),
+                    data,
+                    horarios: ordenarParesHorarios(pares),
+                    origemLinhas: [i + 3],
+                    origem: 'calendario',
+                    ajustes: analise.ajustes,
+                    pendencias: analise.pendencias,
+                    aviso: analise.pendencias.length ? `Linha ${i + 3}: existe batida sem par. Confira antes de fechar o banco de horas.` : ''
+                }, avisos);
+            });
+            if (!encontrouBatidaFuncionario && !semBatidas.includes(funcionario)) {
+                semBatidas.push(funcionario);
+            }
+        }
+    }
+
+    function registrosExistentesSet() {
+        return new Set(todosOsRegistros.map((registro) => criarChaveRegistro(registro.funcionario, registro.data)));
+    }
+
+    function obterRegistroExistenteImportacao(registroImportado) {
+        const chaveImportado = criarChaveRegistro(registroImportado.funcionario, registroImportado.data);
+        return todosOsRegistros.find((registro) => criarChaveRegistro(registro.funcionario, registro.data) === chaveImportado) || null;
+    }
+
+    function obterHorariosNovosImportacao(registroImportado, existente) {
+        const horariosExistentes = normalizarHorariosSemDuplicidade(Array.isArray(existente?.horarios) ? existente.horarios : []);
+        return normalizarHorariosSemDuplicidade(registroImportado.horarios || []).filter((horario) =>
+            !horariosExistentes.some((h) => h.entrada === horario.entrada && h.saida === horario.saida)
+        );
+    }
+
+    function prepararAcoesImportacao(registros) {
+        return registros.map((registro) => {
+            if (!registro.horarios?.length) {
+                return { acao: 'pendente', registro };
+            }
+
+            const existente = obterRegistroExistenteImportacao(registro);
+            if (!existente) {
+                return { acao: 'criar', registro };
+            }
+
+            const horariosNovos = obterHorariosNovosImportacao(registro, existente);
+            if (!horariosNovos.length) {
+                return { acao: 'duplicado', registro, existente, horariosNovos: [] };
+            }
+
+            return {
+                acao: 'atualizar',
+                registro,
+                existente,
+                horariosNovos,
+                horariosAtualizados: normalizarHorariosSemDuplicidade([...(existente.horarios || []), ...horariosNovos])
+            };
+        });
+    }
+
+    function renderizarPreviewImportacao(registros, avisos, semBatidas = []) {
+        const existentes = registrosExistentesSet();
+        const acoes = prepararAcoesImportacao(registros);
+        const pendentes = acoes.filter((item) => item.acao === 'criar' || item.acao === 'atualizar');
+        const novos = acoes.filter((item) => item.acao === 'criar').length;
+        const atualizacoes = acoes.filter((item) => item.acao === 'atualizar').length;
+        const duplicados = acoes.filter((item) => item.acao === 'duplicado').length;
+        const pendentesBatida = acoes.filter((item) => item.registro.pendencias?.length).length;
+        const somentePendentes = acoes.filter((item) => item.acao === 'pendente').length;
+        const btnConfirmar = document.getElementById('btnConfirmarImportacao');
+        const resumo = document.getElementById('resumoImportacao');
+        const preview = document.getElementById('previewImportacao');
+
+        importacaoPendente = pendentes;
+        importacaoPreviewAtual = acoes;
+        importacaoSemBatidasAtual = semBatidas;
+        importacaoItemEmPreenchimento = null;
+        btnConfirmar.disabled = pendentes.length === 0;
+
+        resumo.innerHTML = `
+            <strong>${novos}</strong> novo(s) registro(s) e <strong>${atualizacoes}</strong> atualizacao(oes) de horarios prontas para importar.
+            ${duplicados ? `<br><span class="aviso-importacao">${duplicados} registro(s) ja estavam completos e serao ignorados.</span>` : ''}
+            ${pendentesBatida ? `<br><span class="pendencia-importacao">${pendentesBatida} registro(s) com batida faltando. ${somentePendentes ? `${somentePendentes} nao sera(o) importado(s) ate completar o horario.` : 'Os pares completos podem ser importados, mas confira as pendencias.'}</span>` : ''}
+            ${semBatidas.length ? `<br><span class="aviso-importacao">${semBatidas.length} funcionario(s) com hora zerada no periodo: ${escaparHTML(semBatidas.slice(0, 12).join(', '))}${semBatidas.length > 12 ? '...' : ''}</span>` : ''}
+            ${avisos.length ? `<br><span class="aviso-importacao">${avisos.length} aviso(s): ${escaparHTML(avisos.slice(0, 3).join(' | '))}${avisos.length > 3 ? '...' : ''}</span>` : ''}
+        `;
+
+        if (!registros.length && !semBatidas.length) {
+            preview.innerHTML = '<p class="erro-importacao" style="padding: 12px;">Nao encontrei registros com funcionario, data e pares de entrada/saida. Confira se a planilha e de comparecimento e tente novamente.</p>';
+            return;
+        }
+
+        const resumoFuncionarios = montarResumoFuncionariosImportacao(acoes, semBatidas);
+        const resumoHoraZerada = montarResumoHoraZeradaImportacao(semBatidas);
+        const linhasPreview = acoes.map((item, index) => montarLinhaPreviewImportacao(item, index)).join('');
+
+        preview.innerHTML = `
+            ${resumoFuncionarios}
+            ${resumoHoraZerada}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Funcionario</th>
+                        <th>Data</th>
+                        <th>Horarios</th>
+                        <th>Status</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>${linhasPreview}</tbody>
+            </table>
+        `;
+    }
+
+    function montarLinhaPreviewImportacao(item, index) {
+        const registro = item.registro;
+        const status = item.acao === 'criar'
+            ? 'Novo'
+            : item.acao === 'atualizar'
+                ? `Atualizar +${item.horariosNovos.length} horario(s)`
+                : item.acao === 'pendente'
+                    ? '<span class="pendencia-importacao">Pendente - falta preencher</span>'
+                    : item.acao === 'preenchido'
+                        ? '<span class="aviso-importacao">Preenchido manualmente</span>'
+                        : '<span class="aviso-importacao">Ja existe completo</span>';
+        const pendencias = registro.pendencias?.length
+            ? `<br><small class="pendencia-importacao">${escaparHTML(registro.pendencias.map((p) => p.mensagem).join(' | '))}</small>`
+            : '';
+        const ajustes = registro.ajustes?.length
+            ? `<br><small class="aviso-importacao">${escaparHTML(registro.ajustes.join(' | '))}</small>`
+            : '';
+        const acaoLinha = registro.pendencias?.length || item.acao === 'pendente'
+            ? `<button type="button" class="btn-importacao-mini btn-importacao-preencher" onclick="window.preencherRegistroImportacao(${index})"><i class="fas fa-pen"></i> Preencher</button>`
+            : `<button type="button" class="btn-importacao-mini btn-importacao-ok" disabled><i class="fas fa-check"></i> OK</button>`;
+
+        return `
+            <tr class="${registro.pendencias?.length ? 'linha-pendente' : ''}">
+                <td>${escaparHTML(registro.funcionario)}</td>
+                <td>${formatarDataBR(registro.data)}</td>
+                <td>${registro.horarios.length ? escaparHTML(registro.horarios.map((h) => `${h.entrada} -> ${h.saida}`).join(', ')) : '<span class="pendencia-importacao">Sem par completo</span>'}<br><small>${registro.horarios.length} periodo(s) completo(s)${registro.origens?.includes('calendario') ? ' - formato calendario' : ''}${registro.origemLinhas?.length ? ` - linha ${escaparHTML(registro.origemLinhas.join(', '))}` : ''}</small>${ajustes}${pendencias}</td>
+                <td>${status}</td>
+                <td>${acaoLinha}</td>
+            </tr>
+        `;
+    }
+
+    function montarResumoFuncionariosImportacao(acoes, semBatidas = []) {
+        const resumo = new Map();
+        acoes.forEach((item) => {
+            const nome = item.registro.funcionario || 'Sem funcionario';
+            if (!resumo.has(nome)) {
+                resumo.set(nome, { dias: 0, pares: 0, pendencias: 0 });
+            }
+            const atual = resumo.get(nome);
+            atual.dias++;
+            atual.pares += item.registro.horarios?.length || 0;
+            atual.pendencias += item.registro.pendencias?.length || 0;
+        });
+        semBatidas.forEach((nome) => {
+            if (!resumo.has(nome)) {
+                resumo.set(nome, { dias: 0, pares: 0, pendencias: 0, zerado: true });
+            } else {
+                resumo.get(nome).zerado = true;
+            }
+        });
+
+        const funcionarios = Array.from(resumo.entries())
+            .sort((a, b) => a[0].localeCompare(b[0], 'pt-BR'))
+            .map(([nome, item]) => `
+                <span class="chip-importacao ${item.pendencias || item.zerado ? 'chip-importacao-alerta' : ''}">
+                    ${escaparHTML(nome)}: ${item.zerado ? 'hora zerada' : `${item.dias} dia(s), ${item.pares} periodo(s)`}${item.pendencias ? `, ${item.pendencias} pendencia(s)` : ''}
+                </span>
+            `)
+            .join('');
+
+        return `
+            <div class="resumo-funcionarios-importacao">
+                <strong>${resumo.size}</strong> funcionario(s) com registros encontrados na planilha
+                <div>${funcionarios || '<span class="aviso-importacao">Nenhum funcionario com batidas encontrado.</span>'}</div>
+            </div>
+        `;
+    }
+
+    function montarResumoHoraZeradaImportacao(semBatidas = []) {
+        if (!semBatidas.length) return '';
+        const nomes = semBatidas
+            .slice()
+            .sort((a, b) => a.localeCompare(b, 'pt-BR'))
+            .map((nome) => {
+                const indexOriginal = semBatidas.indexOf(nome);
+                return `<span class="chip-importacao chip-importacao-alerta">${escaparHTML(nome)}: 00h 00m <button type="button" class="btn-importacao-mini btn-importacao-preencher" onclick="window.preencherHoraZeradaImportacao(${indexOriginal})"><i class="fas fa-pen"></i> Preencher</button></span>`;
+            })
+            .join('');
+
+        return `
+            <div class="hora-zerada-importacao">
+                <strong>Funcionarios com hora zerada no periodo</strong>
+                <div>${nomes}</div>
+            </div>
+        `;
+    }
+
+    function prepararFormularioRegistroImportacao(funcionario, data = '', horarios = [], pendencias = []) {
+        document.getElementById('funcionario').value = getCanonicalName(funcionario || '');
+        document.getElementById('data').value = data || '';
+        document.getElementById('blocos').innerHTML = '';
+        blocos = 0;
+
+        (horarios || []).forEach((horario) => {
+            window.addBloco(horario.entrada || '', horario.saida || '');
+        });
+
+        const pendenciasValidas = filtrarPendenciasNaoUsadas(pendencias || [], horarios || []);
+        pendenciasValidas.forEach((pendencia) => {
+            window.addBloco(pendencia.horario || '', '');
+        });
+
+        if (!horarios?.length && !pendenciasValidas.length) {
+            window.addBloco();
+        }
+
+        const salvarBtn = document.getElementById('btnSalvar');
+        if (salvarBtn) {
+            salvarBtn.innerHTML = '<i class="fas fa-save"></i> Salvar Registro';
+            salvarBtn.onclick = () => window.salvarDados();
+        }
+
+        window.calcularDuracaoAtualDia();
+        window.mostrarPagina('page-registro');
+        document.getElementById('funcionario')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function marcarImportacaoPreenchida(funcionario, data, horarios) {
+        if (!importacaoItemEmPreenchimento || !funcionario || !data || !horarios?.length) return;
+
+        const nomeNormalizado = normalizarTexto(getCanonicalName(funcionario));
+        const dataNormalizada = data;
+
+        if (importacaoItemEmPreenchimento.tipo === 'registro') {
+            const item = importacaoPreviewAtual[importacaoItemEmPreenchimento.index];
+            if (item?.registro && normalizarTexto(item.registro.funcionario) === nomeNormalizado && item.registro.data === dataNormalizada) {
+                item.registro.horarios = ordenarParesHorarios(horarios);
+                item.registro.pendencias = [];
+                item.acao = 'preenchido';
+                item.horariosNovos = [];
+                item.horariosAtualizados = ordenarParesHorarios(horarios);
+            }
+        }
+
+        if (importacaoItemEmPreenchimento.tipo === 'zerado') {
+            const nomeOriginal = importacaoSemBatidasAtual[importacaoItemEmPreenchimento.index];
+            if (normalizarTexto(nomeOriginal) === nomeNormalizado) {
+                importacaoSemBatidasAtual.splice(importacaoItemEmPreenchimento.index, 1);
+                importacaoPreviewAtual.push({
+                    acao: 'preenchido',
+                    registro: {
+                        funcionario: getCanonicalName(funcionario),
+                        data,
+                        horarios: ordenarParesHorarios(horarios),
+                        pendencias: [],
+                        origemLinhas: [],
+                        origens: ['preenchido manualmente']
+                    }
+                });
+            }
+        }
+
+        importacaoPendente = importacaoPreviewAtual.filter((item) => item.acao === 'criar' || item.acao === 'atualizar');
+        atualizarPreviewImportacaoAtual();
+        importacaoItemEmPreenchimento = null;
+    }
+
+    function atualizarPreviewImportacaoAtual() {
+        const preview = document.getElementById('previewImportacao');
+        if (!preview || (!importacaoPreviewAtual.length && !importacaoSemBatidasAtual.length)) return;
+        const resumoFuncionarios = montarResumoFuncionariosImportacao(importacaoPreviewAtual, importacaoSemBatidasAtual);
+        const resumoHoraZerada = montarResumoHoraZeradaImportacao(importacaoSemBatidasAtual);
+        const linhasPreview = importacaoPreviewAtual.map((item, index) => montarLinhaPreviewImportacao(item, index)).join('');
+
+        preview.innerHTML = `
+            ${resumoFuncionarios}
+            ${resumoHoraZerada}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Funcionario</th>
+                        <th>Data</th>
+                        <th>Horarios</th>
+                        <th>Status</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>${linhasPreview}</tbody>
+            </table>
+        `;
+    }
+
+    window.preencherRegistroImportacao = function(index) {
+        const item = importacaoPreviewAtual[index];
+        if (!item?.registro) {
+            alert('Nao encontrei esse item da importacao. Leia a planilha novamente.');
+            return;
+        }
+
+        const registro = item.registro;
+        importacaoItemEmPreenchimento = { tipo: 'registro', index };
+        prepararFormularioRegistroImportacao(
+            registro.funcionario,
+            registro.data,
+            registro.horarios || [],
+            registro.pendencias || []
+        );
+        alert('Carreguei o funcionario no formulario. Complete o horario faltante e clique em Salvar Registro.');
+    }
+
+    window.preencherHoraZeradaImportacao = function(index) {
+        const funcionario = importacaoSemBatidasAtual[index];
+        if (!funcionario) {
+            alert('Nao encontrei esse funcionario zerado. Leia a planilha novamente.');
+            return;
+        }
+
+        prepararFormularioRegistroImportacao(funcionario, '', [], []);
+        importacaoItemEmPreenchimento = { tipo: 'zerado', index };
+        alert('Carreguei o funcionario no formulario. Escolha a data, preencha os horarios e clique em Salvar Registro.');
+    }
+
+    window.prepararImportacaoPonto = async function() {
+        const input = document.getElementById('arquivoPonto');
+        const arquivo = input.files && input.files[0];
+        const resumo = document.getElementById('resumoImportacao');
+        const preview = document.getElementById('previewImportacao');
+        const btnConfirmar = document.getElementById('btnConfirmarImportacao');
+
+        importacaoPendente = [];
+        importacaoPreviewAtual = [];
+        importacaoSemBatidasAtual = [];
+        importacaoItemEmPreenchimento = null;
+        btnConfirmar.disabled = true;
+        preview.innerHTML = '';
+
+        if (!arquivo) {
+            resumo.innerHTML = '<span class="erro-importacao">Selecione uma planilha antes de conferir.</span>';
+            return;
+        }
+
+        if (!window.XLSX) {
+            resumo.innerHTML = '<span class="erro-importacao">Nao foi possivel carregar o leitor de planilhas. Verifique a internet e recarregue a pagina.</span>';
+            return;
+        }
+
+        try {
+            resumo.textContent = 'Lendo a planilha...';
+            const buffer = await arquivo.arrayBuffer();
+            const workbook = window.XLSX.read(buffer, { type: 'array', cellDates: true });
+            const todasAsLinhas = [];
+
+            workbook.SheetNames.forEach((nomeAba) => {
+                const sheet = workbook.Sheets[nomeAba];
+                const linhas = window.XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false, defval: '' });
+                todasAsLinhas.push(...linhas);
+            });
+
+            const { registros, avisos, semBatidas } = extrairRegistrosDaPlanilha(todasAsLinhas);
+            renderizarPreviewImportacao(registros, avisos, semBatidas);
+        } catch (erro) {
+            console.error('Erro ao ler planilha:', erro);
+            resumo.innerHTML = '<span class="erro-importacao">Erro ao ler a planilha. Tente salvar o arquivo como .xlsx e anexar novamente.</span>';
+        }
+    }
+
+    window.confirmarImportacaoPonto = async function() {
+        if (!importacaoPendente.length) {
+            alert('Nao ha registros novos para importar.');
+            return;
+        }
+
+        const novos = importacaoPendente.filter((item) => item.acao === 'criar').length;
+        const atualizacoes = importacaoPendente.filter((item) => item.acao === 'atualizar').length;
+        if (!confirm(`Importar ${novos} novo(s) registro(s) e atualizar ${atualizacoes} registro(s) existente(s)?`)) return;
+
+        const btnConfirmar = document.getElementById('btnConfirmarImportacao');
+        const resumo = document.getElementById('resumoImportacao');
+        btnConfirmar.disabled = true;
+        resumo.textContent = 'Importando registros para o Firebase...';
+
+        try {
+            let importados = 0;
+            let atualizados = 0;
+            for (const item of importacaoPendente) {
+                const registro = item.registro;
+                if (item.acao === 'criar') {
+                    await addDoc(collection(db, "horas"), {
+                        funcionario: getCanonicalName(registro.funcionario),
+                        data: registro.data,
+                        horarios: limparHorariosParaSalvar(registro.horarios)
+                    });
+                    importados++;
+                } else if (item.acao === 'atualizar' && item.existente?.id) {
+                    await updateDoc(doc(db, "horas", item.existente.id), {
+                        funcionario: getCanonicalName(item.existente.funcionario || registro.funcionario),
+                        data: item.existente.data || registro.data,
+                        horarios: limparHorariosParaSalvar(item.horariosAtualizados)
+                    });
+                    if (item.existente.idsDuplicados?.length) {
+                        await Promise.all(item.existente.idsDuplicados.map((idDuplicado) => deleteDoc(doc(db, "horas", idDuplicado))));
+                    }
+                    atualizados++;
+                }
+            }
+
+            importacaoPendente = [];
+            importacaoPreviewAtual = [];
+            importacaoSemBatidasAtual = [];
+            importacaoItemEmPreenchimento = null;
+            await window.carregarTodosOsDados();
+            resumo.innerHTML = `<strong>${importados}</strong> registro(s) importado(s) e <strong>${atualizados}</strong> atualizado(s) com sucesso.`;
+            alert('Importacao concluida com sucesso!');
+        } catch (erro) {
+            console.error('Erro ao importar planilha:', erro);
+            resumo.innerHTML = '<span class="erro-importacao">Erro ao importar. Verifique a console do navegador.</span>';
+            btnConfirmar.disabled = false;
+        }
     }
 
     // #######################################################
@@ -424,7 +2860,10 @@
         
         if (erroValidacao) return;
 
-        if (horarios.length === 0 || totalMinutos === 0) {
+        const horariosLimpos = limparHorariosParaSalvar(horarios);
+        totalMinutos = calcularDuracaoTotal(horariosLimpos);
+
+        if (horariosLimpos.length === 0 || totalMinutos === 0) {
             alert("Adicione pelo menos um par de Entrada/Saída válido.");
             return;
         }
@@ -433,8 +2872,10 @@
             await addDoc(collection(db, "horas"), {
                 funcionario: funcionarioParaSalvar, 
                 data,
-                horarios
+                horarios: horariosLimpos
             });
+
+            marcarImportacaoPreenchida(funcionarioParaSalvar, data, horariosLimpos);
             
             document.getElementById('data').value = ''; 
             document.getElementById('blocos').innerHTML = '';
@@ -485,7 +2926,10 @@
         
         if (erroValidacao) return;
 
-        if (horarios.length === 0 || totalMinutos === 0) {
+        const horariosLimpos = limparHorariosParaSalvar(horarios);
+        totalMinutos = calcularDuracaoTotal(horariosLimpos);
+
+        if (horariosLimpos.length === 0 || totalMinutos === 0) {
             alert("Preencha funcionário, data e pelo menos um par de horários válido!");
             return;
         }
@@ -495,14 +2939,18 @@
             await updateDoc(docRef, { 
                 funcionario: funcionarioParaSalvar, 
                 data, 
-                horarios 
+                horarios: horariosLimpos 
             });
+            const registroUnificado = todosOsRegistros.find((registro) => registro.id === id);
+            if (registroUnificado?.idsDuplicados?.length) {
+                await Promise.all(registroUnificado.idsDuplicados.map((idDuplicado) => deleteDoc(doc(db, "horas", idDuplicado))));
+            }
 
-            // CORREÇÃO: Seleciona o botão pelo ID e reverte para o estado de salvar
+            // CORREÇÃƒO: Seleciona o botão pelo ID e reverte para o estado de salvar
             const salvarBtn = document.getElementById('btnSalvar');
             
             if (salvarBtn) {
-                salvarBtn.textContent = 'Salvar Registro';
+                salvarBtn.innerHTML = '<i class="fas fa-save"></i> Salvar Registro';
                 salvarBtn.onclick = () => window.salvarDados(); // Reverte a função de clique
             }
 
@@ -523,18 +2971,19 @@
 
     window.editar = async function(id) {
         try {
+            const registroUnificado = todosOsRegistros.find((registro) => registro.id === id);
             const docRef = doc(db, "horas", id);
-            const docSnap = await getDoc(docRef);
+            const docSnap = registroUnificado ? null : await getDoc(docRef);
 
-            if (docSnap.exists()) {
-                const data = docSnap.data();
+            if (registroUnificado || docSnap?.exists()) {
+                const data = registroUnificado || docSnap.data();
 
                 document.getElementById('funcionario').value = data.funcionario;
                 document.getElementById('data').value = getSortableDate(data.data);
 
                 document.getElementById('blocos').innerHTML = '';
                 blocos = 0;
-                const horarios = Array.isArray(data.horarios) ? data.horarios : []; 
+                const horarios = normalizarHorariosSemDuplicidade(Array.isArray(data.horarios) ? data.horarios : []); 
 
                 horarios.forEach(h => {
                     window.addBloco(h.entrada, h.saida); 
@@ -542,13 +2991,15 @@
                 
                 window.calcularDuracaoAtualDia(); 
 
-                // CORREÇÃO: Seleciona o botão pelo ID e prepara para a atualização
+                // CORREÇÃƒO: Seleciona o botão pelo ID e prepara para a atualização
                 const salvarBtn = document.getElementById('btnSalvar');
                 if (salvarBtn) {
-                    salvarBtn.textContent = 'Atualizar Registro';
+                    salvarBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Atualizar Registro';
                     salvarBtn.onclick = () => window.atualizarDados(id); // Define a função de clique para atualizar
                 }
 
+                window.mostrarPagina('page-registro');
+                salvarBtn?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 alert("Dados carregados para edição. Clique em 'Atualizar Registro' para salvar as mudanças.");
 
             } else {
@@ -565,23 +3016,37 @@
     window.carregarTodosOsDados = async function() {
         const querySnapshot = await getDocs(collection(db, "horas"));
         todosOsRegistros = []; 
+        const registrosUnificados = new Map();
 
         canonicalNamesMap = new Map();
 
         querySnapshot.forEach(docItem => {
             const d = docItem.data();
-            const horariosArray = Array.isArray(d.horarios) ? d.horarios : []; 
-            const duracaoDoDiaMinutos = calcularDuracaoTotal(horariosArray);
+            const nomeOriginal = String(d.funcionario || '').trim();
+            const dataRegistro = getSortableDate(d.data);
+            const chaveRegistro = `${normalizarTexto(nomeOriginal)}|${dataRegistro}`;
+            const horariosArray = normalizarHorariosSemDuplicidade(Array.isArray(d.horarios) ? d.horarios : []);
 
-            todosOsRegistros.push({
-                ...d, 
-                horarios: horariosArray, 
-                id: docItem.id, 
-                duracaoMinutos: duracaoDoDiaMinutos,
-                duracaoFormatada: formatarMinutosParaHora(duracaoDoDiaMinutos)
-            });
+            if (!registrosUnificados.has(chaveRegistro)) {
+                registrosUnificados.set(chaveRegistro, {
+                    ...d,
+                    funcionario: nomeOriginal,
+                    data: dataRegistro,
+                    horarios: [],
+                    id: docItem.id,
+                    idsDuplicados: []
+                });
+            }
+
+            const registroUnificado = registrosUnificados.get(chaveRegistro);
+            registroUnificado.horarios = normalizarHorariosSemDuplicidade([
+                ...registroUnificado.horarios,
+                ...horariosArray
+            ]);
+            if (docItem.id !== registroUnificado.id && !registroUnificado.idsDuplicados.includes(docItem.id)) {
+                registroUnificado.idsDuplicados.push(docItem.id);
+            }
             
-            const nomeOriginal = d.funcionario.trim();
             const nomeNormalizado = removerAcentos(nomeOriginal).toLowerCase(); 
 
             if (!canonicalNamesMap.has(nomeNormalizado)) {
@@ -589,7 +3054,21 @@
             }
         });
 
-        const nomesCanonicossParaDatalist = Array.from(canonicalNamesMap.values()).sort();
+        todosOsRegistros = Array.from(registrosUnificados.values()).map((registro) => {
+            const horariosArray = normalizarHorariosSemDuplicidade(registro.horarios);
+            const duracaoDoDiaMinutos = calcularDuracaoTotal(horariosArray);
+            return {
+                ...registro,
+                horarios: horariosArray,
+                duracaoMinutos: duracaoDoDiaMinutos,
+                duracaoFormatada: formatarMinutosParaHora(duracaoDoDiaMinutos)
+            };
+        });
+
+        funcionariosMeta.forEach(registrarFuncionarioMetaComoAlias);
+
+        const nomesCanonicossParaDatalist = Array.from(new Set(canonicalNamesMap.values()))
+            .sort((a, b) => a.localeCompare(b, "pt-BR"));
 
         const datalist = document.getElementById('listaFuncionarios');
         datalist.innerHTML = '';
@@ -599,6 +3078,8 @@
             datalist.appendChild(option);
         });
 
+        atualizarFiltroAnos();
+        atualizarResumoInativos();
         window.aplicarFiltro();
     }
 
@@ -622,17 +3103,26 @@
         const filtroFuncionario = document.getElementById('filtroFuncionario').value.trim().toLowerCase();
         const filtroDataInicial = document.getElementById('filtroDataInicial').value;
         const filtroDataFinal = document.getElementById('filtroDataFinal').value;
+        const filtroAno = document.getElementById('filtroAno')?.value || '';
+        const filtroStatusFuncionario = document.getElementById('filtroStatusFuncionario')?.value || 'ativos';
         
         registrosGlobais = []; 
         registrosAgrupados = {}; 
         
         const registrosFiltrados = todosOsRegistros.filter(registro => {
             const nomeCorresponde = removerAcentos(registro.funcionario).toLowerCase().includes(removerAcentos(filtroFuncionario));
+            const anoRegistro = getSortableDate(registro.data).slice(0, 4);
+            const anoCorresponde = !filtroAno || anoRegistro === filtroAno;
+            const inativo = funcionarioEstaInativo(registro.funcionario);
+            const statusCorresponde =
+                filtroStatusFuncionario === 'todos' ||
+                (filtroStatusFuncionario === 'inativos' && inativo) ||
+                (filtroStatusFuncionario === 'ativos' && !inativo);
             
             const dataCorresponde = 
                 (!filtroDataInicial || registro.data >= filtroDataInicial) &&
                 (!filtroDataFinal || registro.data <= filtroDataFinal);
-            return nomeCorresponde && dataCorresponde;
+            return nomeCorresponde && dataCorresponde && anoCorresponde && statusCorresponde;
         });
 
         registrosFiltrados.forEach(registro => {
@@ -748,11 +3238,15 @@
             }
             
             const funcionarioSafeName = funcionario.replace(/'/g, "\\'"); 
+            const infoInativo = obterInfoInativo(funcionario);
+            const statusFuncionarioHTML = infoInativo
+                ? `<span class="status-funcionario inativo">INATIVO${infoInativo.dataAfastamento ? ` desde ${formatarDataBR(infoInativo.dataAfastamento)}` : ''}</span>`
+                : '<span class="status-funcionario">ATIVO</span>';
             
             htmlContent += `
                 <div class="agrupamento-funcionario">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <h2>${funcionario}</h2>
+                        <h2>${funcionario} ${statusFuncionarioHTML}</h2>
                         <button class="btn-pdf" style="width: auto; padding: 8px 15px; margin: 0; font-size: 14px; background: #2980b9;" 
                                 onclick="window.gerarPDFSemanalPorFuncionario('${funcionarioSafeName}')">
                             <i class="fas fa-file-pdf"></i> PDF Semanal
@@ -769,13 +3263,26 @@
     window.excluir = async function(id) {
         if (!confirm("Tem certeza que deseja excluir este registro?")) return;
         try {
-            await deleteDoc(doc(db, "horas", id));
+            const registroUnificado = todosOsRegistros.find((registro) => registro.id === id);
+            const idsParaExcluir = [id, ...(registroUnificado?.idsDuplicados || [])];
+            await Promise.all(idsParaExcluir.map((idRegistro) => deleteDoc(doc(db, "horas", idRegistro))));
             carregarTodosOsDados(); 
             alert("Registro excluído com sucesso!");
         } catch (e) {
             console.error("Erro ao excluir: ", e);
             alert("Erro ao excluir. Verifique a console.");
         }
+    }
+
+    function adicionarCreditoPDF(doc) {
+        const totalPages = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= totalPages; i++) {
+            doc.setPage(i);
+            doc.setFontSize(9);
+            doc.setTextColor(110, 110, 110);
+            doc.text("Desenvolvido por Nay Cordeiro - IT", doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 8, { align: "center" });
+        }
+        doc.setTextColor(0, 0, 0);
     }
 
     window.gerarPDFSemanalPorFuncionario = function(funcionarioNome) {
@@ -868,6 +3375,7 @@
         doc.setTextColor(0, 0, 0);
         y += 12;
 
+        adicionarCreditoPDF(doc);
         const nomeArquivo = `relatorio_semanal_${funcionarioNome.replace(/[^a-zA-Z0-9]/g, '_')}_filtrado.pdf`;
         doc.save(nomeArquivo);
     }
@@ -1003,13 +3511,57 @@
         doc.setFontSize(14);
         doc.text(`Total GERAL dos Registros Exibidos no Relatório: ${formatarMinutosParaHora(totalGeralMinutosPDF)}`, 10, y + 10);
 
+        adicionarCreditoPDF(doc);
         doc.save("relatorio_horas_semanal_agrupado.pdf");
     }
 
 
     // Inicialização
-    window.carregarTodosOsDados();
+    window.abrirConfiguracoesTI = function() {
+        const modal = document.getElementById('modalPinTI');
+        const campo = document.getElementById('pinTI');
+        const erro = document.getElementById('pinTIErro');
+        if (erro) erro.textContent = '';
+        if (campo) campo.value = '';
+        modal?.classList.add('aberto');
+        setTimeout(() => campo?.focus(), 50);
+    }
+
+    window.fecharModalTI = function() {
+        document.getElementById('modalPinTI')?.classList.remove('aberto');
+    }
+
+    window.validarPinTI = function() {
+        const campo = document.getElementById('pinTI');
+        const erro = document.getElementById('pinTIErro');
+        const pin = campo?.value.trim() || '';
+
+        if (pin === '8178') {
+            window.location.href = 'banco-horas.html';
+            return;
+        }
+
+        if (erro) erro.textContent = 'PIN incorreto. Confira e tente novamente.';
+        if (campo) {
+            campo.value = '';
+            campo.focus();
+        }
+    }
+
+    document.getElementById('pinTI')?.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') window.validarPinTI();
+        if (event.key === 'Escape') window.fecharModalTI();
+    });
+
+    document.getElementById('modalPinTI')?.addEventListener('click', (event) => {
+        if (event.target?.id === 'modalPinTI') window.fecharModalTI();
+    });
+    inicializarPaginas();
+    carregarFuncionariosInativos();
+    await buscarFuncionariosMeta();
+    await window.carregarTodosOsDados();
     window.addBloco(); 
 </script>
 </body>
 </html>
+
