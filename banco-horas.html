@@ -31,6 +31,16 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     }
 
+    .credito-sistema {
+      width: 95%;
+      max-width: 1380px;
+      margin: -12px auto 24px;
+      text-align: center;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
     .topo {
       display: flex;
       justify-content: space-between;
@@ -218,6 +228,39 @@
       font-weight: 700;
     }
 
+    .status-funcionario {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      background: #e8f5ee;
+      color: #087443;
+      border: 1px solid #b9e5ce;
+      width: fit-content;
+    }
+
+    .status-funcionario.inativo {
+      background: #fff4e6;
+      color: #9a3412;
+      border-color: #fed7aa;
+    }
+
+    .funcionario-identificacao {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    body.modo-chefia .filtros > div:has(#cargaSemanal) {
+      display: none;
+    }
+
     .neutro {
       color: #4b5563;
       font-weight: 700;
@@ -346,6 +389,149 @@
       display: none !important;
     }
 
+    .painel-tratativas-chefia {
+      background: #f8fbff;
+      border: 1px solid #dbe6f9;
+      align-items: start;
+    }
+
+    .tratativas-cabecalho {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .tratativas-cabecalho h2 {
+      margin: 0;
+      color: #1f3a93;
+      font-size: 1.18rem;
+    }
+
+    .tratativas-cabecalho small {
+      display: block;
+      margin-top: 5px;
+      color: #5f6b7a;
+    }
+
+    .tratativa-resumo-grid {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .tratativa-resumo-card {
+      padding: 14px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .tratativa-resumo-card strong {
+      display: block;
+      color: #1f3a93;
+      font-size: 1.25rem;
+      margin-top: 3px;
+    }
+
+    .painel-gestao-chefia {
+      background: #f8fbff;
+      border: 1px solid #dbe6f9;
+      align-items: start;
+    }
+
+    body:not(.visualizando-gestao-chefia) .pagina-gestao-chefia {
+      display: none;
+    }
+
+    body:not(.visualizando-departamentos-chefia) .pagina-departamentos-chefia {
+      display: none;
+    }
+
+    body.visualizando-gestao-chefia .container > :not(.topo):not(.pagina-gestao-chefia) {
+      display: none !important;
+    }
+
+    body.visualizando-departamentos-chefia .container > :not(.topo):not(.pagina-departamentos-chefia) {
+      display: none !important;
+    }
+
+    body.visualizando-gestao-chefia .topo {
+      margin-bottom: 18px;
+    }
+
+    body.visualizando-departamentos-chefia .topo {
+      margin-bottom: 18px;
+    }
+
+    .pagina-departamentos-chefia {
+      margin-top: 18px;
+    }
+
+    .gestao-layout-chefia {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(360px, 1.2fr) minmax(260px, 0.8fr);
+      gap: 16px;
+    }
+
+    .gestao-painel-chefia {
+      background: #fff;
+      border: 1px solid #dbe6f9;
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .gestao-painel-chefia h3 {
+      color: #1f3a93;
+      margin: 0 0 12px;
+      font-size: 1rem;
+    }
+
+    .tipo-situacao {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .tipo-situacao.extra {
+      color: #047857;
+      background: #d1fae5;
+      border: 1px solid #a7f3d0;
+    }
+
+    .tipo-situacao.negativa {
+      color: #b91c1c;
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+    }
+
+    .contador-extra {
+      color: #047857;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .contador-negativo {
+      color: #b91c1c;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
     .modo-badge {
       display: inline-block;
       padding: 6px 10px;
@@ -472,6 +658,99 @@
       color: #5f6b7a;
       line-height: 1.4;
     }
+    .assinatura-layout {
+      display: grid;
+      grid-template-columns: minmax(320px, 1.1fr) minmax(280px, 0.9fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .assinatura-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      align-items: end;
+    }
+
+    .assinatura-form .campo-inteiro,
+    .assinatura-resumo,
+    .assinatura-canvas-area {
+      grid-column: 1 / -1;
+    }
+
+    .assinatura-resumo {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid #dbe6f9;
+      border-radius: 10px;
+      background: #f8fbff;
+    }
+
+    .assinatura-resumo div {
+      padding: 10px;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+    }
+
+    .assinatura-resumo strong {
+      display: block;
+      color: #5f6b7a;
+      font-size: 0.82rem;
+      margin-bottom: 4px;
+    }
+
+    .assinatura-canvas-area canvas {
+      width: 100%;
+      height: 190px;
+      display: block;
+      border: 2px dashed #9fb3d9;
+      border-radius: 10px;
+      background: #fff;
+      touch-action: none;
+    }
+
+    .assinatura-acoes {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .assinatura-acoes button {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .assinatura-lista {
+      max-height: 430px;
+      overflow: auto;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .assinatura-item {
+      padding: 12px 14px;
+      border-bottom: 1px solid #edf1f7;
+    }
+
+    .assinatura-item:last-child {
+      border-bottom: none;
+    }
+
+    .assinatura-item strong {
+      display: block;
+      color: #1f3a93;
+      margin-bottom: 4px;
+    }
+
+    .assinatura-item small {
+      display: block;
+      color: #5f6b7a;
+      line-height: 1.45;
+    }
 
     @media (max-width: 768px) {
       .container {
@@ -510,6 +789,9 @@
       <div class="topo-acoes">
         <a href="index.html" class="btn-link admin-only"><i class="fas fa-arrow-left"></i> Voltar para Registros</a>
         <a href="banco_de_horas_chefes.html" class="btn-link admin-only"><i class="fas fa-eye"></i> Abrir Layout Chefia</a>
+        <button class="btn-secundario" onclick="abrirPaginaBancoChefia()"><i class="fas fa-table"></i> Banco</button>
+        <button class="btn-secundario" onclick="abrirPaginaDepartamentosChefia()"><i class="fas fa-building-user"></i> Departamentos</button>
+        <button class="btn-secundario" onclick="abrirPaginaGestaoChefia()"><i class="fas fa-list-check"></i> Painel Gestão</button>
         <button class="btn-secundario" onclick="exportarCSV()"><i class="fas fa-file-csv"></i> Exportar CSV</button>
         <button class="btn-secundario admin-only" onclick="exportarBackupCompleto()"><i class="fas fa-download"></i> Backup Completo</button>
         <button class="btn-pdf" onclick="gerarPDFBancoHoras()"><i class="fas fa-file-pdf"></i> Baixar PDF Completo</button>
@@ -568,6 +850,112 @@
         <button onclick="carregarBancoHoras()" style="width:100%;">
           <i class="fas fa-search"></i> Calcular Banco
         </button>
+      </div>
+    </div>
+
+    <div class="filtros painel-tratativas-chefia">
+      <div class="tratativas-cabecalho">
+        <div>
+          <h2><i class="fas fa-clipboard-check"></i> Acompanhamento de tratativas</h2>
+          <small>Consulta das horas pagas, horas em folga, pendências e datas escolhidas registradas pelo ADM.</small>
+        </div>
+        <button type="button" onclick="buscarTratativasHorasPDF()" style="background:#1f3a93;">
+          <i class="fas fa-sync-alt"></i> Atualizar
+        </button>
+      </div>
+      <div id="resumoTratativasChefia" class="tratativa-resumo-grid"></div>
+      <div id="listaTratativasChefia" style="grid-column: 1 / -1;"></div>
+    </div>
+
+    <div class="filtros painel-gestao-chefia pagina-gestao-chefia">
+      <div class="tratativas-cabecalho">
+        <div>
+          <h2><i class="fas fa-list-check"></i> Painel de gestão</h2>
+          <small>Verificação separada de pendências, saldos em aberto, meses fechados e movimentações registradas pelo ADM.</small>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" onclick="abrirPaginaBancoChefia()" style="background:#4b5563;">
+            <i class="fas fa-arrow-left"></i> Voltar ao banco
+          </button>
+          <button type="button" onclick="atualizarPainelGestaoChefia()" style="background:#1f3a93;">
+            <i class="fas fa-sync-alt"></i> Atualizar
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <label for="gestaoFiltroMes">Mês</label>
+        <select id="gestaoFiltroMes">
+          <option value="">Todos</option>
+          <option value="01">Janeiro</option>
+          <option value="02">Fevereiro</option>
+          <option value="03">Março</option>
+          <option value="04">Abril</option>
+          <option value="05">Maio</option>
+          <option value="06">Junho</option>
+          <option value="07">Julho</option>
+          <option value="08">Agosto</option>
+          <option value="09">Setembro</option>
+          <option value="10">Outubro</option>
+          <option value="11">Novembro</option>
+          <option value="12">Dezembro</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="gestaoFiltroAno">Ano</label>
+        <input type="number" id="gestaoFiltroAno" placeholder="Ex: 2026">
+      </div>
+
+      <div style="display:flex; gap:10px; align-items:end; flex-wrap:wrap;">
+        <button type="button" onclick="aplicarFiltrosGestao()" style="flex:1; min-width:150px; background:#1f3a93;">
+          <i class="fas fa-search"></i> Filtrar
+        </button>
+        <button type="button" onclick="limparFiltrosGestao()" class="btn-cancelar" style="flex:1; min-width:120px;">
+          <i class="fas fa-eraser"></i> Limpar
+        </button>
+      </div>
+      <div id="resumoGestaoChefia" class="tratativa-resumo-grid"></div>
+
+      <div class="gestao-painel-chefia" style="grid-column: 1 / -1;">
+        <h3><i class="fas fa-notes-medical"></i> Lançar atestado médico</h3>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap:12px; align-items:end;">
+          <div>
+            <label for="atestadoFuncionario">Funcionário</label>
+            <input type="text" id="atestadoFuncionario" list="listaFuncionariosAtestado" placeholder="Digite para buscar o funcionário">
+            <datalist id="listaFuncionariosAtestado"></datalist>
+          </div>
+          <div>
+            <label for="atestadoData">Data do atestado</label>
+            <input type="date" id="atestadoData">
+          </div>
+          <div>
+            <label for="atestadoHoras">Horas abonadas</label>
+            <input type="number" id="atestadoHoras" placeholder="Ex: 8" min="0" step="0.25">
+          </div>
+          <div>
+            <label for="atestadoDescricao">Observação</label>
+            <input type="text" id="atestadoDescricao" placeholder="Ex: Atestado médico entregue ao RH">
+          </div>
+          <button type="button" onclick="salvarAtestadoMedico()" style="background:#047857;">
+            <i class="fas fa-notes-medical"></i> Salvar atestado
+          </button>
+        </div>
+      </div>
+
+      <div class="gestao-layout-chefia">
+        <div class="gestao-painel-chefia">
+          <h3><i class="fas fa-building-user"></i> Situação por departamento</h3>
+          <div id="listaPendenciasChefia"></div>
+        </div>
+        <div class="gestao-painel-chefia">
+          <h3><i class="fas fa-lock"></i> Meses fechados</h3>
+          <div id="listaFechamentosChefia"></div>
+          <h3 style="margin-top:18px;"><i class="fas fa-clock-rotate-left"></i> Histórico recente</h3>
+          <div id="listaHistoricoTratativasChefia"></div>
+          <h3 style="margin-top:18px;"><i class="fas fa-notes-medical"></i> Relatório de atestado médico</h3>
+          <div id="listaAtestadosMedicos"></div>
+        </div>
       </div>
     </div>
 
@@ -640,7 +1028,7 @@
 
       <div>
         <label for="cargaFuncionarioNome">Funcionário</label>
-        <input type="text" id="cargaFuncionarioNome" placeholder="Nome igual ao registro de ponto">
+        <input type="text" id="cargaFuncionarioNome" list="listaFuncionariosAtestado" placeholder="Nome igual ao registro de ponto">
       </div>
 
       <div>
@@ -652,6 +1040,25 @@
           <option value="36">36 horas semanais</option>
           <option value="30">30 horas semanais</option>
         </select>
+      </div>
+
+      <div>
+        <label for="cargaFuncionarioInicio">Válida a partir de</label>
+        <input type="date" id="cargaFuncionarioInicio">
+        <small style="display:block; color:#64748b; margin-top:4px;">Use a data em que a pessoa mudou de jornada. Deixe em branco para valer desde o início.</small>
+      </div>
+
+      <div>
+        <label for="cargaFuncionarioAnterior">Antes dessa data era</label>
+        <select id="cargaFuncionarioAnterior">
+          <option value="">Não alterar carga anterior</option>
+          <option value="44">44h semanais</option>
+          <option value="40">40h semanais</option>
+          <option value="22">22h semanais</option>
+          <option value="36">36 horas semanais</option>
+          <option value="30">30 horas semanais</option>
+        </select>
+        <small style="display:block; color:#64748b; margin-top:4px;">Use quando a pessoa mudou de jornada, por exemplo: antes 44h e depois 22h.</small>
       </div>
 
       <div style="display:flex; align-items:end;">
@@ -730,6 +1137,69 @@
       </div>
     </div>
 
+    <div class="pagina-departamentos-chefia">
+      <div class="filtros">
+        <div class="tratativas-cabecalho" style="grid-column: 1 / -1;">
+          <div>
+            <h2 style="margin:0; color:#1f3a93; font-size:1.15rem;"><i class="fas fa-building-user"></i> Departamentos</h2>
+            <small>Consulta separada para abrir departamentos, conferir funcionários e acompanhar saldos detalhados.</small>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button type="button" onclick="abrirPaginaBancoChefia()" style="background:#4b5563;">
+              <i class="fas fa-arrow-left"></i> Voltar ao banco
+            </button>
+            <button type="button" onclick="carregarBancoHoras()" style="background:#1f3a93;">
+              <i class="fas fa-sync-alt"></i> Atualizar dados
+            </button>
+        </div>
+      </div>
+
+        <div>
+          <label for="departamentosFiltroFuncionario">Pesquisar funcionário</label>
+          <input type="text" id="departamentosFiltroFuncionario" placeholder="Digite nome ou sobrenome">
+        </div>
+
+        <div>
+          <label for="departamentosFiltroDepartamento">Departamento</label>
+          <select id="departamentosFiltroDepartamento">
+            <option value="">Todos</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="departamentosFiltroMes">Mês</label>
+          <select id="departamentosFiltroMes">
+            <option value="">Todos</option>
+            <option value="01">Janeiro</option>
+            <option value="02">Fevereiro</option>
+            <option value="03">Março</option>
+            <option value="04">Abril</option>
+            <option value="05">Maio</option>
+            <option value="06">Junho</option>
+            <option value="07">Julho</option>
+            <option value="08">Agosto</option>
+            <option value="09">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="departamentosFiltroAno">Ano</label>
+          <input type="number" id="departamentosFiltroAno" placeholder="Ex: 2026">
+        </div>
+
+        <div style="display:flex; gap:10px; align-items:end; flex-wrap:wrap;">
+          <button type="button" onclick="aplicarFiltrosDepartamentos()" style="flex:1; min-width:160px; background:#1f3a93;">
+            <i class="fas fa-search"></i> Pesquisar
+          </button>
+          <button type="button" onclick="limparFiltrosDepartamentos()" class="btn-cancelar" style="flex:1; min-width:130px;">
+            <i class="fas fa-eraser"></i> Limpar
+          </button>
+        </div>
+      </div>
+
     <div id="registrosPorDepartamento"></div>
 
     <div class="departamento-card card-todos-registros">
@@ -770,19 +1240,22 @@
 
     <div id="listaDatasEspeciais"></div>
     <div id="detalhesFuncionarios"></div>
+    </div>
 
     <div class="info-regra">
       <strong>Como funciona:</strong><br>
       • Sábado: tudo vira extra.<br>
-      • Data com regra “Não gera débito”: não cobra horas do dia e não gera negativo.<br>
-      • Data com regra “Trabalhado vira extra”: não cobra horas do dia; se a pessoa vier, tudo vira extra.<br>
-      • Data com regra “Carga personalizada”: compara com a carga que você informar naquele dia.<br>
+      • Data com regra "Não gera débito": não cobra horas do dia e não gera negativo.<br>
+      • Data com regra "Trabalhado vira extra": não cobra horas do dia; se a pessoa vier, tudo vira extra.<br>
+      • Data com regra "Carga personalizada": compara com a carga que você informar naquele dia.<br>
       • Para compensação: cadastre a data trabalhada, informe a data compensada e use carga personalizada, normalmente 8h.<br>
-      • Folgas a descontar: use “Folga a descontar em mês escolhido”, informe a data da folga, as horas e o mês onde o desconto deve aparecer. O abatimento entra automaticamente no mês selecionado.
+      • Folgas a descontar: use "Folga a descontar em mês escolhido", informe a data da folga, as horas e o mês onde o desconto deve aparecer. O abatimento entra automaticamente no mês selecionado.
       • Carga individual: cadastre a carga de cada funcionário acima. Quem não tiver cadastro usa a carga padrão do filtro.
-      • Atraso/falta autorizada para descontar de saldo anterior: use “Abonar falta com saldo anterior/2025” em Ajuste manual. Isso soma as horas no mês atual para não ficar negativo e registra a justificativa.
+      • Atraso/falta autorizada para descontar de saldo anterior: use "Abonar falta com saldo anterior/2025" em Ajuste manual. Isso soma as horas no mês atual para não ficar negativo e registra a justificativa.
     </div>
   </div>
+
+  <div class="credito-sistema">Desenvolvido por Nay Cordeiro - IT</div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -814,6 +1287,10 @@
     let ajustesHoras = [];
     let cargasFuncionarios = [];
     let funcionariosMeta = [];
+    let tratativasHorasPDF = [];
+    let fechamentosMensais = [];
+    let historicoTratativas = [];
+    let funcionariosInativosLocais = new Map();
     let resultadoAtualCSV = [];
     let detalhesAtuaisPDF = [];
     let ultimoResumoPDF = {
@@ -823,6 +1300,10 @@
       saldoGeral: 0
     };
     let dataEspecialEditandoId = null;
+    let assinaturasBancoHoras = [];
+    let resumoAssinaturaAtual = null;
+    let assinaturaCanvasConfigurado = false;
+    let assinaturaCanvasVazio = true;
 
     const nomesMeses = [
       "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
@@ -848,6 +1329,425 @@
         .replace(/^_+|_+$/g, "");
       return base || "sem_nome";
     }
+
+    const TRATATIVAS_HORAS_PDF_KEY = "tratativasHorasPDF";
+
+    function carregarTratativasHorasPDFLocal() {
+      try {
+        const lista = JSON.parse(localStorage.getItem(TRATATIVAS_HORAS_PDF_KEY) || "[]");
+        return Array.isArray(lista) ? lista : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function salvarTratativasHorasPDFLocal(lista) {
+      localStorage.setItem(TRATATIVAS_HORAS_PDF_KEY, JSON.stringify(lista));
+    }
+
+    const FECHAMENTOS_MENSAIS_KEY = "fechamentosMensaisBancoHoras";
+    const HISTORICO_TRATATIVAS_KEY = "historicoTratativasHoras";
+
+    function carregarListaLocal(chave) {
+      try {
+        const lista = JSON.parse(localStorage.getItem(chave) || "[]");
+        return Array.isArray(lista) ? lista : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function salvarListaLocal(chave, lista) {
+      localStorage.setItem(chave, JSON.stringify(lista));
+    }
+
+    async function buscarFechamentosMensais() {
+      const locais = carregarListaLocal(FECHAMENTOS_MENSAIS_KEY);
+      const porId = new Map(locais.map(item => [item.id, item]));
+
+      try {
+        const snapshot = await getDocs(collection(db, "fechamentosMensais"));
+        snapshot.forEach(docItem => porId.set(docItem.id, { id: docItem.id, ...docItem.data(), origem: "firebase" }));
+      } catch (error) {
+        console.warn("Nao foi possivel carregar fechamentos do Firebase. Usando dados locais.", error);
+      }
+
+      fechamentosMensais = Array.from(porId.values());
+      salvarListaLocal(FECHAMENTOS_MENSAIS_KEY, fechamentosMensais);
+    }
+
+    async function buscarHistoricoTratativas() {
+      const locais = carregarListaLocal(HISTORICO_TRATATIVAS_KEY);
+      const porId = new Map(locais.map(item => [item.id, item]));
+
+      try {
+        const snapshot = await getDocs(collection(db, "historicoTratativasHoras"));
+        snapshot.forEach(docItem => porId.set(docItem.id, { id: docItem.id, ...docItem.data(), origem: "firebase" }));
+      } catch (error) {
+        console.warn("Nao foi possivel carregar historico do Firebase. Usando dados locais.", error);
+      }
+
+      historicoTratativas = Array.from(porId.values());
+      salvarListaLocal(HISTORICO_TRATATIVAS_KEY, historicoTratativas);
+    }
+
+    function formatarNumeroHoras(valor) {
+      const numero = Number(valor || 0);
+      return numero.toLocaleString("pt-BR", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+    }
+
+    function converterHorasDecimalParaMinutos(valor) {
+      const texto = String(valor ?? "").trim().replace(",", ".");
+      if (texto.includes(":")) {
+        const partes = texto.split(":");
+        const horas = Number(partes[0] || 0) || 0;
+        const minutos = Number(partes[1] || 0) || 0;
+        return Math.round((horas * 60) + minutos);
+      }
+      return Math.round((Number(texto || 0) || 0) * 60);
+    }
+
+    function calcularSaldoRestanteTratativa(tratativa) {
+      const saldo = Number(tratativa.saldoMinutos || 0);
+      const abatido = converterHorasDecimalParaMinutos(tratativa.horasPagas) + converterHorasDecimalParaMinutos(tratativa.horasFolga);
+      if (saldo > 0) return saldo - abatido;
+      if (saldo < 0) return saldo;
+      return 0;
+    }
+
+    function calcularSituacaoFinalTratativa(tratativa) {
+      const saldoOriginal = Number(tratativa.saldoMinutos || 0);
+      const restante = Number(tratativa.saldoRestanteMinutos ?? calcularSaldoRestanteTratativa(tratativa));
+
+      if (saldoOriginal > 0) {
+        if (restante > 0) return `Ainda resta ${formatarMinutosParaHora(restante)} de extra`;
+        if (restante < 0) return `Saldo quitado; abatimento excedeu ${formatarMinutosParaHora(Math.abs(restante))}`;
+        return "Saldo quitado no período";
+      }
+
+      if (saldoOriginal < 0) return `Ainda possui ${formatarMinutosParaHora(Math.abs(saldoOriginal))} de horas negativas`;
+      return "Saldo quitado no período";
+    }
+
+    function formatarTratativaHorasPDF(tratativa) {
+      const partes = [tratativa.status || "Verificando com a gestão"];
+      if (Number(tratativa.horasPagas || 0) > 0) partes.push(`${formatarNumeroHoras(tratativa.horasPagas)}h pagas`);
+      if (Number(tratativa.horasFolga || 0) > 0) partes.push(`${formatarNumeroHoras(tratativa.horasFolga)}h em folga`);
+      if (tratativa.dataFolga) partes.push(`folga em ${formatarDataBR(tratativa.dataFolga)}`);
+      partes.push(tratativa.situacaoFinal || calcularSituacaoFinalTratativa(tratativa));
+      return partes.join(" - ");
+    }
+
+    function renderizarTratativasChefia() {
+      const resumo = document.getElementById("resumoTratativasChefia");
+      const listaContainer = document.getElementById("listaTratativasChefia");
+      if (!resumo || !listaContainer) return;
+
+      const lista = tratativasHorasPDF
+        .slice()
+        .sort((a, b) => (b.atualizadoEm || "").localeCompare(a.atualizadoEm || ""));
+
+      const totais = lista.reduce((acc, item) => {
+        acc.pagas += Number(item.horasPagas || 0);
+        acc.folga += Number(item.horasFolga || 0);
+        if (String(item.opcao || "") === "2") acc.naoPagas += 1;
+        if (String(item.opcao || "") === "4" || !item.opcao) acc.verificando += 1;
+        return acc;
+      }, { pagas: 0, folga: 0, naoPagas: 0, verificando: 0 });
+
+      resumo.innerHTML = `
+        <div class="tratativa-resumo-card">Horas pagas<strong>${formatarNumeroHoras(totais.pagas)}h</strong></div>
+        <div class="tratativa-resumo-card">Horas em folga<strong>${formatarNumeroHoras(totais.folga)}h</strong></div>
+        <div class="tratativa-resumo-card">Horas não pagas<strong>${totais.naoPagas}</strong></div>
+        <div class="tratativa-resumo-card">Verificando com a gestão<strong>${totais.verificando}</strong></div>
+      `;
+
+      if (!lista.length) {
+        listaContainer.innerHTML = '<small style="color:#5f6b7a;">Nenhuma tratativa registrada pelo ADM até agora.</small>';
+        return;
+      }
+
+      listaContainer.innerHTML = `
+        <div class="tabela-wrapper">
+          <table style="min-width:920px;">
+            <thead>
+              <tr>
+                <th>Funcionário</th>
+                <th>Período</th>
+                <th>Tratativa</th>
+                <th>Horas pagas</th>
+                <th>Horas em folga</th>
+                <th>Situação final</th>
+                <th>Data da folga</th>
+                <th>Atualizado em</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${lista.map(item => `
+                <tr>
+                  <td>${escaparHTML(item.funcionario || "")}</td>
+                  <td>${escaparHTML(item.periodoTexto || "")}</td>
+                  <td>${escaparHTML(formatarTratativaHorasPDF(item))}</td>
+                  <td>${formatarNumeroHoras(item.horasPagas)}h</td>
+                  <td>${formatarNumeroHoras(item.horasFolga)}h</td>
+                  <td>${escaparHTML(item.situacaoFinal || calcularSituacaoFinalTratativa(item))}</td>
+                  <td>${item.dataFolga ? escaparHTML(formatarDataBR(item.dataFolga)) : "-"}</td>
+                  <td>${item.atualizadoEm ? escaparHTML(new Date(item.atualizadoEm).toLocaleString("pt-BR")) : "-"}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    window.buscarTratativasHorasPDF = async function() {
+      const locais = carregarTratativasHorasPDFLocal();
+      const porId = new Map(locais.map(item => [item.id, item]));
+
+      try {
+        const snapshot = await getDocs(collection(db, "tratativasHorasPDF"));
+        snapshot.forEach(docItem => {
+          const dados = docItem.data();
+          porId.set(docItem.id, { id: docItem.id, ...dados, origem: "firebase" });
+        });
+        tratativasHorasPDF = Array.from(porId.values());
+        salvarTratativasHorasPDFLocal(tratativasHorasPDF);
+      } catch (error) {
+        console.warn("Nao foi possivel carregar tratativas do Firebase. Usando tratativas locais.", error);
+        tratativasHorasPDF = locais;
+      }
+
+      renderizarTratativasChefia();
+      renderizarPainelGestaoChefia();
+    };
+
+    function obterPendenciasBancoHorasChefia() {
+      const pendencias = [];
+      const periodoFiltro = obterPeriodoFiltroTextoChefia();
+
+      resultadoAtualCSV.forEach(item => {
+        if (Number(item.saldo || 0) > 0) {
+          pendencias.push({
+            tipo: "Hora extra",
+            funcionario: item.funcionario,
+            departamento: item.departamento || obterDepartamentoFuncionario(item.funcionario),
+            periodo: periodoFiltro,
+            detalhe: `Saldo positivo de ${formatarMinutosParaHora(item.saldo)}`
+          });
+        }
+        if (Number(item.saldo || 0) < 0) {
+          pendencias.push({
+            tipo: "Horas negativas",
+            funcionario: item.funcionario,
+            departamento: item.departamento || obterDepartamentoFuncionario(item.funcionario),
+            periodo: periodoFiltro,
+            detalhe: `Saldo negativo de ${formatarMinutosParaHora(Math.abs(item.saldo))}`
+          });
+        }
+        if ((item.departamento || "Sem departamento") === "Sem departamento") {
+          pendencias.push({
+            tipo: "Cadastro incompleto",
+            funcionario: item.funcionario,
+            departamento: item.departamento || obterDepartamentoFuncionario(item.funcionario),
+            periodo: periodoFiltro,
+            detalhe: "Departamento não informado"
+          });
+        }
+      });
+
+      tratativasHorasPDF.forEach(item => {
+        const restante = calcularSaldoRestanteTratativa(item);
+        if (String(item.opcao || "") === "4" || !item.opcao) {
+          pendencias.push({
+            tipo: "Tratativa pendente",
+            funcionario: item.funcionario,
+            departamento: obterDepartamentoFuncionario(item.funcionario),
+            periodo: item.periodoTexto || "Período não informado",
+            detalhe: "Verificando com a gestão"
+          });
+        }
+        if (restante > 0) {
+          pendencias.push({
+            tipo: "Extra em aberto",
+            funcionario: item.funcionario,
+            departamento: obterDepartamentoFuncionario(item.funcionario),
+            periodo: item.periodoTexto || "Período não informado",
+            detalhe: `Ainda resta ${formatarMinutosParaHora(restante)}`
+          });
+        }
+      });
+
+      return pendencias;
+    }
+
+    function obterPeriodoFiltroTextoChefia() {
+      const ano = document.getElementById("filtroAno")?.value || "Ano não filtrado";
+      const mes = document.getElementById("filtroMes")?.value || "";
+      if (!mes) return ano;
+      const nomesMeses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+      return `${nomesMeses[Number(mes) - 1] || mes}/${ano}`;
+    }
+
+    function renderizarPendenciasPorDepartamentoChefia(pendencias, prefixoId) {
+      if (!pendencias.length) {
+        return '<small style="color:#5f6b7a;">Nenhuma pendência encontrada nos dados carregados.</small>';
+      }
+
+      const grupos = {};
+      pendencias.forEach(item => {
+        const departamento = item.departamento || "Sem departamento";
+        if (!grupos[departamento]) {
+          grupos[departamento] = {
+            nome: departamento,
+            itens: [],
+            negativas: 0,
+            horasExtras: 0,
+            extrasAbertos: 0,
+            tratativasPendentes: 0
+          };
+        }
+        grupos[departamento].itens.push(item);
+        if (item.tipo === "Horas negativas") grupos[departamento].negativas += 1;
+        if (item.tipo === "Hora extra") grupos[departamento].horasExtras += 1;
+        if (item.tipo === "Extra em aberto") grupos[departamento].extrasAbertos += 1;
+        if (item.tipo === "Tratativa pendente") grupos[departamento].tratativasPendentes += 1;
+      });
+
+      return Object.values(grupos)
+        .sort((a, b) => b.itens.length - a.itens.length || a.nome.localeCompare(b.nome, "pt-BR"))
+        .map((grupo, index) => {
+          const corpoId = `${prefixoId}_${index}`;
+          return `
+            <section class="departamento-card" style="margin-top:12px;">
+              <div class="departamento-header" onclick="toggleDepartamento('${corpoId}')">
+                <div>
+                  <h2><i class="fas fa-building-user"></i> ${escaparHTML(grupo.nome)}</h2>
+                  <small>${grupo.itens.length} situação(ões) para verificar neste departamento</small>
+                </div>
+                <div class="departamento-resumo">
+                  <span class="contador-extra">${grupo.horasExtras} com extra</span>
+                  <span class="contador-negativo">${grupo.negativas} devendo</span>
+                  <span>${grupo.extrasAbertos} extras em aberto</span>
+                  <span>${grupo.tratativasPendentes} em gestão</span>
+                  <span class="departamento-acao"><i class="fas fa-chevron-down"></i> Abrir</span>
+                </div>
+              </div>
+              <div class="departamento-corpo" id="${corpoId}">
+                <div class="tabela-wrapper">
+                  <table style="min-width:760px;">
+                    <thead><tr><th>Tipo</th><th>Funcionário</th><th>Período</th><th>Detalhe</th></tr></thead>
+                    <tbody>${grupo.itens.map(item => `
+                      <tr>
+                        <td>${renderizarTipoSituacaoGestaoChefia(item.tipo)}</td>
+                        <td>${escaparHTML(item.funcionario)}</td>
+                        <td>${escaparHTML(item.periodo || "")}</td>
+                        <td>${escaparHTML(item.detalhe)}</td>
+                      </tr>
+                    `).join("")}</tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          `;
+        })
+        .join("");
+    }
+
+    function renderizarTipoSituacaoGestaoChefia(tipo) {
+      if (tipo === "Hora extra" || tipo === "Extra em aberto") {
+        return `<span class="tipo-situacao extra">${escaparHTML(tipo)}</span>`;
+      }
+      if (tipo === "Horas negativas") {
+        return `<span class="tipo-situacao negativa">Hora devendo</span>`;
+      }
+      return escaparHTML(tipo);
+    }
+
+    function renderizarPainelGestaoChefia() {
+      const resumo = document.getElementById("resumoGestaoChefia");
+      const listaPendencias = document.getElementById("listaPendenciasChefia");
+      const listaFechamentos = document.getElementById("listaFechamentosChefia");
+      const listaHistorico = document.getElementById("listaHistoricoTratativasChefia");
+      if (!resumo || !listaPendencias || !listaFechamentos || !listaHistorico) return;
+
+      const ordemPendencias = {
+        "Tratativa pendente": 1,
+        "Extra em aberto": 2,
+        "Hora extra": 3,
+        "Horas negativas": 4,
+        "Cadastro incompleto": 5
+      };
+      const pendencias = obterPendenciasBancoHorasChefia()
+        .sort((a, b) => (ordemPendencias[a.tipo] || 99) - (ordemPendencias[b.tipo] || 99) || String(a.funcionario || "").localeCompare(String(b.funcionario || ""), "pt-BR"));
+      const totalPagas = tratativasHorasPDF.reduce((total, item) => total + Number(item.horasPagas || 0), 0);
+      const totalFolgas = tratativasHorasPDF.reduce((total, item) => total + Number(item.horasFolga || 0), 0);
+      const extrasEmAberto = tratativasHorasPDF.reduce((total, item) => total + calcularSaldoRestanteTratativa(item), 0);
+      const verificandoGestao = tratativasHorasPDF.filter(item => String(item.opcao || "") === "4" || !item.opcao).length;
+      const totalNegativos = resultadoAtualCSV.filter(item => Number(item.saldo || 0) < 0).length;
+      const totalComExtra = resultadoAtualCSV.filter(item => Number(item.saldo || 0) > 0).length;
+      const mesesFechados = fechamentosMensais.filter(item => item.status === "fechado").length;
+
+      resumo.innerHTML = `
+        <div class="tratativa-resumo-card">Situações listadas<strong>${pendencias.length}</strong></div>
+        <div class="tratativa-resumo-card">Extras em aberto<strong>${formatarMinutosParaHora(extrasEmAberto)}</strong></div>
+        <div class="tratativa-resumo-card">Funcionários com extra<strong>${totalComExtra}</strong></div>
+        <div class="tratativa-resumo-card">Funcionários negativos<strong>${totalNegativos}</strong></div>
+        <div class="tratativa-resumo-card">Horas pagas<strong>${formatarNumeroHoras(totalPagas)}h</strong></div>
+        <div class="tratativa-resumo-card">Horas em folga<strong>${formatarNumeroHoras(totalFolgas)}h</strong></div>
+        <div class="tratativa-resumo-card">Verificando gestão<strong>${verificandoGestao}</strong></div>
+        <div class="tratativa-resumo-card">Meses fechados<strong>${mesesFechados}</strong></div>
+      `;
+
+      listaPendencias.innerHTML = renderizarPendenciasPorDepartamentoChefia(pendencias, "gestao_pendencias_chefia_departamento");
+
+      const fechados = fechamentosMensais
+        .filter(item => item.status === "fechado")
+        .sort((a, b) => (b.atualizadoEm || "").localeCompare(a.atualizadoEm || ""))
+        .slice(0, 8);
+      listaFechamentos.innerHTML = fechados.length ? fechados
+        .map(item => `<div style="padding:10px 0; border-bottom:1px solid #edf1f7;"><strong>${escaparHTML(item.mes || "")}/${escaparHTML(item.ano || "")}</strong><br><small>Status: fechado${item.atualizadoEm ? ` em ${new Date(item.atualizadoEm).toLocaleDateString("pt-BR")}` : ""}</small><br><small>${escaparHTML(item.observacao || "Sem observação")}</small></div>`)
+        .join("")
+        : '<small style="color:#5f6b7a;">Nenhum mês fechado ainda.</small>';
+
+      listaHistorico.innerHTML = historicoTratativas.length ? historicoTratativas
+        .slice()
+        .sort((a, b) => (b.criadoEm || "").localeCompare(a.criadoEm || ""))
+        .slice(0, 12)
+        .map(item => `<div style="padding:10px 0; border-bottom:1px solid #edf1f7;"><strong>${escaparHTML(item.funcionario || "Sem funcionário")}</strong><br><small>${escaparHTML(item.acao || "")} - ${escaparHTML(item.periodoTexto || "Período não informado")}</small><br><small>${escaparHTML(item.statusAnterior || "Sem status")} para ${escaparHTML(item.statusNovo || "Sem status")} ${item.criadoEm ? `- ${new Date(item.criadoEm).toLocaleString("pt-BR")}` : ""}</small></div>`)
+        .join("")
+        : '<small style="color:#5f6b7a;">Nenhum histórico registrado ainda.</small>';
+
+      renderizarAtestadosMedicos();
+    }
+
+    window.atualizarPainelGestaoChefia = async function() {
+      await buscarTratativasHorasPDF();
+      await buscarFechamentosMensais();
+      await buscarHistoricoTratativas();
+      renderizarPainelGestaoChefia();
+    };
+
+    window.abrirPaginaGestaoChefia = async function() {
+      document.body.classList.remove("visualizando-departamentos-chefia");
+      document.body.classList.add("visualizando-gestao-chefia");
+      sincronizarFiltrosGestaoComBanco();
+      await atualizarPainelGestaoChefia();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    window.abrirPaginaDepartamentosChefia = function() {
+      document.body.classList.remove("visualizando-gestao-chefia");
+      document.body.classList.add("visualizando-departamentos-chefia");
+      sincronizarFiltrosDepartamentosComBanco();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    window.abrirPaginaBancoChefia = function() {
+      document.body.classList.remove("visualizando-gestao-chefia");
+      document.body.classList.remove("visualizando-departamentos-chefia");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
     function getModoChefia() {
       return window.location.pathname.toLowerCase().includes("chefes") ||
@@ -879,18 +1779,139 @@
       return perfil?.nomeExibicao || nome || "Sem nome";
     }
 
+    function obterNomeOriginalPorExibicao(nome) {
+      const perfil = obterPerfilFuncionario(nome);
+      return perfil?.nomeOriginal || nome || "Sem nome";
+    }
+
+    function normalizarNomeBusca(nome) {
+      return removerAcentos(String(nome || "").trim().toLowerCase());
+    }
+
+    function obterVariacoesNomeFuncionario(nome) {
+      const perfil = obterPerfilFuncionario(nome);
+      return [
+        nome,
+        obterNomeFuncionario(nome),
+        perfil?.nomeOriginal,
+        perfil?.nomeExibicao
+      ].filter(Boolean);
+    }
+
+    function funcionarioCombinaComBusca(nomeRegistro, busca, permitirParcial = false) {
+      const buscaNormalizada = normalizarNomeBusca(busca);
+      if (!buscaNormalizada) return false;
+
+      const variacoes = obterVariacoesNomeFuncionario(nomeRegistro)
+        .map(normalizarNomeBusca)
+        .filter(Boolean);
+
+      if (variacoes.some(nome => nome === buscaNormalizada)) return true;
+      return permitirParcial && buscaNormalizada.length >= 3 && variacoes.some(nome => nome.includes(buscaNormalizada));
+    }
+
+    function resolverNomeFuncionarioSistema(nomeDigitado) {
+      const direto = obterNomeOriginalPorExibicao(nomeDigitado);
+      if (direto && !nomesIguais(direto, nomeDigitado)) return direto;
+
+      const busca = normalizarNomeBusca(nomeDigitado);
+      if (busca.length < 3) return nomeDigitado;
+
+      const possiveis = obterNomesFuncionariosSistema()
+        .filter(nome => {
+          const original = normalizarNomeBusca(nome);
+          const exibido = normalizarNomeBusca(obterNomeFuncionario(nome));
+          return original.includes(busca) || exibido.includes(busca);
+        });
+
+      return possiveis.length === 1 ? possiveis[0] : nomeDigitado;
+    }
+
     function obterDepartamentoFuncionario(nome) {
       const perfil = obterPerfilFuncionario(nome);
       return perfil?.departamento || "Sem departamento";
     }
 
+    function obterChaveFuncionarioLocal(nome) {
+      return removerAcentos(String(nome || "").trim().toLowerCase());
+    }
+
+    function carregarFuncionariosInativosLocais() {
+      funcionariosInativosLocais = new Map();
+
+      try {
+        const detalhes = JSON.parse(localStorage.getItem("funcionariosInativosDetalhes") || "{}");
+        if (detalhes && typeof detalhes === "object" && !Array.isArray(detalhes)) {
+          Object.entries(detalhes).forEach(([chave, info]) => {
+            funcionariosInativosLocais.set(chave, {
+              nome: info?.nome || chave,
+              dataAfastamento: info?.dataAfastamento || ""
+            });
+          });
+        }
+      } catch (e) {}
+
+      try {
+        const nomesAntigos = JSON.parse(localStorage.getItem("funcionariosInativos") || "[]");
+        if (Array.isArray(nomesAntigos)) {
+          nomesAntigos.forEach(nome => {
+            const chave = obterChaveFuncionarioLocal(nome);
+            if (!funcionariosInativosLocais.has(chave)) {
+              funcionariosInativosLocais.set(chave, { nome, dataAfastamento: "" });
+            }
+          });
+        }
+      } catch (e) {}
+    }
+
+    function obterInfoInativoLocal(nome) {
+      const chave = obterChaveFuncionarioLocal(nome);
+      const perfil = obterPerfilFuncionario(nome);
+      return funcionariosInativosLocais.get(chave) ||
+        funcionariosInativosLocais.get(obterChaveFuncionarioLocal(perfil?.nomeOriginal)) ||
+        funcionariosInativosLocais.get(obterChaveFuncionarioLocal(perfil?.nomeExibicao)) ||
+        null;
+    }
+
+    function funcionarioEstaInativoBanco(nome) {
+      const perfil = obterPerfilFuncionario(nome);
+      return perfil?.ativo === false || !!obterInfoInativoLocal(nome);
+    }
+
+    function obterDataAfastamentoFuncionario(nome) {
+      const perfil = obterPerfilFuncionario(nome);
+      const infoLocal = obterInfoInativoLocal(nome);
+      return perfil?.dataAfastamento || infoLocal?.dataAfastamento || "";
+    }
+
+    function renderizarStatusFuncionario(nome) {
+      const inativo = funcionarioEstaInativoBanco(nome);
+      const dataAfastamento = obterDataAfastamentoFuncionario(nome);
+      if (!inativo) {
+        return '<span class="status-funcionario"><i class="fas fa-check-circle"></i> Ativo</span>';
+      }
+      return `<span class="status-funcionario inativo"><i class="fas fa-user-slash"></i> Inativo${dataAfastamento ? ` desde ${formatarDataBR(dataAfastamento)}` : ""}</span>`;
+    }
+
     function obterNomesFuncionariosSistema() {
       const nomes = new Set();
       registrosOriginais.forEach(item => nomes.add(item.funcionario));
-      ajustesHoras.forEach(item => nomes.add(item.funcionario));
-      cargasFuncionarios.forEach(item => nomes.add(item.funcionario));
+      ajustesHoras.forEach(item => nomes.add(obterNomeOriginalPorExibicao(item.funcionario)));
+      cargasFuncionarios.forEach(item => nomes.add(obterNomeOriginalPorExibicao(item.funcionario)));
       funcionariosMeta.forEach(item => nomes.add(item.nomeOriginal || item.nomeExibicao));
       return Array.from(nomes).filter(Boolean).sort((a, b) => obterNomeFuncionario(a).localeCompare(obterNomeFuncionario(b), "pt-BR"));
+    }
+
+    function atualizarSugestoesFuncionariosAtestado() {
+      const lista = document.getElementById("listaFuncionariosAtestado");
+      if (!lista) return;
+      const nomes = obterNomesFuncionariosSistema()
+        .map(nome => obterNomeFuncionario(nome))
+        .filter(Boolean)
+        .filter((nome, index, array) => array.findIndex(outro => nomesIguais(outro, nome)) === index)
+        .sort((a, b) => a.localeCompare(b, "pt-BR"));
+
+      lista.innerHTML = nomes.map(nome => `<option value="${escaparHTML(nome)}"></option>`).join("");
     }
 
     function parseTime(timeStr) {
@@ -1066,7 +2087,11 @@
             id: docItem.id,
             nomeOriginal: d.nomeOriginal || "",
             nomeExibicao: d.nomeExibicao || d.nomeOriginal || "",
-            departamento: d.departamento || ""
+            departamento: d.departamento || "",
+            empresa: d.empresa || "",
+            cpf: d.cpf || "",
+            ativo: typeof d.ativo === "boolean" ? d.ativo : true,
+            dataAfastamento: d.dataAfastamento || ""
           });
         });
       } catch (error) {
@@ -1076,28 +2101,112 @@
 
       renderizarFuncionariosAdmin();
       atualizarFiltroDepartamentos();
+      atualizarSugestoesFuncionariosAtestado();
     }
 
     function atualizarFiltroDepartamentos() {
       const select = document.getElementById("filtroDepartamento");
-      if (!select) return;
+      const selectDepartamentos = document.getElementById("departamentosFiltroDepartamento");
+      if (!select && !selectDepartamentos) return;
 
-      const valorAtual = select.value;
+      const valorAtual = select?.value || "";
+      const valorAtualDepartamentos = selectDepartamentos?.value || "";
       const departamentos = new Set();
       obterNomesFuncionariosSistema().forEach(nome => {
         departamentos.add(obterDepartamentoFuncionario(nome));
       });
 
-      select.innerHTML = '<option value="">Todos</option>' + Array.from(departamentos)
+      const opcoes = '<option value="">Todos</option>' + Array.from(departamentos)
         .filter(Boolean)
         .sort((a, b) => a.localeCompare(b, "pt-BR"))
         .map(dep => `<option value="${dep}">${dep}</option>`)
         .join("");
 
-      if (Array.from(departamentos).includes(valorAtual)) {
+      if (select) {
+        select.innerHTML = opcoes;
+      }
+      if (selectDepartamentos) {
+        selectDepartamentos.innerHTML = opcoes;
+      }
+
+      if (select && Array.from(departamentos).includes(valorAtual)) {
         select.value = valorAtual;
       }
+      if (selectDepartamentos && Array.from(departamentos).includes(valorAtualDepartamentos)) {
+        selectDepartamentos.value = valorAtualDepartamentos;
+      }
     }
+
+    function sincronizarFiltrosDepartamentosComBanco() {
+      const mapa = [
+        ["filtroFuncionario", "departamentosFiltroFuncionario"],
+        ["filtroDepartamento", "departamentosFiltroDepartamento"],
+        ["filtroMes", "departamentosFiltroMes"],
+        ["filtroAno", "departamentosFiltroAno"]
+      ];
+      mapa.forEach(([origemId, destinoId]) => {
+        const origem = document.getElementById(origemId);
+        const destino = document.getElementById(destinoId);
+        if (origem && destino) destino.value = origem.value || "";
+      });
+    }
+
+    window.aplicarFiltrosDepartamentos = function() {
+      const mapa = [
+        ["departamentosFiltroFuncionario", "filtroFuncionario"],
+        ["departamentosFiltroDepartamento", "filtroDepartamento"],
+        ["departamentosFiltroMes", "filtroMes"],
+        ["departamentosFiltroAno", "filtroAno"]
+      ];
+      mapa.forEach(([origemId, destinoId]) => {
+        const origem = document.getElementById(origemId);
+        const destino = document.getElementById(destinoId);
+        if (origem && destino) destino.value = origem.value || "";
+      });
+      carregarBancoHoras();
+    };
+
+    window.limparFiltrosDepartamentos = function() {
+      ["departamentosFiltroFuncionario", "departamentosFiltroDepartamento", "departamentosFiltroMes", "departamentosFiltroAno"].forEach(id => {
+        const campo = document.getElementById(id);
+        if (campo) campo.value = "";
+      });
+      window.aplicarFiltrosDepartamentos();
+    }
+
+    function sincronizarFiltrosGestaoComBanco() {
+      const mapa = [
+        ["filtroMes", "gestaoFiltroMes"],
+        ["filtroAno", "gestaoFiltroAno"]
+      ];
+      mapa.forEach(([origemId, destinoId]) => {
+        const origem = document.getElementById(origemId);
+        const destino = document.getElementById(destinoId);
+        if (origem && destino) destino.value = origem.value || "";
+      });
+    }
+
+    window.aplicarFiltrosGestao = function() {
+      const mapa = [
+        ["gestaoFiltroMes", "filtroMes"],
+        ["gestaoFiltroAno", "filtroAno"]
+      ];
+      mapa.forEach(([origemId, destinoId]) => {
+        const origem = document.getElementById(origemId);
+        const destino = document.getElementById(destinoId);
+        if (origem && destino) destino.value = origem.value || "";
+      });
+      carregarBancoHoras();
+      renderizarPainelGestaoChefia();
+    };
+
+    window.limparFiltrosGestao = function() {
+      ["gestaoFiltroMes", "gestaoFiltroAno"].forEach(id => {
+        const campo = document.getElementById(id);
+        if (campo) campo.value = "";
+      });
+      window.aplicarFiltrosGestao();
+    };
 
     function renderizarFuncionariosAdmin() {
       const container = document.getElementById("listaFuncionariosAdmin");
@@ -1114,12 +2223,20 @@
         const perfil = obterPerfilFuncionario(nomeOriginal);
         const nomeExibicao = perfil?.nomeExibicao || nomeOriginal;
         const departamento = perfil?.departamento || "";
+        const empresa = perfil?.empresa || "";
 
         return `
           <tr>
             <td>${escaparHTML(nomeOriginal)}</td>
             <td><input type="text" id="nome_${id}" value="${escaparHTML(nomeExibicao)}" placeholder="Nome para relatório"></td>
             <td><input type="text" id="dep_${id}" value="${escaparHTML(departamento)}" placeholder="Ex: Financeiro"></td>
+            <td>
+              <select id="empresa_${id}">
+                <option value="">Selecione</option>
+                <option value="tracos" ${empresa === "tracos" ? "selected" : ""}>Escola Traços e Letras</option>
+                <option value="gaudi" ${empresa === "gaudi" ? "selected" : ""}>Colégio Antoni Gaudi</option>
+              </select>
+            </td>
             <td><button data-id="${escaparHTML(id)}" data-nome-original="${escaparHTML(nomeOriginal)}" onclick="salvarFuncionarioMeta(this.dataset.id, this.dataset.nomeOriginal)"><i class="fas fa-save"></i> Salvar</button></td>
           </tr>
         `;
@@ -1127,8 +2244,8 @@
 
       container.innerHTML = `
         <div class="tabela-wrapper" style="margin-top:10px;">
-          <table style="min-width:900px;">
-            <thead><tr><th>Nome no ponto</th><th>Nome exibido</th><th>Departamento</th><th>Ação</th></tr></thead>
+          <table style="min-width:1080px;">
+            <thead><tr><th>Nome no ponto</th><th>Nome exibido</th><th>Departamento</th><th>Empresa</th><th>Ação</th></tr></thead>
             <tbody>${linhas}</tbody>
           </table>
         </div>
@@ -1138,6 +2255,8 @@
     window.salvarFuncionarioMeta = async function(id, nomeOriginal) {
       const nomeExibicao = document.getElementById(`nome_${id}`).value.trim();
       const departamento = document.getElementById(`dep_${id}`).value.trim();
+      const empresa = document.getElementById(`empresa_${id}`).value;
+      const perfilAtual = funcionariosMeta.find(item => item.id === id) || {};
 
       if (!nomeExibicao) {
         alert("Informe o nome exibido do funcionário.");
@@ -1145,12 +2264,19 @@
       }
 
       try {
-        await setDoc(doc(db, "funcionarios", id), {
+        const ativoFuncionario = typeof perfilAtual.ativo === "boolean" ? perfilAtual.ativo : true;
+        const dadosFuncionario = {
           nomeOriginal,
           nomeExibicao,
+          cpf: perfilAtual.cpf || "",
           departamento,
+          empresa,
+          ativo: ativoFuncionario,
+          dataAfastamento: ativoFuncionario ? "" : (perfilAtual.dataAfastamento || ""),
           atualizadoEm: new Date().toISOString()
-        });
+        };
+
+        await setDoc(doc(db, "funcionarios", id), dadosFuncionario);
 
         await buscarFuncionariosMeta();
         carregarBancoHoras();
@@ -1172,7 +2298,8 @@
             id: docItem.id,
             origem: "firebase",
             funcionario: d.funcionario || "Sem nome",
-            cargaSemanal: Number(d.cargaSemanal || 40)
+            cargaSemanal: Number(d.cargaSemanal || 40),
+            dataInicio: extrairDataInicioCarga(docItem.id)
           });
         });
       } catch (error) {
@@ -1181,20 +2308,80 @@
 
       const locais = carregarCargasFuncionariosLocais().map(item => ({ ...item, origem: "local" }));
       cargasFuncionarios = cargasFuncionarios.concat(locais);
+      cargasFuncionarios = deduplicarCargasFuncionarios(cargasFuncionarios);
       renderizarCargasFuncionarios();
     }
 
-    function obterCargaSemanalFuncionario(funcionario) {
-      const encontrada = cargasFuncionarios.find(item =>
-        nomesIguais(item.funcionario, funcionario) ||
-        nomesIguais(obterNomeFuncionario(item.funcionario), funcionario)
-      );
+    function deduplicarCargasFuncionarios(lista) {
+      const porId = new Map();
+      lista.forEach(item => {
+        const id = item.id || gerarIdCargaFuncionario(item.funcionario, item.dataInicio || "");
+        const existente = porId.get(id);
+        if (!existente || existente.origem === "local" || item.origem === "firebase") {
+          porId.set(id, { ...item, id, dataInicio: item.dataInicio || extrairDataInicioCarga(id) });
+        }
+      });
+      return Array.from(porId.values());
+    }
+
+    function gerarIdCargaFuncionario(funcionario, dataInicio = "") {
+      return `${gerarIdFuncionario(funcionario)}__${dataInicio || "inicio"}`;
+    }
+
+    function extrairDataInicioCarga(id = "") {
+      const partes = String(id || "").split("__");
+      const data = partes[partes.length - 1] || "";
+      return /^\d{4}-\d{2}-\d{2}$/.test(data) ? data : "";
+    }
+
+    function obterCargasDoFuncionario(funcionario) {
+      const porData = new Map();
+      cargasFuncionarios
+        .filter(item =>
+          nomesIguais(item.funcionario, funcionario) ||
+          nomesIguais(obterNomeFuncionario(item.funcionario), funcionario) ||
+          funcionarioCombinaComBusca(funcionario, item.funcionario, true) ||
+          funcionarioCombinaComBusca(item.funcionario, funcionario, true)
+        )
+        .forEach(item => {
+          const chave = item.dataInicio || "";
+          const existente = porData.get(chave);
+          const idEsperado = gerarIdCargaFuncionario(funcionario, chave);
+          const itemEhIdEsperado = item.id === idEsperado;
+          const existenteEhIdEsperado = existente?.id === idEsperado;
+          if (!existente || itemEhIdEsperado || (!existenteEhIdEsperado && existente.origem === "local" && item.origem === "firebase")) {
+            porData.set(chave, item);
+          }
+        });
+
+      return Array.from(porData.values())
+        .sort((a, b) => (a.dataInicio || "0000-00-00").localeCompare(b.dataInicio || "0000-00-00"));
+    }
+
+    function obterCargaSemanalFuncionario(funcionario, dataReferencia = "") {
+      const cargas = obterCargasDoFuncionario(funcionario);
+      let encontrada = null;
+      if (dataReferencia) {
+        const dataISO = normalizarDataISO(dataReferencia);
+        const datadasValidas = cargas.filter(item => item.dataInicio && item.dataInicio <= dataISO);
+        encontrada = datadasValidas.length ? datadasValidas[datadasValidas.length - 1] : cargas.find(item => !item.dataInicio);
+      } else {
+        encontrada = cargas[cargas.length - 1];
+      }
       if (encontrada) return Number(encontrada.cargaSemanal || 40);
       return Number(document.getElementById("cargaSemanal").value || 40);
     }
 
-    function obterMinutosPrevistosPorFuncionario(funcionario) {
-      const cargaSemanal = obterCargaSemanalFuncionario(funcionario);
+    function normalizarDataISO(data) {
+      const texto = String(data || "");
+      if (/^\d{4}-\d{2}-\d{2}$/.test(texto)) return texto;
+      const partesBR = texto.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+      if (partesBR) return `${partesBR[3]}-${partesBR[2]}-${partesBR[1]}`;
+      return texto;
+    }
+
+    function obterMinutosPrevistosPorFuncionario(funcionario, dataReferencia = "") {
+      const cargaSemanal = obterCargaSemanalFuncionario(funcionario, dataReferencia);
       return Math.round((cargaSemanal / 5) * 60);
     }
 
@@ -1207,21 +2394,38 @@
         return;
       }
 
-      const linhas = cargasFuncionarios
-        .slice()
-        .sort((a, b) => a.funcionario.localeCompare(b.funcionario, "pt-BR"))
-        .map(item => `
+      const grupos = {};
+      cargasFuncionarios.forEach(item => {
+        const chave = gerarIdFuncionario(item.funcionario);
+        if (!grupos[chave]) grupos[chave] = { funcionario: item.funcionario, cargas: [] };
+        grupos[chave].cargas.push(item);
+      });
+
+      const linhas = Object.values(grupos)
+        .sort((a, b) => obterNomeFuncionario(a.funcionario).localeCompare(obterNomeFuncionario(b.funcionario), "pt-BR"))
+        .map(grupo => {
+          const cargasOrdenadas = grupo.cargas
+            .slice()
+            .sort((a, b) => (a.dataInicio || "").localeCompare(b.dataInicio || ""));
+          const historico = cargasOrdenadas.map(item => `
+            <div style="display:flex; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px solid #eef2f7;">
+              <span><strong>${item.cargaSemanal}h semanais</strong> - ${item.dataInicio ? `a partir de ${formatarDataBR(item.dataInicio)}` : "desde o início"}</span>
+              <button class="btn-excluir" onclick="excluirCargaFuncionario('${item.id}')">Excluir</button>
+            </div>
+          `).join("");
+
+          return `
           <tr>
-            <td>${item.funcionario}</td>
-            <td>${item.cargaSemanal}h semanais</td>
-            <td><button class="btn-excluir" onclick="excluirCargaFuncionario('${item.id}')">Excluir</button></td>
+            <td>${escaparHTML(obterNomeFuncionario(grupo.funcionario))}</td>
+            <td colspan="3">${historico}</td>
           </tr>
-        `).join("");
+        `;
+        }).join("");
 
       container.innerHTML = `
         <div class="tabela-wrapper" style="margin-top:10px;">
           <table style="min-width:600px;">
-            <thead><tr><th>Funcionário</th><th>Carga</th><th>Ação</th></tr></thead>
+            <thead><tr><th>Funcionário</th><th colspan="3">Histórico de carga</th></tr></thead>
             <tbody>${linhas}</tbody>
           </table>
         </div>
@@ -1229,34 +2433,51 @@
     }
 
     window.salvarCargaFuncionario = async function() {
-      const funcionario = document.getElementById("cargaFuncionarioNome").value.trim();
+      const funcionarioDigitado = document.getElementById("cargaFuncionarioNome").value.trim();
+      const funcionario = resolverNomeFuncionarioSistema(funcionarioDigitado);
       const cargaSemanal = Number(document.getElementById("cargaFuncionarioSemanal").value || 40);
+      const dataInicio = document.getElementById("cargaFuncionarioInicio")?.value || "";
+      const cargaAnterior = Number(document.getElementById("cargaFuncionarioAnterior")?.value || 0);
 
-      if (!funcionario) { alert("Informe o nome do funcionário."); return; }
+      if (!funcionarioDigitado) { alert("Informe o nome do funcionário."); return; }
       if (!cargaSemanal || cargaSemanal <= 0) { alert("Informe uma carga válida."); return; }
 
-      const existente = cargasFuncionarios.find(item => nomesIguais(item.funcionario, funcionario));
+      const idCarga = gerarIdCargaFuncionario(funcionario, dataInicio);
+      const existente = cargasFuncionarios.find(item => item.id === idCarga);
       const dados = { funcionario, cargaSemanal };
 
       try {
+        if (dataInicio && cargaAnterior > 0) {
+          const idCargaAnterior = gerarIdCargaFuncionario(funcionario, "");
+          await setDoc(doc(db, "cargasFuncionarios", idCargaAnterior), { funcionario, cargaSemanal: cargaAnterior });
+        }
         if (existente && existente.origem !== "local") {
           await updateDoc(doc(db, "cargasFuncionarios", existente.id), dados);
         } else if (!existente) {
-          await addDoc(collection(db, "cargasFuncionarios"), dados);
+          await setDoc(doc(db, "cargasFuncionarios", idCarga), dados);
         } else {
-          const locais = carregarCargasFuncionariosLocais().filter(item => !nomesIguais(item.funcionario, funcionario));
-          locais.push({ id: existente.id || `local_${Date.now()}`, ...dados });
+          const locais = carregarCargasFuncionariosLocais().filter(item => item.id !== idCarga);
+          locais.push({ id: idCarga, ...dados, dataInicio });
           salvarCargasFuncionariosLocais(locais);
         }
       } catch (error) {
         console.error("Erro ao salvar carga no Firebase:", error);
-        const locais = carregarCargasFuncionariosLocais().filter(item => !nomesIguais(item.funcionario, funcionario));
-        locais.push({ id: existente?.id || `local_${Date.now()}`, ...dados });
+        const locais = carregarCargasFuncionariosLocais().filter(item => item.id !== idCarga);
+        if (dataInicio && cargaAnterior > 0) {
+          const idCargaAnterior = gerarIdCargaFuncionario(funcionario, "");
+          const semAnteriorDuplicado = locais.filter(item => item.id !== idCargaAnterior);
+          semAnteriorDuplicado.push({ id: idCargaAnterior, funcionario, cargaSemanal: cargaAnterior, dataInicio: "" });
+          locais.length = 0;
+          locais.push(...semAnteriorDuplicado);
+        }
+        locais.push({ id: idCarga, ...dados, dataInicio });
         salvarCargasFuncionariosLocais(locais);
         alert("O Firebase bloqueou o salvamento da carga. Salvei no navegador para não perder.");
       }
 
       document.getElementById("cargaFuncionarioNome").value = "";
+      document.getElementById("cargaFuncionarioInicio").value = "";
+      document.getElementById("cargaFuncionarioAnterior").value = "";
       await buscarCargasFuncionarios();
       carregarBancoHoras();
     };
@@ -1304,6 +2525,7 @@
       const locais = carregarAjustesLocais().map(item => ({ ...item, origem: "local" }));
       ajustesHoras = ajustesHoras.concat(locais);
       renderizarAjustesHoras();
+      renderizarAtestadosMedicos();
     }
 
     function filtrarAjustesHoras() {
@@ -1347,6 +2569,7 @@
       if (tipo === "folga_descontar") return "Folga descontada";
       if (tipo === "acrescimo_extra") return "Crédito manual";
       if (tipo === "abono_saldo_anterior") return "Abono com saldo anterior/2025";
+      if (tipo === "atestado_medico") return "Atestado médico";
       return tipo || "Ajuste";
     }
 
@@ -1508,6 +2731,255 @@
         observacao: "Regra padrão"
       };
     }
+    function obterMesReferenciaAtual() {
+      const agora = new Date();
+      const ano = document.getElementById("filtroAno")?.value || String(agora.getFullYear());
+      const mes = document.getElementById("filtroMes")?.value || String(agora.getMonth() + 1).padStart(2, "0");
+      return `${ano}-${String(mes).padStart(2, "0")}`;
+    }
+
+    function formatarMesReferencia(mesRef) {
+      if (!mesRef || !mesRef.includes("-")) return mesRef || "";
+      const [ano, mes] = mesRef.split("-");
+      return `${nomesMeses[Number(mes) - 1] || mes}/${ano}`;
+    }
+
+    async function buscarAssinaturasBancoHoras() {
+      assinaturasBancoHoras = [];
+      try {
+        const snapshot = await getDocs(collection(db, "assinaturasBancoHoras"));
+        snapshot.forEach(documento => {
+          assinaturasBancoHoras.push({ id: documento.id, ...documento.data() });
+        });
+      } catch (error) {
+        console.warn("Não foi possível carregar assinaturas do Firebase.", error);
+      }
+      renderizarAssinaturasBancoHoras();
+    }
+
+    function renderizarAssinaturasBancoHoras() {
+      const container = document.getElementById("listaAssinaturasMensais");
+      if (!container) return;
+
+      if (!assinaturasBancoHoras.length) {
+        container.innerHTML = `<div class="assinatura-item"><small>Nenhuma assinatura salva ainda.</small></div>`;
+        return;
+      }
+
+      container.innerHTML = assinaturasBancoHoras
+        .slice()
+        .sort((a, b) => (b.assinadoEm || "").localeCompare(a.assinadoEm || ""))
+        .map(item => `
+          <div class="assinatura-item">
+            <strong>${escaparHTML(item.funcionario)}</strong>
+            <small>Departamento: ${escaparHTML(item.departamento || "Sem departamento")}</small>
+            <small>Mês: ${escaparHTML(formatarMesReferencia(item.mesReferencia))}</small>
+            <small>Assinado por: ${escaparHTML(item.nomeAssinante || "-")}</small>
+            <small>Data: ${item.assinadoEm ? new Date(item.assinadoEm).toLocaleString("pt-BR") : "-"}</small>
+            <small>Saldo assinado: ${formatarMinutosParaHora(item.resumo?.saldoFinal || item.saldoMinutos || 0)}</small>
+          </div>
+        `).join("");
+    }
+
+    function atualizarFuncionariosAssinatura() {
+      const select = document.getElementById("assinaturaFuncionario");
+      if (!select) return;
+
+      const valorAtual = select.value;
+      const nomes = (resultadoAtualCSV.length ? resultadoAtualCSV.map(item => item.funcionario) : obterNomesFuncionariosSistema())
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b, "pt-BR"));
+
+      select.innerHTML = `<option value="">Selecione</option>` + nomes
+        .map(nome => `<option value="${escaparHTML(nome)}">${escaparHTML(nome)} - ${escaparHTML(obterDepartamentoFuncionario(nome))}</option>`)
+        .join("");
+
+      if (valorAtual && nomes.some(nome => nomesIguais(nome, valorAtual))) {
+        select.value = valorAtual;
+      }
+    }
+
+    function atualizarMesAssinatura() {
+      const campo = document.getElementById("assinaturaMes");
+      if (campo && !campo.value) campo.value = obterMesReferenciaAtual();
+    }
+
+    function obterResumoMensalAssinatura(funcionario, mesRef) {
+      const detalhe = detalhesAtuaisPDF.find(item => nomesIguais(item.funcionario, funcionario));
+      if (!detalhe) return null;
+
+      const [ano, mes] = mesRef.split("-");
+      const nomeMes = `${nomesMeses[Number(mes) - 1]}/${ano}`;
+      const mesDetalhe = detalhe.meses.find(item => item.mesAno === nomeMes);
+      if (!mesDetalhe) return null;
+
+      const resumo = mesDetalhe.registros.reduce((acc, reg) => {
+        const saldo = Number(reg.saldoDia || 0);
+        acc.trabalhado += Number(reg.duracaoMinutos || 0);
+        acc.previsto += Number(reg.previstoDia || 0);
+        acc.extras += saldo > 0 ? saldo : 0;
+        acc.negativas += saldo < 0 ? Math.abs(saldo) : 0;
+        if (reg.horariosTexto === "Ajuste manual") acc.ajustes += saldo;
+        acc.saldoFinal += saldo;
+        return acc;
+      }, { trabalhado: 0, previsto: 0, extras: 0, negativas: 0, ajustes: 0, saldoFinal: 0 });
+
+      return {
+        funcionario: detalhe.funcionario,
+        departamento: detalhe.departamento || obterDepartamentoFuncionario(detalhe.funcionario),
+        mesReferencia: mesRef,
+        mesTexto: nomeMes,
+        quantidadeRegistros: mesDetalhe.registros.length,
+        resumo
+      };
+    }
+
+    window.carregarResumoAssinatura = function() {
+      const funcionario = document.getElementById("assinaturaFuncionario")?.value || "";
+      const mesRef = document.getElementById("assinaturaMes")?.value || "";
+      const container = document.getElementById("assinaturaResumo");
+      resumoAssinaturaAtual = null;
+
+      if (!container) return;
+      if (!funcionario || !mesRef) {
+        container.innerHTML = `<div><strong>Status</strong> Selecione funcionário e mês para conferir.</div>`;
+        return;
+      }
+
+      const resumo = obterResumoMensalAssinatura(funcionario, mesRef);
+      if (!resumo) {
+        container.innerHTML = `<div><strong>Status</strong> Nenhum registro encontrado para esse funcionário nesse mês.</div>`;
+        return;
+      }
+
+      resumoAssinaturaAtual = resumo;
+      const nomeCampo = document.getElementById("assinaturaNome");
+      if (nomeCampo && !nomeCampo.value) nomeCampo.value = resumo.funcionario;
+
+      container.innerHTML = `
+        <div><strong>Funcionário</strong> ${escaparHTML(resumo.funcionario)}</div>
+        <div><strong>Departamento</strong> ${escaparHTML(resumo.departamento)}</div>
+        <div><strong>Mês</strong> ${escaparHTML(resumo.mesTexto)}</div>
+        <div><strong>Registros</strong> ${resumo.quantidadeRegistros}</div>
+        <div><strong>Trabalhado</strong> ${formatarMinutosParaHora(resumo.resumo.trabalhado)}</div>
+        <div><strong>Previsto</strong> ${formatarMinutosParaHora(resumo.resumo.previsto)}</div>
+        <div><strong>Extras</strong> ${formatarMinutosParaHora(resumo.resumo.extras)}</div>
+        <div><strong>Negativas</strong> ${formatarMinutosParaHora(resumo.resumo.negativas)}</div>
+        <div><strong>Ajustes</strong> ${formatarMinutosParaHora(resumo.resumo.ajustes)}</div>
+        <div class="${obterClasseSaldo(resumo.resumo.saldoFinal)}"><strong>Saldo final</strong> ${formatarMinutosParaHora(resumo.resumo.saldoFinal)}</div>
+      `;
+    };
+
+    function configurarCanvasAssinatura() {
+      const canvas = document.getElementById("assinaturaCanvas");
+      if (!canvas || assinaturaCanvasConfigurado) return;
+
+      const ctx = canvas.getContext("2d");
+      const ajustarTamanho = () => {
+        const rect = canvas.getBoundingClientRect();
+        const ratio = window.devicePixelRatio || 1;
+        canvas.width = Math.max(1, Math.floor(rect.width * ratio));
+        canvas.height = Math.max(1, Math.floor(rect.height * ratio));
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.strokeStyle = "#111827";
+      };
+
+      ajustarTamanho();
+      window.addEventListener("resize", ajustarTamanho);
+
+      let desenhando = false;
+      const ponto = event => {
+        const rect = canvas.getBoundingClientRect();
+        return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+      };
+
+      canvas.addEventListener("pointerdown", event => {
+        desenhando = true;
+        assinaturaCanvasVazio = false;
+        canvas.setPointerCapture(event.pointerId);
+        const p = ponto(event);
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+      });
+
+      canvas.addEventListener("pointermove", event => {
+        if (!desenhando) return;
+        const p = ponto(event);
+        ctx.lineTo(p.x, p.y);
+        ctx.stroke();
+      });
+
+      const parar = () => { desenhando = false; };
+      canvas.addEventListener("pointerup", parar);
+      canvas.addEventListener("pointerleave", parar);
+      assinaturaCanvasConfigurado = true;
+    }
+
+    window.limparAssinaturaCanvas = function() {
+      const canvas = document.getElementById("assinaturaCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      assinaturaCanvasVazio = true;
+    };
+
+    window.salvarAssinaturaMensal = async function() {
+      const funcionario = document.getElementById("assinaturaFuncionario")?.value || "";
+      const mesRef = document.getElementById("assinaturaMes")?.value || "";
+      const nomeAssinante = (document.getElementById("assinaturaNome")?.value || "").trim();
+      const canvas = document.getElementById("assinaturaCanvas");
+
+      if (!funcionario || !mesRef) {
+        alert("Selecione o funcionário e o mês da assinatura.");
+        return;
+      }
+
+      if (!resumoAssinaturaAtual || !nomesIguais(resumoAssinaturaAtual.funcionario, funcionario) || resumoAssinaturaAtual.mesReferencia !== mesRef) {
+        window.carregarResumoAssinatura();
+      }
+
+      if (!resumoAssinaturaAtual) {
+        alert("Não existe resumo calculado para esse funcionário nesse mês.");
+        return;
+      }
+
+      if (!nomeAssinante) {
+        alert("Digite o nome de quem está assinando.");
+        return;
+      }
+
+      if (!canvas || assinaturaCanvasVazio) {
+        alert("Faça a assinatura no quadro antes de salvar.");
+        return;
+      }
+
+      const id = `${gerarIdFuncionario(funcionario)}_${mesRef}`;
+      const dados = {
+        funcionario: resumoAssinaturaAtual.funcionario,
+        departamento: resumoAssinaturaAtual.departamento,
+        mesReferencia: mesRef,
+        mesTexto: resumoAssinaturaAtual.mesTexto,
+        quantidadeRegistros: resumoAssinaturaAtual.quantidadeRegistros,
+        saldoMinutos: resumoAssinaturaAtual.resumo.saldoFinal,
+        resumo: resumoAssinaturaAtual.resumo,
+        assinaturaImagem: canvas.toDataURL("image/png"),
+        nomeAssinante,
+        assinadoEm: new Date().toISOString(),
+        status: "assinado"
+      };
+
+      try {
+        await setDoc(doc(db, "assinaturasBancoHoras", id), dados);
+        alert("Assinatura salva com sucesso no Firebase!");
+        window.limparAssinaturaCanvas();
+      } catch (error) {
+        console.error("Erro ao salvar assinatura:", error);
+        alert("Erro ao salvar assinatura. Verifique se as regras do Firebase permitem a coleção assinaturasBancoHoras.");
+      }
+    };
 
     function renderizarResumo(resultado) {
       document.getElementById("totalFuncionarios").textContent = resultado.totalFuncionarios;
@@ -1569,7 +3041,7 @@
               <div class="departamento-header" onclick="toggleDepartamento('registros_departamento_${indexDepartamento}')">
                 <div>
                   <h2><i class="fas fa-building"></i> ${dep.nome}</h2>
-                  <small>${dep.funcionarios.length} funcionÃ¡rio(s)</small>
+                  <small>${dep.funcionarios.length} funcionário(s)</small>
                 </div>
                 <div class="departamento-resumo">
                   <span><strong>Trabalhado:</strong> ${formatarMinutosParaHora(dep.totalTrabalhado)}</span>
@@ -1583,7 +3055,7 @@
                   <table>
                     <thead>
                       <tr>
-                        <th>FuncionÃ¡rio</th>
+                        <th>Funcionário</th>
                         <th>Registros</th>
                         <th>Horas Trabalhadas</th>
                         <th>Horas Previstas</th>
@@ -1598,7 +3070,7 @@
                         .sort((a, b) => a.funcionario.localeCompare(b.funcionario, "pt-BR"))
                         .map(item => `
                           <tr>
-                            <td>${item.funcionario}<br><small style="color:#5f6b7a;">Carga: ${item.cargaSemanal || obterCargaSemanalFuncionario(item.funcionario)}h/semana</small></td>
+                            <td><div class="funcionario-identificacao"><strong>${item.funcionario}</strong>${renderizarStatusFuncionario(item.funcionario)}</div></td>
                             <td>${item.quantidadeRegistros}</td>
                             <td>${formatarMinutosParaHora(item.trabalhado)}</td>
                             <td>${formatarMinutosParaHora(item.previsto)}</td>
@@ -1625,7 +3097,7 @@
 
       tbody.innerHTML = linhas.map(item => `
         <tr>
-          <td>${item.funcionario}<br><small style="color:#5f6b7a;">Carga: ${item.cargaSemanal || obterCargaSemanalFuncionario(item.funcionario)}h/semana</small></td>
+          <td><div class="funcionario-identificacao"><strong>${item.funcionario}</strong>${renderizarStatusFuncionario(item.funcionario)}</div></td>
           <td>${item.departamento || "Sem departamento"}</td>
           <td>${item.quantidadeRegistros}</td>
           <td>${formatarMinutosParaHora(item.trabalhado)}</td>
@@ -1805,13 +3277,13 @@
 
           totalTrabalhado += regParaCalculo.duracaoMinutos;
 
-          const regraDia = calcularRegraDoDia(regParaCalculo, obterMinutosPrevistosPorFuncionario(nome));
+          const cargaSemanalDia = obterCargaSemanalFuncionario(nome, reg.data);
+          const regraDia = calcularRegraDoDia(regParaCalculo, Math.round((cargaSemanalDia / 5) * 60));
           const observacaoAbono = montarObservacaoAbono(nome, reg.data, ajustesFiltrados);
 
           if (observacaoAbono) {
             regraDia.observacao = `${regraDia.observacao || ""} | ${observacaoAbono}`;
           }
-
           totalPrevisto += regraDia.previstoDia;
           totalExtras += regraDia.extrasDia;
           totalNegativas += regraDia.negativasDia;
@@ -1826,6 +3298,7 @@
             ...reg,
             ...regraDia,
             duracaoMinutos: regParaCalculo.duracaoMinutos,
+            cargaSemanalDia,
             horariosTexto: `${reg.horarios.map(h => `${h.entrada} às ${h.saida}`).join(" | ")}${minutosAbonoSaldoAnterior ? ` | Abono saldo 2025: +${formatarMinutosParaHora(minutosAbonoSaldoAnterior)}` : ""}`,
             observacaoAbono
           });
@@ -1890,6 +3363,7 @@
             </td>
             <td>${reg.horariosTexto || "-"}</td>
             <td>${formatarMinutosParaHora(reg.duracaoMinutos)}</td>
+            <td>${reg.cargaSemanalDia ? `${reg.cargaSemanalDia}h/semana` : "-"}</td>
             <td>${formatarMinutosParaHora(reg.previstoDia)}</td>
             <td class="${obterClasseSaldo(reg.saldoDia)}">${formatarMinutosParaHora(reg.saldoDia)}</td>
           </tr>
@@ -1909,6 +3383,7 @@
                       <th>Data</th>
                       <th>Horários</th>
                       <th>Trabalhado</th>
+                      <th>Carga usada</th>
                       <th>Previsto</th>
                       <th>Saldo do Dia</th>
                     </tr>
@@ -1924,7 +3399,7 @@
       return `
         <div class="funcionario-card">
           <div class="funcionario-header">
-            <h2><i class="fas fa-user"></i> ${item.funcionario}<br><small style="color:#5f6b7a; font-size:13px;">${item.departamento || "Sem departamento"}</small></h2>
+            <h2><i class="fas fa-user"></i> ${item.funcionario}<br><small style="color:#5f6b7a; font-size:13px;">${item.departamento || "Sem departamento"}</small><br>${renderizarStatusFuncionario(item.funcionario)}</h2>
             <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
               <strong>Saldo:</strong>
               <span class="${obterClasseSaldo(item.saldoFinal)}">${formatarMinutosParaHora(item.saldoFinal)}</span>
@@ -1996,7 +3471,7 @@
       return `
         <div class="departamentos-titulo">
           <h2><i class="fas fa-sitemap"></i> Departamentos</h2>
-          <p>Escolha um departamento para abrir os funcionÃ¡rios e conferir o banco de horas.</p>
+          <p>Escolha um departamento para abrir os funcionários e conferir o banco de horas.</p>
         </div>
         ${departamentosHtml}
       `;
@@ -2036,6 +3511,7 @@
               </td>
               <td>${reg.horariosTexto || "-"}</td>
               <td>${formatarMinutosParaHora(reg.duracaoMinutos)}</td>
+              <td>${reg.cargaSemanalDia ? `${reg.cargaSemanalDia}h/semana` : "-"}</td>
               <td>${formatarMinutosParaHora(reg.previstoDia)}</td>
               <td class="${obterClasseSaldo(reg.saldoDia)}">${formatarMinutosParaHora(reg.saldoDia)}</td>
             </tr>
@@ -2055,6 +3531,7 @@
                         <th>Data</th>
                         <th>Horários</th>
                         <th>Trabalhado</th>
+                        <th>Carga usada</th>
                         <th>Previsto</th>
                         <th>Saldo do Dia</th>
                       </tr>
@@ -2294,6 +3771,108 @@
       carregarBancoHoras();
     };
 
+    function filtrarAtestadosMedicos() {
+      const mesFiltro = document.getElementById("filtroMes")?.value || "";
+      const anoFiltro = document.getElementById("filtroAno")?.value?.trim() || "";
+      return ajustesHoras
+        .filter(item => item.tipo === "atestado_medico")
+        .filter(item => {
+          if (!item.data) return true;
+          const [ano, mes] = item.data.split("-");
+          return (!mesFiltro || mes === mesFiltro) && (!anoFiltro || ano === anoFiltro);
+        })
+        .sort((a, b) => (b.data || "").localeCompare(a.data || ""));
+    }
+
+    function renderizarAtestadosMedicos() {
+      const container = document.getElementById("listaAtestadosMedicos");
+      if (!container) return;
+
+      const atestados = filtrarAtestadosMedicos();
+      if (!atestados.length) {
+        container.innerHTML = '<small style="color:#5f6b7a;">Nenhum atestado médico lançado para o período filtrado.</small>';
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="tabela-wrapper">
+          <table style="min-width:720px;">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Funcionário</th>
+                <th>Departamento</th>
+                <th>Horas abonadas</th>
+                <th>Observação</th>
+                ${getModoChefia() ? "" : "<th>Ação</th>"}
+              </tr>
+            </thead>
+            <tbody>
+              ${atestados.map(item => `
+                <tr>
+                  <td>${formatarDataBR(item.data)}</td>
+                  <td>${escaparHTML(obterNomeFuncionario(item.funcionario))}</td>
+                  <td>${escaparHTML(obterDepartamentoFuncionario(item.funcionario))}</td>
+                  <td class="positivo">${formatarMinutosParaHora(Math.abs(Number(item.minutos || 0)))}</td>
+                  <td>${escaparHTML(item.descricao || "-")}</td>
+                  ${getModoChefia() ? "" : `<td><button class="btn-excluir" onclick="excluirAjusteHoras('${item.id}')">Excluir</button></td>`}
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    window.salvarAtestadoMedico = async function() {
+      const funcionario = document.getElementById("atestadoFuncionario")?.value.trim() || "";
+      const data = document.getElementById("atestadoData")?.value || "";
+      const horasInformadas = document.getElementById("atestadoHoras")?.value || "";
+      const descricaoDigitada = document.getElementById("atestadoDescricao")?.value.trim() || "";
+
+      if (!funcionario) { alert("Informe o nome do funcionário."); return; }
+      if (!data) { alert("Informe a data do atestado."); return; }
+      if (horasInformadas === "") { alert("Informe as horas abonadas pelo atestado."); return; }
+
+      const horas = Number(horasInformadas);
+      if (Number.isNaN(horas) || horas <= 0) { alert("Informe uma quantidade de horas válida."); return; }
+      const funcionarioRegistro = resolverNomeFuncionarioSistema(funcionario);
+
+      const [ano, mes] = data.split("-");
+      if (mesEstaFechado(ano, mes) && !confirm(`O mês ${mes}/${ano} está fechado. Deseja lançar este atestado mesmo assim?`)) {
+        return;
+      }
+
+      const dadosAtestado = {
+        funcionario: funcionarioRegistro,
+        data,
+        tipo: "atestado_medico",
+        minutos: Math.round(horas * 60),
+        descricao: descricaoDigitada || "Atestado médico entregue",
+        criadoEm: new Date().toISOString()
+      };
+
+      try {
+        await addDoc(collection(db, "ajustesHoras"), dadosAtestado);
+        alert("Atestado médico salvo com sucesso!");
+      } catch (error) {
+        console.error("Erro ao salvar atestado no Firebase:", error);
+        const locais = carregarAjustesLocais();
+        locais.push({ id: `local_atestado_${Date.now()}`, ...dadosAtestado });
+        salvarAjustesLocais(locais);
+        alert("O Firebase bloqueou o atestado. Salvei no navegador para não perder, mas atualize as regras do Firebase para salvar online.");
+      }
+
+      document.getElementById("atestadoFuncionario").value = "";
+      document.getElementById("atestadoData").value = "";
+      document.getElementById("atestadoHoras").value = "";
+      document.getElementById("atestadoDescricao").value = "";
+
+      await buscarAjustesHoras();
+      carregarBancoHoras();
+      renderizarPainelGestaoChefia();
+    };
+
     window.excluirAjusteHoras = async function(id) {
       if (!confirm("Deseja excluir este ajuste de horas?")) return;
       try {
@@ -2352,8 +3931,6 @@
             let negativas = 0;
             let ajustes = 0;
 
-            const minutosPrevistosDoFuncionario = obterMinutosPrevistosPorFuncionario(funcionario);
-
             registros.forEach(reg => {
               const minutosAbonoSaldoAnterior = somarMinutosAbonoSaldoAnterior(funcionario, reg.data, ajustesFiltrados);
               const regParaCalculo = {
@@ -2363,7 +3940,7 @@
 
               trabalhado += regParaCalculo.duracaoMinutos;
 
-              const regraDia = calcularRegraDoDia(regParaCalculo, minutosPrevistosDoFuncionario);
+              const regraDia = calcularRegraDoDia(regParaCalculo, obterMinutosPrevistosPorFuncionario(funcionario, reg.data));
               previsto += regraDia.previstoDia;
               extras += regraDia.extrasDia;
               negativas += regraDia.negativasDia;
@@ -2413,6 +3990,7 @@
         renderizarTabela(linhas);
         renderizarDetalhes(detalhesAtuaisPDF);
         renderizarResumo(ultimoResumoPDF);
+        renderizarPainelGestaoChefia();
 
       } catch (error) {
         console.error("Erro ao carregar banco de horas:", error);
@@ -2470,90 +4048,419 @@
       link.click();
       document.body.removeChild(link);
     };
+    const EMPRESAS_BANCO_HORAS = {
+      tracos: {
+        nome: "Escola Tracos e Letras",
+        cnpj: "03.570.177/0001-11"
+      },
+      gaudi: {
+        nome: "Colegio Antoni Gaudi",
+        cnpj: "45.701.401/0001-07"
+      }
+    };
+
+    function obterEmpresaFuncionario(nome, departamento = "") {
+      const perfil = obterPerfilFuncionario(nome) || {};
+      const empresaCadastrada = perfil.empresa || perfil.unidade || "";
+      if (empresaCadastrada === "tracos") return EMPRESAS_BANCO_HORAS.tracos;
+      if (empresaCadastrada === "gaudi") return EMPRESAS_BANCO_HORAS.gaudi;
+
+      const base = removerAcentos(`${empresaCadastrada} ${departamento} ${perfil.departamento || ""} ${nome || ""}`.toLowerCase());
+
+      if (base.includes("gaudi") || base.includes("antoni") || base.includes("colegio")) return EMPRESAS_BANCO_HORAS.gaudi;
+      if (base.includes("tracos") || base.includes("letras") || base.includes("escola")) return EMPRESAS_BANCO_HORAS.tracos;
+
+      return { nome: "Empresa nao informada", cnpj: "-" };
+    }
+
+    function adicionarCabecalhoEmpresasPDF(doc, titulo) {
+      doc.setFontSize(13);
+      doc.setTextColor(31, 58, 147);
+      doc.text(titulo, 14, 12);
+
+      doc.setFontSize(8.5);
+      doc.setTextColor(60, 60, 60);
+      doc.text(`${EMPRESAS_BANCO_HORAS.tracos.nome} - CNPJ: ${EMPRESAS_BANCO_HORAS.tracos.cnpj}`, 14, 18);
+      doc.text(`${EMPRESAS_BANCO_HORAS.gaudi.nome} - CNPJ: ${EMPRESAS_BANCO_HORAS.gaudi.cnpj}`, 14, 23);
+    }
+    function solicitarTratativaHorasPDF() {
+      const resposta = prompt(
+        "Antes de baixar o PDF, escolha a tratativa das horas:\n\n" +
+        "1 - Horas pagas\n" +
+        "2 - Horas não pagas\n" +
+        "3 - Horas serão tiradas em folgas\n" +
+        "4 - Verificando com a gestão\n\n" +
+        "Digite o número da opção:"
+      );
+
+      if (resposta === null) return null;
+
+      const opcoes = {
+        "1": "Horas pagas",
+        "2": "Horas não pagas",
+        "3": "Horas serão tiradas em folgas",
+        "4": "Verificando com a gestão"
+      };
+
+      return opcoes[String(resposta).trim()] || "Verificando com a gestão";
+    }
+
+    function desenharTratativaHorasPDF(doc, y, tratativaHoras) {
+      const opcoes = [
+        "Horas pagas",
+        "Horas não pagas",
+        "Horas serão tiradas em folgas",
+        "Verificando com a gestão"
+      ];
+
+      doc.setFontSize(9);
+      doc.setTextColor(30, 41, 59);
+      doc.setFont(undefined, "bold");
+      doc.text("Tratativa das horas", 14, y);
+      doc.setFont(undefined, "normal");
+      y += 7;
+
+      opcoes.forEach((opcao, index) => {
+        const x = index < 2 ? 18 : 108;
+        const linhaY = y + (index % 2) * 8;
+        doc.setDrawColor(71, 85, 105);
+        doc.rect(x, linhaY - 3.5, 3.8, 3.8);
+        if (opcao === tratativaHoras) {
+          doc.setFillColor(30, 41, 59);
+          doc.rect(x + 0.7, linhaY - 2.8, 2.4, 2.4, "F");
+        }
+        doc.setFontSize(8.5);
+        doc.setTextColor(51, 65, 85);
+        doc.text(opcao, x + 6, linhaY);
+      });
+
+      return y + 19;
+    }
+
+    function adicionarCamposAssinaturaPDF(doc, y, tratativaHoras = "Verificando com a gestão") {
+      const alturaPagina = doc.internal.pageSize.height;
+      if (y > alturaPagina - 44) {
+        doc.addPage();
+        y = 42;
+      }
+
+      y = desenharTratativaHorasPDF(doc, y, tratativaHoras);
+
+      doc.setDrawColor(80, 80, 80);
+      doc.line(14, y, 92, y);
+      doc.line(112, y, 190, y);
+      y += 5;
+
+      doc.setFontSize(8.5);
+      doc.text("Assinatura da Direcao", 31, y);
+      doc.text("Assinatura do Funcionario", 124, y);
+      y += 7;
+      doc.text("Data: ____/____/______", 14, y);
+      return y + 8;
+    }
+
+    function textoPDF(valor) {
+      return removerAcentos(String(valor ?? ""));
+    }
+
+    function aplicarRodapePDF(doc, titulo) {
+      const totalPages = doc.internal.getNumberOfPages();
+      const largura = doc.internal.pageSize.width;
+      const altura = doc.internal.pageSize.height;
+      for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setDrawColor(220, 226, 235);
+        doc.line(14, altura - 14, largura - 14, altura - 14);
+        doc.setFontSize(8);
+        doc.setTextColor(100, 116, 139);
+        doc.text(textoPDF(titulo), 14, altura - 8);
+        doc.text("Desenvolvido por Nay Cordeiro - IT", largura / 2, altura - 8, { align: "center" });
+        doc.text(`Pagina ${i} de ${totalPages}`, largura - 14, altura - 8, { align: "right" });
+      }
+    }
+
+    function desenharCabecalhoPDF(doc, titulo, subtitulo) {
+      const largura = doc.internal.pageSize.width;
+      doc.setFillColor(18, 38, 82);
+      doc.rect(0, 0, largura, 31, "F");
+      doc.setFillColor(37, 99, 235);
+      doc.rect(0, 31, largura, 2.2, "F");
+
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(16);
+      doc.setFont(undefined, "bold");
+      doc.text(textoPDF(titulo), 14, 14);
+      doc.setFontSize(9);
+      doc.setFont(undefined, "normal");
+      doc.text(textoPDF(subtitulo), 14, 22);
+      doc.text("Documento gerado pelo Sistema de Banco de Horas", largura - 14, 14, { align: "right" });
+      doc.text("Desenvolvido por Nay Cordeiro - IT", largura - 14, 22, { align: "right" });
+    }
+
+    function desenharSecaoPDF(doc, titulo, y) {
+      doc.setFillColor(241, 245, 249);
+      doc.roundedRect(14, y, 182, 8, 1.5, 1.5, "F");
+      doc.setTextColor(30, 41, 59);
+      doc.setFontSize(10);
+      doc.setFont(undefined, "bold");
+      doc.text(textoPDF(titulo), 18, y + 5.4);
+      doc.setFont(undefined, "normal");
+      return y + 12;
+    }
+
+    function desenharResumoCardsPDF(doc, cards, y) {
+      const largura = 35;
+      const gap = 1.5;
+      cards.forEach((card, index) => {
+        const x = 14 + index * (largura + gap);
+        doc.setFillColor(248, 250, 252);
+        doc.setDrawColor(226, 232, 240);
+        doc.roundedRect(x, y, largura, 20, 2, 2, "FD");
+        doc.setFontSize(6.8);
+        doc.setTextColor(100, 116, 139);
+        doc.text(textoPDF(card.label), x + 2.2, y + 6);
+        doc.setFontSize(9);
+        doc.setFont(undefined, "bold");
+        doc.setTextColor(card.color?.[0] || 15, card.color?.[1] || 23, card.color?.[2] || 42);
+        doc.text(textoPDF(card.valor), x + 2.2, y + 14);
+        doc.setFont(undefined, "normal");
+      });
+      return y + 26;
+    }
 
     window.gerarPDFFuncionario = function(indexFuncionario) {
       const funcionarioDetalhe = detalhesAtuaisPDF[indexFuncionario];
 
       if (!funcionarioDetalhe) {
-        alert("Funcionário não encontrado para gerar PDF.");
+        alert("Funcionario nao encontrado para gerar PDF.");
         return;
       }
 
       if (!window.jspdf || !window.jspdf.jsPDF) {
-        alert("Erro: biblioteca do PDF não carregou.");
+        alert("Erro: biblioteca do PDF nao carregou.");
         return;
       }
+
+      const tratativaHoras = "Verificando com a gestão";
 
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF("p", "mm", "a4");
       const dataAtual = new Date();
-      let y = 18;
+      const filtroMes = document.getElementById("filtroMes")?.value || "";
+      const filtroAno = document.getElementById("filtroAno")?.value || "";
+      const mesesRelatorio = funcionarioDetalhe.meses.filter(mes => {
+        if (!filtroMes && !filtroAno) return true;
+        const [nomeMes, anoMes] = mes.mesAno.split("/");
+        const numeroMes = String(nomesMeses.indexOf(nomeMes) + 1).padStart(2, "0");
+        return (!filtroMes || numeroMes === filtroMes) && (!filtroAno || anoMes === filtroAno);
+      });
+      const mesRelatorio = mesesRelatorio[0] || funcionarioDetalhe.meses[0];
 
-      doc.setFontSize(18);
-      doc.setTextColor(31, 58, 147);
-      doc.text("Relatório Individual de Banco de Horas", 14, y);
-      y += 8;
+      if (!mesRelatorio) {
+        alert("Nao ha dados mensais para gerar o PDF deste funcionario.");
+        return;
+      }
 
-      doc.setFontSize(10);
+      const resumoMes = mesRelatorio.registros.reduce((acc, reg) => {
+        const saldo = Number(reg.saldoDia || 0);
+        acc.trabalhado += Number(reg.duracaoMinutos || 0);
+        acc.previsto += Number(reg.previstoDia || 0);
+        acc.extras += saldo > 0 ? saldo : 0;
+        acc.negativas += saldo < 0 ? Math.abs(saldo) : 0;
+        acc.saldo += saldo;
+        return acc;
+      }, { trabalhado: 0, previsto: 0, extras: 0, negativas: 0, saldo: 0 });
+
+      adicionarCabecalhoEmpresasPDF(doc, "Resumo mensal de banco de horas");
+
+      doc.setFontSize(8.5);
       doc.setTextColor(80, 80, 80);
-      doc.text(`Gerado em: ${dataAtual.toLocaleDateString("pt-BR")} ${dataAtual.toLocaleTimeString("pt-BR")}`, 14, y);
-      y += 10;
+      doc.text(`Gerado em: ${dataAtual.toLocaleDateString("pt-BR")} ${dataAtual.toLocaleTimeString("pt-BR")}`, 14, 29);
 
-      doc.setFontSize(13);
+      doc.setFontSize(9.5);
       doc.setTextColor(0, 0, 0);
-      doc.text(`Funcionário: ${funcionarioDetalhe.funcionario}`, 14, y);
-      y += 6;
+      const empresaFuncionario = obterEmpresaFuncionario(funcionarioDetalhe.funcionario, funcionarioDetalhe.departamento);
+      const perfilFuncionario = obterPerfilFuncionario(funcionarioDetalhe.funcionario) || {};
+      const cpfFuncionario = perfilFuncionario.cpf || "Nao informado";
+      doc.text(`Funcionario: ${removerAcentos(funcionarioDetalhe.funcionario)}`, 14, 37);
+      doc.text(`CPF: ${cpfFuncionario}`, 14, 43);
+      doc.text(`Empresa empregadora: ${empresaFuncionario.nome} - CNPJ: ${empresaFuncionario.cnpj}`, 14, 49);
+      doc.text(`Departamento: ${removerAcentos(funcionarioDetalhe.departamento || "Sem departamento")}`, 14, 55);
+      doc.text(`Periodo: ${removerAcentos(mesRelatorio.mesAno)}`, 14, 61);
 
       doc.autoTable({
-        startY: y,
-        head: [["Trabalhado", "Previsto", "Extras", "Negativas", "Ajustes", "Saldo Final"]],
+        startY: 67,
+        head: [["Trabalhado", "Previsto", "Extras", "Negativas", "Saldo final"]],
         body: [[
-          formatarMinutosParaHora(funcionarioDetalhe.totalTrabalhado),
-          formatarMinutosParaHora(funcionarioDetalhe.totalPrevisto),
-          formatarMinutosParaHora(funcionarioDetalhe.totalExtras),
-          formatarMinutosParaHora(funcionarioDetalhe.totalNegativas),
-          formatarMinutosParaHora(funcionarioDetalhe.totalAjustes || 0),
-          formatarMinutosParaHora(funcionarioDetalhe.saldoFinal)
+          formatarMinutosParaHora(resumoMes.trabalhado),
+          formatarMinutosParaHora(resumoMes.previsto),
+          formatarMinutosParaHora(resumoMes.extras),
+          formatarMinutosParaHora(resumoMes.negativas),
+          formatarMinutosParaHora(resumoMes.saldo)
         ]],
         theme: "grid",
         headStyles: { fillColor: [31, 58, 147] },
-        styles: { fontSize: 10 }
+        styles: { fontSize: 8, cellPadding: 1.5 }
       });
 
-      y = doc.autoTable.previous.finalY + 10;
+      const linhasDia = mesRelatorio.registros
+        .slice()
+        .sort((a, b) => (a.data || "").localeCompare(b.data || ""))
+        .map(reg => [
+          formatarDataBR(reg.data),
+          formatarMinutosParaHora(reg.duracaoMinutos),
+          formatarMinutosParaHora(reg.previstoDia),
+          formatarMinutosParaHora(reg.saldoDia)
+        ]);
 
-      funcionarioDetalhe.meses.forEach((mes) => {
+      doc.autoTable({
+        startY: doc.autoTable.previous.finalY + 5,
+        head: [["Dia", "Trabalhado", "Previsto", "Saldo do dia"]],
+        body: linhasDia,
+        theme: "striped",
+        headStyles: { fillColor: [31, 58, 147] },
+        styles: { fontSize: 6.8, cellPadding: 1.1, overflow: "linebreak" },
+        margin: { left: 14, right: 14 },
+        pageBreak: "avoid",
+        rowPageBreak: "avoid",
+        columnStyles: {
+          0: { cellWidth: 38 },
+          1: { cellWidth: 45 },
+          2: { cellWidth: 45 },
+          3: { cellWidth: 45 }
+        }
+      });
+
+      adicionarCamposAssinaturaPDF(doc, doc.autoTable.previous.finalY + 8);
+
+      const nomeSeguro = removerAcentos(funcionarioDetalhe.funcionario).replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+      const mesSeguro = removerAcentos(mesRelatorio.mesAno).replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+      doc.save(`banco_de_horas_${nomeSeguro || "funcionario"}_${mesSeguro || "mes"}.pdf`);
+    };
+    window.gerarPDFFuncionario = function(indexFuncionario) {
+      const funcionarioDetalhe = detalhesAtuaisPDF[indexFuncionario];
+
+      if (!funcionarioDetalhe) {
+        alert("Funcionario nao encontrado para gerar PDF.");
+        return;
+      }
+
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert("Erro: biblioteca do PDF nao carregou.");
+        return;
+      }
+
+      const tratativaHoras = "Verificando com a gestão";
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF("p", "mm", "a4");
+      const dataAtual = new Date();
+      const filtroMes = document.getElementById("filtroMes")?.value || "";
+      const filtroAno = document.getElementById("filtroAno")?.value || "";
+      const mesesRelatorio = funcionarioDetalhe.meses.filter(mes => {
+        if (!filtroMes && !filtroAno) return true;
+        const [nomeMes, anoMes] = mes.mesAno.split("/");
+        const numeroMes = String(nomesMeses.indexOf(nomeMes) + 1).padStart(2, "0");
+        return (!filtroMes || numeroMes === filtroMes) && (!filtroAno || anoMes === filtroAno);
+      });
+      const mesesParaPDF = mesesRelatorio.length ? mesesRelatorio : funcionarioDetalhe.meses;
+
+      const resumoRelatorio = mesesParaPDF.reduce((acc, mes) => {
+        mes.registros.forEach(reg => {
+          const saldoDia = Number(reg.saldoDia || 0);
+          acc.trabalhado += Number(reg.duracaoMinutos || 0);
+          acc.previsto += Number(reg.previstoDia || 0);
+          acc.extras += saldoDia > 0 ? saldoDia : 0;
+          acc.negativas += saldoDia < 0 ? Math.abs(saldoDia) : 0;
+          acc.saldo += saldoDia;
+          acc.registros += 1;
+        });
+        return acc;
+      }, { trabalhado: 0, previsto: 0, extras: 0, negativas: 0, saldo: 0, registros: 0 });
+
+      const perfil = obterPerfilFuncionario(funcionarioDetalhe.funcionario) || {};
+      const empresa = obterEmpresaFuncionario(funcionarioDetalhe.funcionario, funcionarioDetalhe.departamento);
+      const periodoTexto = mesesParaPDF.map(mes => mes.mesAno).join(", ");
+
+      desenharCabecalhoPDF(doc, "Relatorio individual de banco de horas", `Periodo: ${periodoTexto || "Nao informado"}`);
+
+      let y = 43;
+      y = desenharSecaoPDF(doc, "Identificacao", y);
+
+      doc.autoTable({
+        startY: y,
+        body: [
+          ["Funcionario", textoPDF(funcionarioDetalhe.funcionario), "CPF", textoPDF(perfil.cpf || "Nao informado")],
+          ["Empresa", textoPDF(`${empresa.nome} - CNPJ: ${empresa.cnpj}`), "Departamento", textoPDF(funcionarioDetalhe.departamento || "Sem departamento")],
+          ["Status", funcionarioEstaInativoBanco(funcionarioDetalhe.funcionario) ? "Inativo" : "Ativo", "Gerado em", `${dataAtual.toLocaleDateString("pt-BR")} ${dataAtual.toLocaleTimeString("pt-BR")}`]
+        ],
+        theme: "plain",
+        styles: { fontSize: 8.5, cellPadding: 1.4, textColor: [30, 41, 59] },
+        columnStyles: {
+          0: { fontStyle: "bold", textColor: [71, 85, 105], cellWidth: 24 },
+          1: { cellWidth: 72 },
+          2: { fontStyle: "bold", textColor: [71, 85, 105], cellWidth: 24 },
+          3: { cellWidth: 58 }
+        },
+        margin: { left: 14, right: 14 }
+      });
+      y = doc.autoTable.previous.finalY + 8;
+
+      y = desenharSecaoPDF(doc, "Resumo do periodo", y);
+      y = desenharResumoCardsPDF(doc, [
+        { label: "Trabalhado", valor: formatarMinutosParaHora(resumoRelatorio.trabalhado), color: [30, 64, 175] },
+        { label: "Previsto", valor: formatarMinutosParaHora(resumoRelatorio.previsto), color: [67, 56, 202] },
+        { label: "Extras", valor: formatarMinutosParaHora(resumoRelatorio.extras), color: [5, 150, 105] },
+        { label: "Negativas", valor: formatarMinutosParaHora(resumoRelatorio.negativas), color: [220, 38, 38] },
+        { label: "Saldo", valor: formatarMinutosParaHora(resumoRelatorio.saldo), color: resumoRelatorio.saldo < 0 ? [220, 38, 38] : [5, 150, 105] }
+      ], y);
+
+      mesesParaPDF.forEach((mes) => {
         if (y > 225) {
           doc.addPage();
-          y = 16;
+          desenharCabecalhoPDF(doc, "Relatorio individual de banco de horas", `Periodo: ${periodoTexto || "Nao informado"}`);
+          y = 43;
         }
 
-        doc.setFontSize(12);
-        doc.setTextColor(31, 58, 147);
-        doc.text(`Mês/Ano: ${mes.mesAno}`, 14, y);
-        y += 4;
+        y = desenharSecaoPDF(doc, `Detalhamento - ${textoPDF(mes.mesAno)}`, y);
 
-        const bodyMes = mes.registros.map(reg => {
-          let observacao = reg.observacao || "-";
-          if (reg.dataEspecial?.descricao) observacao += ` | ${reg.dataEspecial.descricao}`;
-
-          return [
-            formatarDataBR(reg.data),
-            reg.horariosTexto || "-",
-            formatarMinutosParaHora(reg.duracaoMinutos),
-            formatarMinutosParaHora(reg.previstoDia),
-            formatarMinutosParaHora(reg.saldoDia),
-            observacao
-          ];
-        });
+        const linhasDia = mes.registros
+          .slice()
+          .sort((a, b) => (a.data || "").localeCompare(b.data || ""))
+          .map(reg => {
+            const observacoes = [];
+            if (reg.sabado) observacoes.push("Sabado trabalhado");
+            if (reg.dataEspecial?.tipo) observacoes.push(formatarTipoEspecial(reg.dataEspecial.tipo));
+            if (reg.dataEspecial?.regra) observacoes.push(formatarRegraEspecial(reg.dataEspecial.regra));
+            if (reg.observacao) observacoes.push(reg.observacao);
+            if (reg.dataEspecial?.descricao) observacoes.push(reg.dataEspecial.descricao);
+            return [
+              formatarDataBR(reg.data),
+              reg.horariosTexto || "-",
+              formatarMinutosParaHora(reg.duracaoMinutos),
+              formatarMinutosParaHora(reg.previstoDia),
+              formatarMinutosParaHora(reg.saldoDia),
+              textoPDF(observacoes.join(" | ") || "-")
+            ];
+          });
 
         doc.autoTable({
           startY: y,
-          head: [["Data", "Horários", "Trabalhado", "Previsto", "Saldo do Dia", "Observação"]],
-          body: bodyMes,
+          head: [["Data", "Horarios", "Trabalhado", "Previsto", "Saldo do dia", "Observacoes"]],
+          body: linhasDia,
           theme: "striped",
-          headStyles: { fillColor: [31, 58, 147] },
-          styles: { fontSize: 8.5, cellPadding: 2 },
+          headStyles: { fillColor: [30, 41, 59], textColor: [255, 255, 255], fontSize: 6.8, halign: "center", cellPadding: 1 },
+          alternateRowStyles: { fillColor: [248, 250, 252] },
+          styles: { fontSize: 6.4, cellPadding: 0.9, lineColor: [226, 232, 240], lineWidth: 0.1, valign: "middle", overflow: "ellipsize" },
+          didParseCell: function(data) {
+            if (data.section === "body" && data.column.index === 4) {
+              const texto = String(data.cell.raw || "");
+              if (texto.startsWith("-")) data.cell.styles.textColor = [220, 38, 38];
+              else if (texto !== "00h 00m") data.cell.styles.textColor = [5, 150, 105];
+              data.cell.styles.fontStyle = "bold";
+            }
+          },
+          margin: { left: 14, right: 14 },
           columnStyles: {
             0: { cellWidth: 22 },
             1: { cellWidth: 42 },
@@ -2567,8 +4474,12 @@
         y = doc.autoTable.previous.finalY + 8;
       });
 
+      adicionarCamposAssinaturaPDF(doc, y, tratativaHoras);
+      aplicarRodapePDF(doc, "Relatorio individual de banco de horas");
+
       const nomeSeguro = removerAcentos(funcionarioDetalhe.funcionario).replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_+|_+$/g, "");
-      doc.save(`banco_de_horas_${nomeSeguro || "funcionario"}_${dataAtual.toLocaleDateString("pt-BR").replace(/\//g, "-")}.pdf`);
+      const periodoSeguro = removerAcentos(periodoTexto || dataAtual.toLocaleDateString("pt-BR")).replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+      doc.save(`banco_de_horas_${nomeSeguro || "funcionario"}_${periodoSeguro || "periodo"}.pdf`);
     };
 
     window.gerarPDFBancoHoras = function() {
@@ -2590,7 +4501,6 @@
       const filtroMes = document.getElementById("filtroMes");
       const filtroMesTexto = filtroMes.options[filtroMes.selectedIndex]?.text || "Todos";
       const filtroAno = document.getElementById("filtroAno").value || "Todos";
-      const cargaSemanal = document.getElementById("cargaSemanal").value || "40";
 
       doc.setFontSize(18);
       doc.setTextColor(31, 58, 147);
@@ -2605,7 +4515,6 @@
       doc.text(`Funcionário: ${filtroFuncionario}`, 14, 34);
       doc.text(`Mês: ${filtroMesTexto}`, 14, 40);
       doc.text(`Ano: ${filtroAno}`, 14, 46);
-      doc.text(`Carga semanal: ${cargaSemanal} horas`, 14, 52);
 
       doc.setFontSize(12);
       doc.setTextColor(31, 58, 147);
@@ -2746,6 +4655,7 @@
           });
 
           y = doc.autoTable.previous.finalY + 8;
+          y = adicionarCamposAssinaturaPDF(doc, y);
         });
 
         if (idx < detalhesAtuaisPDF.length - 1) {
@@ -2764,6 +4674,13 @@
         doc.setFontSize(9);
         doc.setTextColor(110, 110, 110);
         doc.text(`Página ${i} de ${totalPages}`, 14, doc.internal.pageSize.height - 8);
+      }
+
+      for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(9);
+        doc.setTextColor(110, 110, 110);
+        doc.text("Desenvolvido por Nay Cordeiro - IT", doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 8, { align: "center" });
       }
 
       const nomeArquivo = `relatorio_completo_banco_horas_${dataAtual.toLocaleDateString("pt-BR").replace(/\//g, "-")}.pdf`;
@@ -2788,16 +4705,42 @@
     document.getElementById("filtroAno").addEventListener("input", () => carregarBancoHoras());
     document.getElementById("cargaSemanal").addEventListener("change", () => carregarBancoHoras());
     document.getElementById("ajusteTipo").addEventListener("change", atualizarCampoMesDescontoFolga);
+    ["departamentosFiltroFuncionario", "departamentosFiltroAno"].forEach(id => {
+      document.getElementById(id)?.addEventListener("keydown", event => {
+        if (event.key === "Enter") window.aplicarFiltrosDepartamentos();
+      });
+    });
+    ["departamentosFiltroDepartamento", "departamentosFiltroMes"].forEach(id => {
+      document.getElementById(id)?.addEventListener("change", () => window.aplicarFiltrosDepartamentos());
+    });
+    document.getElementById("gestaoFiltroMes")?.addEventListener("change", () => window.aplicarFiltrosGestao());
+    document.getElementById("gestaoFiltroAno")?.addEventListener("keydown", event => {
+      if (event.key === "Enter") window.aplicarFiltrosGestao();
+    });
 
     aplicarModoDaPagina();
+    carregarFuncionariosInativosLocais();
     await buscarRegistros();
     await buscarDatasEspeciais();
     await buscarAjustesHoras();
     await buscarCargasFuncionarios();
     await buscarFuncionariosMeta();
+    await buscarTratativasHorasPDF();
+    await buscarFechamentosMensais();
+    await buscarHistoricoTratativas();
     atualizarCampoCargaPersonalizada();
     atualizarCampoMesDescontoFolga();
-    carregarBancoHoras();
+    await carregarBancoHoras();
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
