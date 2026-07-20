@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -835,7 +835,7 @@
         <input type="number" id="filtroAno" placeholder="Ex: 2026">
       </div>
 
-      <div>
+      <div style="display:none;">
         <label for="cargaSemanal">Carga semanal</label>
         <select id="cargaSemanal">
           <option value="40" selected>40 horas semanais</option>
@@ -1291,6 +1291,7 @@
     let fechamentosMensais = [];
     let historicoTratativas = [];
     let funcionariosInativosLocais = new Map();
+    let atestadoEditandoId = "";
     let resultadoAtualCSV = [];
     let detalhesAtuaisPDF = [];
     let ultimoResumoPDF = {
@@ -1928,9 +1929,48 @@
       return `${sinal}${String(h).padStart(2, "0")}h ${String(m).padStart(2, "0")}m`;
     }
 
+    function formatarMinutosParaHorario(minutosTotais) {
+      const minutosDia = ((minutosTotais % 1440) + 1440) % 1440;
+      const h = Math.floor(minutosDia / 60);
+      const m = minutosDia % 60;
+      return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+    }
+
+    function normalizarHorariosSemDuplicidade(horarios = []) {
+      const ordenados = (horarios || [])
+        .filter(horario => horario?.entrada && horario?.saida && parseTime(horario.saida) > parseTime(horario.entrada))
+        .map(horario => ({ entrada: horario.entrada, saida: horario.saida }))
+        .sort((a, b) => parseTime(a.entrada) - parseTime(b.entrada) || parseTime(a.saida) - parseTime(b.saida));
+
+      const limpos = [];
+      ordenados.forEach(horario => {
+        const atual = limpos[limpos.length - 1];
+        if (!atual) {
+          limpos.push(horario);
+          return;
+        }
+
+        const inicioAtual = parseTime(atual.entrada);
+        const fimAtual = parseTime(atual.saida);
+        const inicioNovo = parseTime(horario.entrada);
+        const fimNovo = parseTime(horario.saida);
+
+        if (horario.entrada === atual.entrada && horario.saida === atual.saida) return;
+        if (inicioNovo <= fimAtual) {
+          atual.entrada = formatarMinutosParaHorario(Math.min(inicioAtual, inicioNovo));
+          atual.saida = formatarMinutosParaHorario(Math.max(fimAtual, fimNovo));
+          return;
+        }
+
+        limpos.push(horario);
+      });
+
+      return limpos;
+    }
+
     function calcularDuracaoTotal(horarios) {
       let duracaoMinutos = 0;
-      const horas = Array.isArray(horarios) ? horarios : [];
+      const horas = normalizarHorariosSemDuplicidade(Array.isArray(horarios) ? horarios : []);
 
       for (const h of horas) {
         if (h.entrada && h.saida) {
@@ -2014,6 +2054,7 @@
     async function buscarRegistros() {
       const snapshot = await getDocs(collection(db, "horas"));
       registrosOriginais = [];
+      const registrosUnificados = new Map();
 
       snapshot.forEach((docItem) => {
         const d = docItem.data();
@@ -2022,14 +2063,33 @@
         // Isso evita que um ajuste seja contado como registro de ponto com 00h.
         if (d.ajusteManual === true) return;
 
-        registrosOriginais.push({
-          id: docItem.id,
-          funcionario: d.funcionario || "Sem nome",
-          data: d.data || "",
-          horarios: Array.isArray(d.horarios) ? d.horarios : [],
-          duracaoMinutos: calcularDuracaoTotal(d.horarios || [])
-        });
+        const funcionario = d.funcionario || "Sem nome";
+        const data = d.data || "";
+        const chave = `${normalizarNomeBusca(funcionario)}|${data}`;
+        const horarios = normalizarHorariosSemDuplicidade(Array.isArray(d.horarios) ? d.horarios : []);
+
+        if (!registrosUnificados.has(chave)) {
+          registrosUnificados.set(chave, {
+            id: docItem.id,
+            funcionario,
+            data,
+            horarios: [],
+            idsDuplicados: []
+          });
+        }
+
+        const existente = registrosUnificados.get(chave);
+        existente.horarios = normalizarHorariosSemDuplicidade([...existente.horarios, ...horarios]);
+        if (docItem.id !== existente.id && !existente.idsDuplicados.includes(docItem.id)) {
+          existente.idsDuplicados.push(docItem.id);
+        }
       });
+
+      registrosOriginais = Array.from(registrosUnificados.values()).map(registro => ({
+        ...registro,
+        horarios: normalizarHorariosSemDuplicidade(registro.horarios),
+        duracaoMinutos: calcularDuracaoTotal(registro.horarios)
+      }));
     }
 
     async function buscarDatasEspeciais() {
@@ -2577,29 +2637,32 @@
       return obterMinutosAjuste(ajuste) < 0 ? "negativo" : "positivo";
     }
 
-    function obterAbonosSaldoAnterior(funcionario, data, ajustesFiltrados) {
+    function ajusteAbonaDia(ajuste) {
+      return ajuste.tipo === "abono_saldo_anterior" || ajuste.tipo === "atestado_medico";
+    }
+
+    function obterAbonosDoDia(funcionario, data, ajustesFiltrados) {
       return ajustesFiltrados.filter(ajuste =>
-        ajuste.tipo === "abono_saldo_anterior" &&
+        ajusteAbonaDia(ajuste) &&
         ajuste.data === data &&
         nomesIguais(obterNomeFuncionario(ajuste.funcionario), funcionario)
       );
     }
 
-    function somarMinutosAbonoSaldoAnterior(funcionario, data, ajustesFiltrados) {
-      return obterAbonosSaldoAnterior(funcionario, data, ajustesFiltrados)
+    function somarMinutosAbonosDoDia(funcionario, data, ajustesFiltrados) {
+      return obterAbonosDoDia(funcionario, data, ajustesFiltrados)
         .reduce((total, ajuste) => total + Math.abs(Number(ajuste.minutos || 0)), 0);
     }
 
-    function montarObservacaoAbono(funcionario, data, ajustesFiltrados) {
-      const abonos = obterAbonosSaldoAnterior(funcionario, data, ajustesFiltrados);
+    function montarObservacaoAbonosDoDia(funcionario, data, ajustesFiltrados) {
+      const abonos = obterAbonosDoDia(funcionario, data, ajustesFiltrados);
       if (!abonos.length) return "";
 
-      const total = abonos.reduce((soma, ajuste) => soma + Math.abs(Number(ajuste.minutos || 0)), 0);
       const descricoes = abonos
-        .map(ajuste => ajuste.descricao || "descontado do saldo anterior/2025")
+        .map(ajuste => `${formatarTipoAjuste(ajuste.tipo)}: +${formatarMinutosParaHora(Math.abs(Number(ajuste.minutos || 0)))}${ajuste.descricao ? " - " + ajuste.descricao : ""}`)
         .join(" | ");
 
-      return `Abono com saldo anterior/2025: +${formatarMinutosParaHora(total)}${descricoes ? " - " + descricoes : ""}`;
+      return descricoes;
     }
 
 
@@ -3252,6 +3315,11 @@
     }
 
     function construirEstruturaDetalhada(agrupado, ajustesFiltrados) {
+      ajustesFiltrados.forEach(ajuste => {
+        const nomeRelatorio = obterNomeFuncionario(ajuste.funcionario);
+        if (!agrupado[nomeRelatorio]) agrupado[nomeRelatorio] = [];
+      });
+
       const nomes = Object.keys(agrupado).sort((a, b) => a.localeCompare(b, "pt-BR"));
       const detalhes = [];
 
@@ -3267,19 +3335,20 @@
         let totalAjustes = 0;
 
         const registrosPorMes = {};
+        const datasComRegistro = new Set(registros.map(reg => reg.data));
 
         registros.forEach(reg => {
-          const minutosAbonoSaldoAnterior = somarMinutosAbonoSaldoAnterior(nome, reg.data, ajustesFiltrados);
+          const minutosAbonosDoDia = somarMinutosAbonosDoDia(nome, reg.data, ajustesFiltrados);
           const regParaCalculo = {
             ...reg,
-            duracaoMinutos: reg.duracaoMinutos + minutosAbonoSaldoAnterior
+            duracaoMinutos: reg.duracaoMinutos + minutosAbonosDoDia
           };
 
           totalTrabalhado += regParaCalculo.duracaoMinutos;
 
           const cargaSemanalDia = obterCargaSemanalFuncionario(nome, reg.data);
           const regraDia = calcularRegraDoDia(regParaCalculo, Math.round((cargaSemanalDia / 5) * 60));
-          const observacaoAbono = montarObservacaoAbono(nome, reg.data, ajustesFiltrados);
+          const observacaoAbono = montarObservacaoAbonosDoDia(nome, reg.data, ajustesFiltrados);
 
           if (observacaoAbono) {
             regraDia.observacao = `${regraDia.observacao || ""} | ${observacaoAbono}`;
@@ -3299,14 +3368,43 @@
             ...regraDia,
             duracaoMinutos: regParaCalculo.duracaoMinutos,
             cargaSemanalDia,
-            horariosTexto: `${reg.horarios.map(h => `${h.entrada} às ${h.saida}`).join(" | ")}${minutosAbonoSaldoAnterior ? ` | Abono saldo 2025: +${formatarMinutosParaHora(minutosAbonoSaldoAnterior)}` : ""}`,
+            horariosTexto: `${reg.horarios.map(h => `${h.entrada} às ${h.saida}`).join(" | ")}${observacaoAbono ? ` | ${observacaoAbono}` : ""}`,
             observacaoAbono
           });
         });
 
         const ajustesDoFuncionario = ajustesFiltrados.filter(ajuste => nomesIguais(obterNomeFuncionario(ajuste.funcionario), nome));
         ajustesDoFuncionario.forEach(ajuste => {
-          if (ajuste.tipo === "abono_saldo_anterior") return;
+          if (ajusteAbonaDia(ajuste)) {
+            if (datasComRegistro.has(ajuste.data)) return;
+
+            const minutosAbono = Math.abs(Number(ajuste.minutos || 0));
+            const registroAbonado = {
+              id: ajuste.id,
+              data: ajuste.data,
+              duracaoMinutos: minutosAbono
+            };
+            const cargaSemanalDia = obterCargaSemanalFuncionario(nome, ajuste.data);
+            const regraDia = calcularRegraDoDia(registroAbonado, Math.round((cargaSemanalDia / 5) * 60));
+            const observacaoAbono = `${formatarTipoAjuste(ajuste.tipo)}: +${formatarMinutosParaHora(minutosAbono)}${ajuste.descricao ? " - " + ajuste.descricao : ""}`;
+
+            regraDia.observacao = `${regraDia.observacao || ""} | ${observacaoAbono}`;
+            totalTrabalhado += minutosAbono;
+            totalPrevisto += regraDia.previstoDia;
+            totalExtras += regraDia.extrasDia;
+            totalNegativas += regraDia.negativasDia;
+
+            const chaveMes = obterMesAno(ajuste.data);
+            if (!registrosPorMes[chaveMes]) registrosPorMes[chaveMes] = [];
+            registrosPorMes[chaveMes].push({
+              ...registroAbonado,
+              ...regraDia,
+              cargaSemanalDia,
+              horariosTexto: observacaoAbono,
+              observacaoAbono
+            });
+            return;
+          }
 
           totalAjustes += obterMinutosAjuste(ajuste);
           const chaveMes = obterMesAno(ajuste.data);
@@ -3363,7 +3461,6 @@
             </td>
             <td>${reg.horariosTexto || "-"}</td>
             <td>${formatarMinutosParaHora(reg.duracaoMinutos)}</td>
-            <td>${reg.cargaSemanalDia ? `${reg.cargaSemanalDia}h/semana` : "-"}</td>
             <td>${formatarMinutosParaHora(reg.previstoDia)}</td>
             <td class="${obterClasseSaldo(reg.saldoDia)}">${formatarMinutosParaHora(reg.saldoDia)}</td>
           </tr>
@@ -3383,7 +3480,6 @@
                       <th>Data</th>
                       <th>Horários</th>
                       <th>Trabalhado</th>
-                      <th>Carga usada</th>
                       <th>Previsto</th>
                       <th>Saldo do Dia</th>
                     </tr>
@@ -3511,7 +3607,6 @@
               </td>
               <td>${reg.horariosTexto || "-"}</td>
               <td>${formatarMinutosParaHora(reg.duracaoMinutos)}</td>
-              <td>${reg.cargaSemanalDia ? `${reg.cargaSemanalDia}h/semana` : "-"}</td>
               <td>${formatarMinutosParaHora(reg.previstoDia)}</td>
               <td class="${obterClasseSaldo(reg.saldoDia)}">${formatarMinutosParaHora(reg.saldoDia)}</td>
             </tr>
@@ -3531,7 +3626,6 @@
                         <th>Data</th>
                         <th>Horários</th>
                         <th>Trabalhado</th>
-                        <th>Carga usada</th>
                         <th>Previsto</th>
                         <th>Saldo do Dia</th>
                       </tr>
@@ -3815,7 +3909,7 @@
                   <td>${escaparHTML(obterDepartamentoFuncionario(item.funcionario))}</td>
                   <td class="positivo">${formatarMinutosParaHora(Math.abs(Number(item.minutos || 0)))}</td>
                   <td>${escaparHTML(item.descricao || "-")}</td>
-                  ${getModoChefia() ? "" : `<td><button class="btn-excluir" onclick="excluirAjusteHoras('${item.id}')">Excluir</button></td>`}
+                  ${getModoChefia() ? "" : `<td><button type="button" onclick="editarAtestadoMedico('${item.id}')" style="background:#2563eb;">Editar</button> <button class="btn-excluir" onclick="excluirAjusteHoras('${item.id}')">Excluir</button></td>`}
                 </tr>
               `).join("")}
             </tbody>
@@ -3853,16 +3947,33 @@
       };
 
       try {
-        await addDoc(collection(db, "ajustesHoras"), dadosAtestado);
-        alert("Atestado médico salvo com sucesso!");
+        if (atestadoEditandoId) {
+          const existente = ajustesHoras.find(item => item.id === atestadoEditandoId);
+          if (existente?.origem === "local" || String(atestadoEditandoId).startsWith("local_")) {
+            const locais = carregarAjustesLocais().map(item => item.id === atestadoEditandoId ? { ...item, ...dadosAtestado } : item);
+            salvarAjustesLocais(locais);
+          } else {
+            await updateDoc(doc(db, "ajustesHoras", atestadoEditandoId), dadosAtestado);
+          }
+          alert("Atestado médico atualizado com sucesso!");
+        } else {
+          await addDoc(collection(db, "ajustesHoras"), dadosAtestado);
+          alert("Atestado médico salvo com sucesso!");
+        }
       } catch (error) {
         console.error("Erro ao salvar atestado no Firebase:", error);
         const locais = carregarAjustesLocais();
-        locais.push({ id: `local_atestado_${Date.now()}`, ...dadosAtestado });
-        salvarAjustesLocais(locais);
+        if (atestadoEditandoId) {
+          const atualizados = locais.map(item => item.id === atestadoEditandoId ? { ...item, ...dadosAtestado } : item);
+          salvarAjustesLocais(atualizados);
+        } else {
+          locais.push({ id: `local_atestado_${Date.now()}`, ...dadosAtestado });
+          salvarAjustesLocais(locais);
+        }
         alert("O Firebase bloqueou o atestado. Salvei no navegador para não perder, mas atualize as regras do Firebase para salvar online.");
       }
 
+      atestadoEditandoId = "";
       document.getElementById("atestadoFuncionario").value = "";
       document.getElementById("atestadoData").value = "";
       document.getElementById("atestadoHoras").value = "";
@@ -3871,6 +3982,22 @@
       await buscarAjustesHoras();
       carregarBancoHoras();
       renderizarPainelGestaoChefia();
+    };
+
+    window.editarAtestadoMedico = function(id) {
+      const item = ajustesHoras.find(ajuste => ajuste.id === id);
+      if (!item) {
+        alert("Atestado não encontrado.");
+        return;
+      }
+
+      atestadoEditandoId = id;
+      document.getElementById("atestadoFuncionario").value = obterNomeFuncionario(item.funcionario);
+      document.getElementById("atestadoData").value = item.data || "";
+      document.getElementById("atestadoHoras").value = (Math.abs(Number(item.minutos || 0)) / 60).toString();
+      document.getElementById("atestadoDescricao").value = item.descricao || "";
+      document.getElementById("atestadoFuncionario")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      alert("Atestado carregado para edição. Altere os campos e clique em Salvar atestado.");
     };
 
     window.excluirAjusteHoras = async function(id) {
@@ -3932,10 +4059,10 @@
             let ajustes = 0;
 
             registros.forEach(reg => {
-              const minutosAbonoSaldoAnterior = somarMinutosAbonoSaldoAnterior(funcionario, reg.data, ajustesFiltrados);
+              const minutosAbonosDoDia = somarMinutosAbonosDoDia(funcionario, reg.data, ajustesFiltrados);
               const regParaCalculo = {
                 ...reg,
-                duracaoMinutos: reg.duracaoMinutos + minutosAbonoSaldoAnterior
+                duracaoMinutos: reg.duracaoMinutos + minutosAbonosDoDia
               };
 
               trabalhado += regParaCalculo.duracaoMinutos;
@@ -3946,8 +4073,24 @@
               negativas += regraDia.negativasDia;
             });
 
+            const datasComRegistro = new Set(registros.map(reg => reg.data));
+            ajustesFiltrados
+              .filter(ajuste => nomesIguais(obterNomeFuncionario(ajuste.funcionario), funcionario) && ajusteAbonaDia(ajuste) && !datasComRegistro.has(ajuste.data))
+              .forEach(ajuste => {
+                const minutosAbono = Math.abs(Number(ajuste.minutos || 0));
+                const registroAbonado = {
+                  data: ajuste.data,
+                  duracaoMinutos: minutosAbono
+                };
+                trabalhado += minutosAbono;
+                const regraDia = calcularRegraDoDia(registroAbonado, obterMinutosPrevistosPorFuncionario(funcionario, ajuste.data));
+                previsto += regraDia.previstoDia;
+                extras += regraDia.extrasDia;
+                negativas += regraDia.negativasDia;
+              });
+
             ajustes = ajustesFiltrados
-              .filter(ajuste => nomesIguais(obterNomeFuncionario(ajuste.funcionario), funcionario) && ajuste.tipo !== "abono_saldo_anterior")
+              .filter(ajuste => nomesIguais(obterNomeFuncionario(ajuste.funcionario), funcionario) && !ajusteAbonaDia(ajuste))
               .reduce((total, ajuste) => total + obterMinutosAjuste(ajuste), 0);
 
             const saldo = extras - negativas + ajustes;
