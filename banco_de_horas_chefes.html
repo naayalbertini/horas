@@ -437,6 +437,46 @@
       margin-top: 3px;
     }
 
+    .secao-chefia {
+      background: #fff;
+      border: 1px solid #dbe4f0;
+      border-radius: 16px;
+      box-shadow: 0 10px 28px rgba(31, 58, 147, 0.07);
+      margin-bottom: 22px;
+      overflow: hidden;
+    }
+
+    .secao-chefia-cabecalho {
+      align-items: center;
+      background: linear-gradient(135deg, #f8fbff, #eef4ff);
+      border-bottom: 1px solid #dbe4f0;
+      display: flex;
+      gap: 14px;
+      justify-content: space-between;
+      padding: 18px 20px;
+    }
+
+    .secao-chefia-cabecalho h2 { color: #1f3a93; font-size: 1.1rem; margin: 0; }
+    .secao-chefia-cabecalho small { color: #64748b; display: block; margin-top: 4px; }
+    .secao-chefia-conteudo { padding: 18px 20px; }
+    .resumo-geral.visao-geral-chefia { margin: 0 0 22px; }
+    .resumo-geral.visao-geral-chefia::before {
+      color: #1f3a93;
+      content: "Visão geral do período selecionado";
+      font-size: 1.05rem;
+      font-weight: 800;
+      grid-column: 1 / -1;
+    }
+    .pagamento-valor { color: #b45309; font-weight: 800; white-space: nowrap; }
+    .saldo-apos-pagamento { color: #166534; font-weight: 800; }
+    .btn-recolher { background: #e5edfb; color: #1f3a93; padding: 8px 12px; width: auto; }
+    .btn-recolher:hover { background: #d7e3f7; }
+    #conteudoTratativasChefia .tratativas-cabecalho { display: none; }
+    .filtros-principais-chefia { align-items: end; }
+    .filtros-principais-chefia .titulo-filtros-chefia { grid-column: 1 / -1; }
+    .filtros-principais-chefia .titulo-filtros-chefia h2 { color: #1f3a93; font-size: 1.05rem; margin: 0; }
+    .filtros-principais-chefia .titulo-filtros-chefia small { color: #64748b; display: block; margin-top: 4px; }
+
     .painel-gestao-chefia {
       background: #f8fbff;
       border: 1px solid #dbe6f9;
@@ -798,7 +838,11 @@
       </div>
     </div>
 
-    <div class="filtros">
+    <div class="filtros filtros-principais-chefia">
+      <div class="titulo-filtros-chefia">
+        <h2><i class="fas fa-filter"></i> Consultar banco de horas</h2>
+        <small>Escolha somente os filtros necessários. O resumo e os pagamentos abaixo serão atualizados juntos.</small>
+      </div>
       <div>
         <label for="filtroFuncionario">Funcionário</label>
         <input type="text" id="filtroFuncionario" placeholder="Digite o nome do funcionário">
@@ -853,7 +897,18 @@
       </div>
     </div>
 
-    <div class="filtros painel-tratativas-chefia">
+    <section class="secao-chefia painel-tratativas-chefia">
+      <div class="secao-chefia-cabecalho">
+        <div>
+          <h2><i class="fas fa-clipboard-check"></i> Outras tratativas</h2>
+          <small>Folgas, horas não pagas e situações ainda em verificação.</small>
+        </div>
+        <button type="button" class="btn-recolher" onclick="togglePainelChefia('conteudoTratativasChefia', this)">
+          <i class="fas fa-chevron-down"></i> Mostrar detalhes
+        </button>
+      </div>
+      <div id="conteudoTratativasChefia" class="secao-chefia-conteudo" style="display:none;">
+    <div class="filtros painel-tratativas-chefia" style="box-shadow:none; border:0; margin:0; padding:0;">
       <div class="tratativas-cabecalho">
         <div>
           <h2><i class="fas fa-clipboard-check"></i> Acompanhamento de tratativas</h2>
@@ -866,6 +921,8 @@
       <div id="resumoTratativasChefia" class="tratativa-resumo-grid"></div>
       <div id="listaTratativasChefia" style="grid-column: 1 / -1;"></div>
     </div>
+      </div>
+    </section>
 
     <div class="filtros painel-gestao-chefia pagina-gestao-chefia">
       <div class="tratativas-cabecalho">
@@ -1118,7 +1175,7 @@
       </div>
     </div>
 
-    <div class="resumo-geral">
+    <div class="resumo-geral visao-geral-chefia">
       <div class="card-resumo">
         <h3>Total de funcionários</h3>
         <p id="totalFuncionarios">0</p>
@@ -1136,6 +1193,19 @@
         <p id="saldoGeral" class="neutro">00h 00m</p>
       </div>
     </div>
+
+    <section class="secao-chefia" id="secaoPagamentosChefia">
+      <div class="secao-chefia-cabecalho">
+        <div>
+          <h2><i class="fas fa-money-check-dollar"></i> Horas extras pagas</h2>
+          <small>Pagamentos lançados pelo ADM e descontados diretamente no mês de referência.</small>
+        </div>
+        <button type="button" class="btn-recolher" onclick="buscarAjustesHoras(); carregarBancoHoras();">
+          <i class="fas fa-sync-alt"></i> Atualizar
+        </button>
+      </div>
+      <div id="pagamentosChefia" class="secao-chefia-conteudo"></div>
+    </section>
 
     <div class="pagina-departamentos-chefia">
       <div class="filtros">
@@ -2586,6 +2656,62 @@
       ajustesHoras = ajustesHoras.concat(locais);
       renderizarAjustesHoras();
       renderizarAtestadosMedicos();
+      renderizarPagamentosChefia();
+    }
+
+    function renderizarPagamentosChefia() {
+      const container = document.getElementById("pagamentosChefia");
+      if (!container) return;
+
+      const pagamentos = filtrarAjustesHoras()
+        .filter(item => item.tipo === "horas_pagas")
+        .sort((a, b) => (b.criadoEm || b.data || "").localeCompare(a.criadoEm || a.data || ""));
+      const totalMinutos = pagamentos.reduce((total, item) => total + Math.abs(Number(item.minutos || 0)), 0);
+
+      if (!pagamentos.length) {
+        container.innerHTML = '<div class="vazio">Nenhum pagamento de horas registrado para os filtros selecionados.</div>';
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="tratativa-resumo-grid" style="margin-bottom:16px;">
+          <div class="tratativa-resumo-card">Pagamentos encontrados<strong>${pagamentos.length}</strong></div>
+          <div class="tratativa-resumo-card">Total de horas pagas<strong class="pagamento-valor">${formatarMinutosParaHora(totalMinutos)}</strong></div>
+        </div>
+        <div class="tabela-wrapper">
+          <table>
+            <thead><tr><th>Mês abatido</th><th>Funcionário</th><th>Horas pagas</th><th>Informações do pagamento</th></tr></thead>
+            <tbody>
+              ${pagamentos.map(item => `
+                <tr>
+                  <td><strong>${escaparHTML(obterMesAno(item.data))}</strong></td>
+                  <td>${escaparHTML(obterNomeFuncionario(item.funcionario))}</td>
+                  <td class="pagamento-valor">${formatarMinutosParaHora(Math.abs(Number(item.minutos || 0)))}</td>
+                  <td>${escaparHTML(item.descricao || "Pagamento registrado pelo ADM")}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    window.togglePainelChefia = function(id, botao) {
+      const conteudo = document.getElementById(id);
+      if (!conteudo) return;
+      const abrir = conteudo.style.display === "none" || !conteudo.style.display;
+      conteudo.style.display = abrir ? "block" : "none";
+      if (botao) botao.innerHTML = abrir
+        ? '<i class="fas fa-chevron-up"></i> Ocultar detalhes'
+        : '<i class="fas fa-chevron-down"></i> Mostrar detalhes';
+    };
+
+    function organizarLayoutChefia() {
+      const container = document.querySelector(".container");
+      const topo = document.querySelector(".topo");
+      const resumo = document.querySelector(".resumo-geral.visao-geral-chefia");
+      const filtrosPrincipais = Array.from(container?.children || []).find(elemento => elemento.classList?.contains("filtros") && !elemento.classList.contains("painel-tratativas-chefia"));
+      if (container && topo && resumo) container.insertBefore(resumo, filtrosPrincipais || topo.nextSibling);
     }
 
     function filtrarAjustesHoras() {
@@ -3412,7 +3538,8 @@
           registrosPorMes[chaveMes].push({
             id: ajuste.id,
             data: ajuste.data,
-            horariosTexto: "Ajuste manual",
+            horariosTexto: ajuste.tipo === "horas_pagas" ? "Pagamento de horas extras" : "Ajuste manual",
+            tipoAjuste: ajuste.tipo,
             duracaoMinutos: 0,
             previstoDia: 0,
             saldoDia: obterMinutosAjuste(ajuste),
@@ -3435,10 +3562,17 @@
           saldoFinal,
           meses: Object.keys(registrosPorMes)
             .sort((a, b) => a.localeCompare(b, "pt-BR"))
-            .map(mesAno => ({
-              mesAno,
-              registros: registrosPorMes[mesAno]
-            }))
+            .map(mesAno => {
+              const registrosMes = registrosPorMes[mesAno];
+              return {
+                mesAno,
+                registros: registrosMes,
+                horasPagas: registrosMes
+                  .filter(registro => registro.tipoAjuste === "horas_pagas")
+                  .reduce((total, registro) => total + Math.abs(Number(registro.saldoDia || 0)), 0),
+                saldoMes: registrosMes.reduce((total, registro) => total + Number(registro.saldoDia || 0), 0)
+              };
+            })
         });
       });
 
@@ -3470,7 +3604,11 @@
           <div class="mes-card">
             <div class="mes-header" onclick="toggleMes('${contentId}')">
               <span><i class="fas fa-folder"></i> ${mes.mesAno}</span>
-              <span><i class="fas fa-chevron-down"></i></span>
+              <span style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
+                ${mes.horasPagas > 0 ? `<strong class="pagamento-valor"><i class="fas fa-money-check-dollar"></i> Pagas: ${formatarMinutosParaHora(mes.horasPagas)}</strong>` : ""}
+                <strong class="${obterClasseSaldo(mes.saldoMes)}">Saldo: ${formatarMinutosParaHora(mes.saldoMes)}</strong>
+                <i class="fas fa-chevron-down"></i>
+              </span>
             </div>
             <div class="mes-conteudo" id="${contentId}">
               <div class="tabela-wrapper">
@@ -3616,7 +3754,11 @@
             <div class="mes-card">
               <div class="mes-header" onclick="toggleMes('${contentId}')">
                 <span><i class="fas fa-folder"></i> ${mes.mesAno}</span>
-                <span><i class="fas fa-chevron-down"></i></span>
+                <span style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
+                  ${mes.horasPagas > 0 ? `<strong class="pagamento-valor"><i class="fas fa-money-check-dollar"></i> Pagas: ${formatarMinutosParaHora(mes.horasPagas)}</strong>` : ""}
+                  <strong class="${obterClasseSaldo(mes.saldoMes)}">Saldo: ${formatarMinutosParaHora(mes.saldoMes)}</strong>
+                  <i class="fas fa-chevron-down"></i>
+                </span>
               </div>
               <div class="mes-conteudo" id="${contentId}">
                 <div class="tabela-wrapper">
@@ -4133,6 +4275,7 @@
         renderizarTabela(linhas);
         renderizarDetalhes(detalhesAtuaisPDF);
         renderizarResumo(ultimoResumoPDF);
+        renderizarPagamentosChefia();
         renderizarPainelGestaoChefia();
 
       } catch (error) {
@@ -4862,6 +5005,7 @@
     });
 
     aplicarModoDaPagina();
+    organizarLayoutChefia();
     carregarFuncionariosInativosLocais();
     await buscarRegistros();
     await buscarDatasEspeciais();
