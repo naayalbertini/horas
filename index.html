@@ -142,6 +142,26 @@
     .mes-header i { transition: transform 0.3s; }
     .mes-header.open i { transform: rotate(90deg); }
     .mes-header .total-mes-header { font-size: 0.9em; font-weight: bold; background: #fff; color: #4a90e2; padding: 5px 10px; border-radius: 20px; border: 1px solid #4a90e2; }
+    .acoes-pasta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+    }
+    .btn-excluir-pasta {
+        background: #c0392b;
+        border: 0;
+        border-radius: 6px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 700;
+        margin: 0;
+        padding: 7px 10px;
+        width: auto;
+    }
+    .btn-excluir-pasta:hover { background: #962d22; }
+    .btn-excluir-pasta i { transform: none !important; }
     .registros-agrupados-mes { padding: 15px; background: #fdfdfd; }
     .agrupamento-semana { border: 1px solid #e0e0e0; border-radius: 6px; margin-bottom: 15px; padding: 10px; background: #ffffff; }
     .semana-header { color: #555; font-size: 1.05em; margin-top: 0; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px dashed #e0e0e0; display: flex; justify-content: space-between; font-weight: 600; }
@@ -1551,6 +1571,37 @@
         registrarAliasFuncionario(nomeExibicao, nomeCanonico);
     }
 
+    function registrarAliasesPorPrimeiroNomeUnico() {
+        const candidatos = Array.from(new Set([
+            ...canonicalNamesMap.values(),
+            ...funcionariosMeta.map(item => item.nomeExibicao || item.nomeOriginal)
+        ].filter(Boolean).map(nome => String(nome).trim())));
+        const grupos = new Map();
+
+        candidatos.forEach((nome) => {
+            const partes = obterPartesNome(nome);
+            const primeiroNome = partes[0];
+            if (!primeiroNome) return;
+            if (!grupos.has(primeiroNome)) grupos.set(primeiroNome, []);
+            grupos.get(primeiroNome).push(nome);
+        });
+
+        grupos.forEach((nomes, primeiroNome) => {
+            const nomesCompletos = Array.from(new Map(
+                nomes
+                    .filter(nome => obterPartesNome(nome).length > 1)
+                    .map(nome => [normalizarTexto(nome), nome])
+            ).values());
+            if (nomesCompletos.length !== 1) return;
+
+            const nomeCompleto = nomesCompletos[0];
+            const metaCorrespondente = funcionariosMeta.find(item =>
+                normalizarTexto(item.nomeExibicao || item.nomeOriginal) === normalizarTexto(nomeCompleto)
+            );
+            registrarAliasFuncionario(primeiroNome, metaCorrespondente?.nomeExibicao || nomeCompleto);
+        });
+    }
+
     function obterPartesNome(nome) {
         return normalizarTexto(nome)
             .split(/\s+/)
@@ -1950,7 +2001,11 @@
     }
 
     function normalizarTexto(valor) {
-        return removerAcentos(String(valor ?? '').trim()).toLowerCase();
+        return removerAcentos(String(valor ?? '')
+            .replace(/[\u200B-\u200D\uFEFF]/g, '')
+            .trim()
+            .replace(/\s+/g, ' '))
+            .toLowerCase();
     }
 
     function excelSerialParaDataISO(valor) {
@@ -2037,8 +2092,8 @@
         linha.forEach((celula, index) => {
             const texto = normalizarTexto(celula);
             if (!texto) return;
-            if (!mapa.nome && texto.match(/funcionario|colaborador|empregado|nome/)) mapa.nome = index;
-            if (!mapa.data && texto.match(/\bdata\b|dia/)) mapa.data = index;
+            if (mapa.nome === undefined && texto.match(/funcionario|colaborador|empregado|nome/)) mapa.nome = index;
+            if (mapa.data === undefined && texto.match(/\bdata\b|dia/)) mapa.data = index;
             if (texto.match(/entrada|ent\.?|inicio/)) {
                 mapa.entradas = mapa.entradas || [];
                 mapa.entradas.push(index);
@@ -2126,14 +2181,24 @@
         if (horariosLimpos.length === 3) {
             const entradaManha = horariosLimpos[0];
             const saidaAlmoco = horariosLimpos[1];
-            const saidaFimDia = horariosLimpos[2];
-            const voltaAlmoco = formatarMinutosParaHorario(parseTime(saidaAlmoco) + 60);
+            const terceiraBatida = horariosLimpos[2];
+            const intervaloAteTerceira = parseTime(terceiraBatida) - parseTime(saidaAlmoco);
 
-            if (parseTime(saidaAlmoco) > parseTime(entradaManha) && parseTime(saidaFimDia) > parseTime(voltaAlmoco)) {
-                pares.push({ entrada: entradaManha, saida: saidaAlmoco });
-                pares.push({ entrada: voltaAlmoco, saida: saidaFimDia, automatico: true, motivo: 'Volta do almoço preenchida automaticamente com 1 hora de intervalo.' });
-                ajustes.push(`Volta do almoço preenchida automaticamente: ${voltaAlmoco}.`);
-                return { batidas: horariosLimpos, pares, pendencias: [], ajustes };
+            // Quando a terceira batida ocorre bem depois do almoço, ela representa
+            // a saída final. Nesse caso, somente a volta do almoço está faltando.
+            if (intervaloAteTerceira >= 180) {
+                const voltaAlmoco = formatarMinutosParaHorario(parseTime(saidaAlmoco) + 60);
+                if (parseTime(saidaAlmoco) > parseTime(entradaManha) && parseTime(terceiraBatida) > parseTime(voltaAlmoco)) {
+                    pares.push({ entrada: entradaManha, saida: saidaAlmoco });
+                    pares.push({
+                        entrada: voltaAlmoco,
+                        saida: terceiraBatida,
+                        automatico: true,
+                        motivo: 'Volta do almoço preenchida automaticamente com 1 hora de intervalo.'
+                    });
+                    ajustes.push(`Volta do almoço preenchida automaticamente: ${voltaAlmoco}.`);
+                    return { batidas: horariosLimpos, pares, pendencias: [], ajustes };
+                }
             }
         }
 
@@ -2221,6 +2286,20 @@
         let cabecalhoAtual = null;
 
         extrairRegistrosFormatoCalendario(linhas, registros, avisos, semBatidas);
+
+        // A aba em formato calendário contém as batidas originais e completas.
+        // As abas de detalhes/anomalias são resumos e podem omitir uma batida,
+        // fazendo uma pendência parecer um período completo. Só usamos esses
+        // formatos como alternativa quando o calendário não estiver disponível.
+        if (registros.size || semBatidas.length) {
+            return { registros: Array.from(registros.values()), avisos, semBatidas };
+        }
+
+        extrairRegistrosFormatoDetalhes(linhas, registros, avisos);
+
+        if (registros.size) {
+            return { registros: Array.from(registros.values()), avisos, semBatidas };
+        }
 
         linhas.forEach((linhaOriginal, indice) => {
             const linha = Array.isArray(linhaOriginal) ? linhaOriginal : [];
@@ -2394,6 +2473,82 @@
             });
             if (!encontrouBatidaFuncionario && !semBatidas.includes(funcionario)) {
                 semBatidas.push(funcionario);
+            }
+        }
+    }
+
+    function extrairDataCurtaDoPeriodo(valor, periodo) {
+        const texto = String(valor ?? '').trim();
+        const match = texto.match(/^(\d{1,2})[-/.](\d{1,2})$/);
+        if (!match || !periodo) return parseDataPlanilha(texto);
+
+        const mes = String(match[1]).padStart(2, '0');
+        const dia = String(match[2]).padStart(2, '0');
+        let ano = periodo.ano;
+        let data = `${ano}-${mes}-${dia}`;
+
+        if (data < periodo.inicio) {
+            ano = String(Number(ano) + 1);
+            data = `${ano}-${mes}-${dia}`;
+        } else if (data > periodo.fim) {
+            ano = String(Number(ano) - 1);
+            data = `${ano}-${mes}-${dia}`;
+        }
+
+        return data >= periodo.inicio && data <= periodo.fim ? data : '';
+    }
+
+    function extrairRegistrosFormatoDetalhes(linhas, registros, avisos) {
+        const periodo = obterPeriodoPlanilha(linhas);
+        if (!periodo) return;
+
+        let funcionario = '';
+        for (let i = 0; i < linhas.length; i++) {
+            const linha = Array.isArray(linhas[i]) ? linhas[i] : [];
+            const valores = linha.map((celula) => String(celula ?? '').trim());
+            const textoLinha = valores.join(' ');
+            const nomeNaLinha = textoLinha.match(/\bnome\s*:\s*([^|]+?)(?=\s+(?:dept|departamento|programa|data)\s*:|$)/i);
+            if (nomeNaLinha && pareceNomeFuncionario(nomeNaLinha[1])) {
+                funcionario = nomeNaLinha[1].trim();
+            }
+
+            const iniciosBlocos = [];
+            valores.forEach((valor, coluna) => {
+                if (normalizarTexto(valor) === 'data') iniciosBlocos.push(coluna);
+            });
+            if (iniciosBlocos.length < 2 || !funcionario) continue;
+
+            for (let linhaDados = i + 1; linhaDados < linhas.length; linhaDados++) {
+                const valoresDados = Array.isArray(linhas[linhaDados]) ? linhas[linhaDados] : [];
+                let encontrouData = false;
+
+                iniciosBlocos.forEach((inicio) => {
+                    const data = extrairDataCurtaDoPeriodo(valoresDados[inicio], periodo);
+                    if (!data) return;
+                    encontrouData = true;
+
+                    const horarios = [];
+                    for (let coluna = inicio + 2; coluna < Math.min(inicio + 8, valoresDados.length); coluna++) {
+                        horarios.push(...parseHorariosPlanilha(valoresDados[coluna]));
+                    }
+                    const analise = analisarBatidasPlanilha(horarios);
+                    if (!analise.pares.length && !analise.pendencias.length) return;
+
+                    agruparRegistro(registros, {
+                        funcionario: getCanonicalName(funcionario),
+                        data,
+                        horarios: ordenarParesHorarios(analise.pares),
+                        origemLinhas: [linhaDados + 1],
+                        origem: 'detalhes',
+                        ajustes: analise.ajustes,
+                        pendencias: analise.pendencias,
+                        aviso: analise.pendencias.length
+                            ? `Linha ${linhaDados + 1}: existe batida sem par. Confira antes de fechar o banco de horas.`
+                            : ''
+                    }, avisos);
+                });
+
+                if (!encontrouData && linhaDados > i + 1) break;
             }
         }
     }
@@ -3066,6 +3221,7 @@
         });
 
         funcionariosMeta.forEach(registrarFuncionarioMetaComoAlias);
+        registrarAliasesPorPrimeiroNomeUnico();
 
         const nomesCanonicossParaDatalist = Array.from(new Set(canonicalNamesMap.values()))
             .sort((a, b) => a.localeCompare(b, "pt-BR"));
@@ -3177,6 +3333,8 @@
             for (const mesAno of mesesOrdenados) {
                 const grupoMes = grupoFuncionario.gruposPorMes[mesAno];
                 const contentId = `content-mes-${funcionario.replace(/\s/g, '_')}-${mesAno.replace('/', '-')}`;
+                const funcionarioCodificado = encodeURIComponent(funcionario).replace(/'/g, '%27');
+                const mesAnoCodificado = encodeURIComponent(mesAno).replace(/'/g, '%27');
                 
                 let semanasHTML = '';
                 const semanasOrdenadas = Object.keys(grupoMes.gruposPorSemana).sort(); 
@@ -3224,9 +3382,16 @@
                     <div class="agrupamento-mes">
                         <h3 class="mes-header" onclick="window.toggleVisibility('${contentId}', this)">
                             <i class="fas fa-folder"></i> Mês de ${mesAno}
-                            <span class="total-mes-header">
-                                ${formatarMinutosParaHora(grupoMes.totalMinutosMes)}
-                                <i class="fas fa-chevron-right"></i>
+                            <span class="acoes-pasta">
+                                <span class="total-mes-header">
+                                    ${formatarMinutosParaHora(grupoMes.totalMinutosMes)}
+                                    <i class="fas fa-chevron-right"></i>
+                                </span>
+                                <button type="button" class="btn-excluir-pasta"
+                                        title="Apagar todos os registros deste mês"
+                                        onclick="event.stopPropagation(); window.excluirPastaRegistros('mes', '${funcionarioCodificado}', '${mesAnoCodificado}')">
+                                    <i class="fas fa-trash-alt"></i> Apagar pasta
+                                </button>
                             </span>
                         </h3>
                         
@@ -3238,6 +3403,7 @@
             }
             
             const funcionarioSafeName = funcionario.replace(/'/g, "\\'"); 
+            const funcionarioCodificado = encodeURIComponent(funcionario).replace(/'/g, '%27');
             const infoInativo = obterInfoInativo(funcionario);
             const statusFuncionarioHTML = infoInativo
                 ? `<span class="status-funcionario inativo">INATIVO${infoInativo.dataAfastamento ? ` desde ${formatarDataBR(infoInativo.dataAfastamento)}` : ''}</span>`
@@ -3247,10 +3413,17 @@
                 <div class="agrupamento-funcionario">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                         <h2>${funcionario} ${statusFuncionarioHTML}</h2>
-                        <button class="btn-pdf" style="width: auto; padding: 8px 15px; margin: 0; font-size: 14px; background: #2980b9;" 
-                                onclick="window.gerarPDFSemanalPorFuncionario('${funcionarioSafeName}')">
-                            <i class="fas fa-file-pdf"></i> PDF Semanal
-                        </button>
+                        <div class="acoes-pasta">
+                            <button class="btn-pdf" style="width: auto; padding: 8px 15px; margin: 0; font-size: 14px; background: #2980b9;" 
+                                    onclick="window.gerarPDFSemanalPorFuncionario('${funcionarioSafeName}')">
+                                <i class="fas fa-file-pdf"></i> PDF Semanal
+                            </button>
+                            <button type="button" class="btn-excluir-pasta"
+                                    title="Apagar todos os registros deste funcionário"
+                                    onclick="window.excluirPastaRegistros('funcionario', '${funcionarioCodificado}')">
+                                <i class="fas fa-trash-alt"></i> Apagar pasta completa
+                            </button>
+                        </div>
                     </div>
                     ${mesesHTML} 
                 </div>
@@ -3271,6 +3444,52 @@
         } catch (e) {
             console.error("Erro ao excluir: ", e);
             alert("Erro ao excluir. Verifique a console.");
+        }
+    }
+
+    window.excluirPastaRegistros = async function(tipo, funcionarioCodificado, mesAnoCodificado = '') {
+        const funcionario = decodeURIComponent(funcionarioCodificado || '');
+        const mesAno = decodeURIComponent(mesAnoCodificado || '');
+        const registrosDaPasta = todosOsRegistros.filter((registro) => {
+            const mesmoFuncionario = normalizarTexto(registro.funcionario) === normalizarTexto(funcionario);
+            if (!mesmoFuncionario) return false;
+            return tipo !== 'mes' || formatarMesAnoBR(registro.data) === mesAno;
+        });
+
+        if (!registrosDaPasta.length) {
+            alert('Essa pasta não possui registros para apagar.');
+            return;
+        }
+
+        const descricao = tipo === 'mes'
+            ? `a pasta "${mesAno}" de ${funcionario}`
+            : `a pasta completa de ${funcionario}`;
+        const confirmacao = confirm(
+            `ATENÇÃO: apagar ${descricao}?\n\n` +
+            `${registrosDaPasta.length} registro(s) serão excluídos permanentemente.\n` +
+            `Essa ação não poderá ser desfeita.`
+        );
+        if (!confirmacao) return;
+
+        try {
+            const idsParaExcluir = Array.from(new Set(registrosDaPasta.flatMap((registro) => [
+                registro.id,
+                ...(registro.idsDuplicados || [])
+            ]).filter(Boolean)));
+
+            for (let inicio = 0; inicio < idsParaExcluir.length; inicio += 450) {
+                const lote = writeBatch(db);
+                idsParaExcluir.slice(inicio, inicio + 450).forEach((idRegistro) => {
+                    lote.delete(doc(db, 'horas', idRegistro));
+                });
+                await lote.commit();
+            }
+
+            await window.carregarTodosOsDados();
+            alert(`Pasta apagada com sucesso. ${registrosDaPasta.length} registro(s) removido(s).`);
+        } catch (e) {
+            console.error('Erro ao apagar pasta de registros:', e);
+            alert('Erro ao apagar a pasta. Nenhum novo comando de exclusão será executado.');
         }
     }
 
