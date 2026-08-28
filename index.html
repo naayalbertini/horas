@@ -1228,8 +1228,8 @@
 
     <div class="importacao-ponto">
         <h2><i class="fas fa-file-import"></i> Importar Planilha do Ponto</h2>
-        <label for="arquivoPonto">Arquivo de comparecimento (.xls, .xlsx ou .csv):</label>
-        <input type="file" id="arquivoPonto" accept=".xls,.xlsx,.csv">
+        <label for="arquivoPonto">Arquivos de comparecimento (.xls, .xlsx ou .csv):</label>
+        <input type="file" id="arquivoPonto" accept=".xls,.xlsx,.csv" multiple>
         <div class="importacao-acoes">
             <button type="button" class="btn-importar" onclick="window.prepararImportacaoPonto()">
                 <i class="fas fa-search"></i> Ler e Conferir Planilha
@@ -1238,7 +1238,7 @@
                 <i class="fas fa-cloud-upload-alt"></i> Importar Registros Conferidos
             </button>
         </div>
-        <div id="resumoImportacao">Selecione a planilha do ponto para conferir os registros antes de salvar.</div>
+        <div id="resumoImportacao">Selecione um ou mais arquivos do ponto para conferir todos os funcionários antes de salvar.</div>
         <div id="previewImportacao"></div>
     </div>
 
@@ -2124,6 +2124,7 @@
                 funcionario: registro.funcionario,
                 data: registro.data,
                 horarios: [],
+                batidasOriginais: [],
                 origemLinhas: [],
                 origens: [],
                 pendencias: [],
@@ -2132,6 +2133,13 @@
         }
 
         const existente = registros.get(chave);
+        (registro.batidasOriginais || []).forEach((batida) => {
+            if (batida && !existente.batidasOriginais.includes(batida)) {
+                existente.batidasOriginais.push(batida);
+            }
+        });
+        existente.batidasOriginais.sort((a, b) => parseTime(a) - parseTime(b));
+
         registro.horarios.forEach((horario) => {
             if (!existente.horarios.some((h) => h.entrada === horario.entrada && h.saida === horario.saida)) {
                 existente.horarios.push(horario);
@@ -2379,6 +2387,7 @@
                     funcionario: getCanonicalName(funcionario),
                     data,
                     horarios: ordenarParesHorarios(paresHorario),
+                    batidasOriginais: analiseLinha.batidas || horariosLinhaInteira,
                     origemLinhas: [indice + 1],
                     ajustes: analiseLinha.ajustes,
                     pendencias: analiseLinha.pendencias,
@@ -2431,7 +2440,12 @@
     function linhaEhCabecalhoDias(linha) {
         const valores = (Array.isArray(linha) ? linha : []).map((celula) => String(celula ?? '').trim());
         const dias = valores.filter((valor) => /^\d{1,2}$/.test(valor)).map(Number);
-        return dias.length >= 3 && dias.every((dia) => dia >= 1 && dia <= 31);
+
+        // Relatórios de comparecimento podem ser exportados para apenas 1 dia.
+        // A versão antiga exigia 3 dias ou mais e, por isso, ignorava relatórios
+        // diários como 27/08/2026. A confirmação do funcionário na linha seguinte
+        // já evita que números aleatórios sejam tratados como cabeçalho de calendário.
+        return dias.length >= 1 && dias.every((dia) => dia >= 1 && dia <= 31);
     }
 
     function extrairRegistrosFormatoCalendario(linhas, registros, avisos, semBatidas = []) {
@@ -2464,6 +2478,7 @@
                     funcionario: getCanonicalName(funcionario),
                     data,
                     horarios: ordenarParesHorarios(pares),
+                    batidasOriginais: analise.batidas || horarios,
                     origemLinhas: [i + 3],
                     origem: 'calendario',
                     ajustes: analise.ajustes,
@@ -2538,6 +2553,7 @@
                         funcionario: getCanonicalName(funcionario),
                         data,
                         horarios: ordenarParesHorarios(analise.pares),
+                        batidasOriginais: analise.batidas || horarios,
                         origemLinhas: [linhaDados + 1],
                         origem: 'detalhes',
                         ajustes: analise.ajustes,
@@ -2639,7 +2655,7 @@
                     <tr>
                         <th>Funcionario</th>
                         <th>Data</th>
-                        <th>Horarios</th>
+                        <th>Batidas / Períodos</th>
                         <th>Status</th>
                         <th>Ação</th>
                     </tr>
@@ -2654,7 +2670,7 @@
         const status = item.acao === 'criar'
             ? 'Novo'
             : item.acao === 'atualizar'
-                ? `Atualizar +${item.horariosNovos.length} horario(s)`
+                ? `Atualizar +${item.horariosNovos.length} periodo(s)`
                 : item.acao === 'pendente'
                     ? '<span class="pendencia-importacao">Pendente - falta preencher</span>'
                     : item.acao === 'preenchido'
@@ -2674,7 +2690,15 @@
             <tr class="${registro.pendencias?.length ? 'linha-pendente' : ''}">
                 <td>${escaparHTML(registro.funcionario)}</td>
                 <td>${formatarDataBR(registro.data)}</td>
-                <td>${registro.horarios.length ? escaparHTML(registro.horarios.map((h) => `${h.entrada} -> ${h.saida}`).join(', ')) : '<span class="pendencia-importacao">Sem par completo</span>'}<br><small>${registro.horarios.length} periodo(s) completo(s)${registro.origens?.includes('calendario') ? ' - formato calendario' : ''}${registro.origemLinhas?.length ? ` - linha ${escaparHTML(registro.origemLinhas.join(', '))}` : ''}</small>${ajustes}${pendencias}</td>
+                <td>
+                    ${registro.batidasOriginais?.length
+                        ? `<strong>Batidas (${registro.batidasOriginais.length}):</strong> ${escaparHTML(registro.batidasOriginais.join(' • '))}<br>`
+                        : ''}
+                    ${registro.horarios.length
+                        ? `<strong>Períodos:</strong> ${escaparHTML(registro.horarios.map((h) => `${h.entrada} -> ${h.saida}`).join(', '))}`
+                        : '<span class="pendencia-importacao">Sem par completo</span>'}
+                    <br><small>${registro.batidasOriginais?.length || 0} batida(s) original(is) / ${registro.horarios.length} período(s) completo(s)${registro.origens?.includes('calendario') ? ' - formato calendario' : ''}${registro.origemLinhas?.length ? ` - linha ${escaparHTML(registro.origemLinhas.join(', '))}` : ''}</small>${ajustes}${pendencias}
+                </td>
                 <td>${status}</td>
                 <td>${acaoLinha}</td>
             </tr>
@@ -2686,16 +2710,17 @@
         acoes.forEach((item) => {
             const nome = item.registro.funcionario || 'Sem funcionario';
             if (!resumo.has(nome)) {
-                resumo.set(nome, { dias: 0, pares: 0, pendencias: 0 });
+                resumo.set(nome, { dias: 0, pares: 0, batidas: 0, pendencias: 0 });
             }
             const atual = resumo.get(nome);
             atual.dias++;
             atual.pares += item.registro.horarios?.length || 0;
+            atual.batidas += item.registro.batidasOriginais?.length || 0;
             atual.pendencias += item.registro.pendencias?.length || 0;
         });
         semBatidas.forEach((nome) => {
             if (!resumo.has(nome)) {
-                resumo.set(nome, { dias: 0, pares: 0, pendencias: 0, zerado: true });
+                resumo.set(nome, { dias: 0, pares: 0, batidas: 0, pendencias: 0, zerado: true });
             } else {
                 resumo.get(nome).zerado = true;
             }
@@ -2705,7 +2730,7 @@
             .sort((a, b) => a[0].localeCompare(b[0], 'pt-BR'))
             .map(([nome, item]) => `
                 <span class="chip-importacao ${item.pendencias || item.zerado ? 'chip-importacao-alerta' : ''}">
-                    ${escaparHTML(nome)}: ${item.zerado ? 'hora zerada' : `${item.dias} dia(s), ${item.pares} periodo(s)`}${item.pendencias ? `, ${item.pendencias} pendencia(s)` : ''}
+                    ${escaparHTML(nome)}: ${item.zerado ? 'hora zerada' : `${item.dias} dia(s), ${item.batidas} batida(s), ${item.pares} período(s)`}${item.pendencias ? `, ${item.pendencias} pendencia(s)` : ''}
                 </span>
             `)
             .join('');
@@ -2794,6 +2819,7 @@
                         funcionario: getCanonicalName(funcionario),
                         data,
                         horarios: ordenarParesHorarios(horarios),
+                        batidasOriginais: ordenarParesHorarios(horarios).flatMap(h => [h.entrada, h.saida]),
                         pendencias: [],
                         origemLinhas: [],
                         origens: ['preenchido manualmente']
@@ -2822,7 +2848,7 @@
                     <tr>
                         <th>Funcionario</th>
                         <th>Data</th>
-                        <th>Horarios</th>
+                        <th>Batidas / Períodos</th>
                         <th>Status</th>
                         <th>Ação</th>
                     </tr>
@@ -2864,7 +2890,7 @@
 
     window.prepararImportacaoPonto = async function() {
         const input = document.getElementById('arquivoPonto');
-        const arquivo = input.files && input.files[0];
+        const arquivos = Array.from(input.files || []);
         const resumo = document.getElementById('resumoImportacao');
         const preview = document.getElementById('previewImportacao');
         const btnConfirmar = document.getElementById('btnConfirmarImportacao');
@@ -2876,8 +2902,8 @@
         btnConfirmar.disabled = true;
         preview.innerHTML = '';
 
-        if (!arquivo) {
-            resumo.innerHTML = '<span class="erro-importacao">Selecione uma planilha antes de conferir.</span>';
+        if (!arquivos.length) {
+            resumo.innerHTML = '<span class="erro-importacao">Selecione pelo menos um arquivo antes de conferir.</span>';
             return;
         }
 
@@ -2887,22 +2913,88 @@
         }
 
         try {
-            resumo.textContent = 'Lendo a planilha...';
-            const buffer = await arquivo.arrayBuffer();
-            const workbook = window.XLSX.read(buffer, { type: 'array', cellDates: true });
-            const todasAsLinhas = [];
+            resumo.textContent = `Lendo ${arquivos.length} arquivo(s)...`;
 
-            workbook.SheetNames.forEach((nomeAba) => {
-                const sheet = workbook.Sheets[nomeAba];
-                const linhas = window.XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false, defval: '' });
-                todasAsLinhas.push(...linhas);
-            });
+            const registrosCombinados = new Map();
+            const avisosCombinados = [];
+            const semBatidasSet = new Set();
+            const arquivosLidos = [];
 
-            const { registros, avisos, semBatidas } = extrairRegistrosDaPlanilha(todasAsLinhas);
-            renderizarPreviewImportacao(registros, avisos, semBatidas);
+            for (const arquivo of arquivos) {
+                const buffer = await arquivo.arrayBuffer();
+                const workbook = window.XLSX.read(buffer, { type: 'array', cellDates: true });
+
+                // Prioriza a aba "Registo de comparec.", pois ela contém as batidas
+                // originais. As abas de detalhes/anomalias podem omitir marcações.
+                const nomeAbaPrincipal = workbook.SheetNames.find((nomeAba) => {
+                    const nome = normalizarTexto(nomeAba);
+                    return nome.includes('registo de comparec') || nome.includes('registro de comparec');
+                });
+
+                let resultadoArquivo = null;
+
+                if (nomeAbaPrincipal) {
+                    const sheet = workbook.Sheets[nomeAbaPrincipal];
+                    const linhas = window.XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false, defval: '' });
+                    resultadoArquivo = extrairRegistrosDaPlanilha(linhas);
+                }
+
+                // Se a aba principal não existir ou não produzir dados, usa todas as abas
+                // como fallback para aceitar outros modelos de relógio de ponto.
+                if (!resultadoArquivo || (!resultadoArquivo.registros.length && !resultadoArquivo.semBatidas.length)) {
+                    const todasAsLinhas = [];
+                    workbook.SheetNames.forEach((nomeAba) => {
+                        const sheet = workbook.Sheets[nomeAba];
+                        const linhas = window.XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false, defval: '' });
+                        todasAsLinhas.push(...linhas);
+                    });
+                    resultadoArquivo = extrairRegistrosDaPlanilha(todasAsLinhas);
+                }
+
+                arquivosLidos.push(arquivo.name);
+                (resultadoArquivo.avisos || []).forEach((aviso) => avisosCombinados.push(`${arquivo.name}: ${aviso}`));
+                (resultadoArquivo.semBatidas || []).forEach((nome) => semBatidasSet.add(getCanonicalName(nome)));
+
+                (resultadoArquivo.registros || []).forEach((registro) => {
+                    const chave = criarChaveRegistro(registro.funcionario, registro.data);
+                    if (!registrosCombinados.has(chave)) {
+                        registrosCombinados.set(chave, {
+                            ...registro,
+                            horarios: [],
+                            origemLinhas: [],
+                            origens: [],
+                            pendencias: [],
+                            ajustes: []
+                        });
+                    }
+
+                    agruparRegistro(registrosCombinados, {
+                        ...registro,
+                        origem: registro.origem || arquivo.name
+                    }, avisosCombinados);
+                });
+            }
+
+            const registros = Array.from(registrosCombinados.values());
+            const semBatidas = Array.from(semBatidasSet);
+
+            // Remove da lista de hora zerada quem teve qualquer batida válida
+            // em um dos arquivos selecionados.
+            const nomesComRegistro = new Set(registros.map((registro) => normalizarTexto(registro.funcionario)));
+            const semBatidasFinais = semBatidas.filter((nome) => !nomesComRegistro.has(normalizarTexto(nome)));
+
+            renderizarPreviewImportacao(registros, avisosCombinados, semBatidasFinais);
+
+            const funcionariosDetectados = new Set([
+                ...registros.map((registro) => normalizarTexto(registro.funcionario)),
+                ...semBatidasFinais.map((nome) => normalizarTexto(nome))
+            ]).size;
+
+            const resumoAtual = resumo.innerHTML;
+            resumo.innerHTML = `<strong>${arquivosLidos.length}</strong> arquivo(s) lido(s) | <strong>${funcionariosDetectados}</strong> funcionário(s) detectado(s).<br>${resumoAtual}`;
         } catch (erro) {
             console.error('Erro ao ler planilha:', erro);
-            resumo.innerHTML = '<span class="erro-importacao">Erro ao ler a planilha. Tente salvar o arquivo como .xlsx e anexar novamente.</span>';
+            resumo.innerHTML = '<span class="erro-importacao">Erro ao ler a planilha. Confira o arquivo e tente novamente. Se necessario, salve como .xlsx.</span>';
         }
     }
 
