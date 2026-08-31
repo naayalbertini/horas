@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <script>document.documentElement.classList.add("ti-js-v5");</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Banco de Horas</title>
+  <title>Banco de Horas - Configurações T.I.</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://unpkg.com/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.js"></script>
 
   <style>
+    /* Evita exibir o layout legado antes do dashboard T.I. ser montado */
+    html.ti-js-v5:not(.ti-ready-v5) body { visibility: hidden; }
+
     * {
       box-sizing: border-box;
     }
@@ -700,6 +704,129 @@
         text-align: center;
       }
     }
+
+
+    /* =========================================================
+       PAINEL T.I. V4 - organização visual definitiva
+       ========================================================= */
+    body.ti-dashboard-v4 {
+      --ti-sidebar: 248px;
+      --ti-bg: #f3f6fa;
+      --ti-card: #ffffff;
+      --ti-border: #e3e8ef;
+      --ti-text: #182230;
+      --ti-muted: #667085;
+      --ti-primary: #173b6c;
+      --ti-primary-2: #24558f;
+      --ti-success: #067647;
+      --ti-warning: #b54708;
+      --ti-danger: #b42318;
+      background: var(--ti-bg);
+      color: var(--ti-text);
+      min-height: 100vh;
+    }
+    body.ti-dashboard-v4 .container {
+      width: auto;
+      max-width: none;
+      margin: 0 0 0 var(--ti-sidebar);
+      min-height: 100vh;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 30px 34px 48px;
+      background: transparent;
+    }
+    body.ti-dashboard-v4 .credito-sistema { margin-left: var(--ti-sidebar); width: calc(100% - var(--ti-sidebar)); max-width:none; }
+    .ti-sidebar-v4 {
+      position: fixed; inset: 0 auto 0 0; width: var(--ti-sidebar); z-index: 1000;
+      background: linear-gradient(180deg,#122c50 0%,#0c203c 100%);
+      color:#fff; padding:22px 14px; display:flex; flex-direction:column;
+      box-shadow: 8px 0 28px rgba(16,24,40,.10);
+    }
+    .ti-brand-v4 { padding: 6px 10px 22px; border-bottom:1px solid rgba(255,255,255,.12); margin-bottom:16px; }
+    .ti-brand-v4 .brand-row {display:flex; gap:10px; align-items:center;}
+    .ti-brand-v4 .brand-icon {width:38px;height:38px;border-radius:11px;background:#fff;color:#173b6c;display:grid;place-items:center;font-size:18px;}
+    .ti-brand-v4 strong {display:block;font-size:15px;}
+    .ti-brand-v4 small {display:block;color:#bdcbe0;margin-top:3px;font-size:11px;}
+    .ti-nav-label-v4 {font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#91a7c3;font-weight:800;padding:8px 12px;}
+    .ti-sidebar-v4 button,.ti-sidebar-v4 a {
+      width:100%;border:0;background:transparent;color:#cbd8e8;border-radius:9px;padding:10px 11px;
+      display:flex;gap:10px;align-items:center;text-align:left;text-decoration:none;font-size:13px;font-weight:650;margin:2px 0;cursor:pointer;
+    }
+    .ti-sidebar-v4 button:hover,.ti-sidebar-v4 a:hover {background:rgba(255,255,255,.08);color:#fff;transform:none;}
+    .ti-sidebar-v4 button.ativo {background:#fff;color:#173b6c;box-shadow:0 5px 16px rgba(0,0,0,.14);}
+    .ti-sidebar-v4 button i,.ti-sidebar-v4 a i {width:19px;text-align:center;}
+    .ti-nav-bottom-v4 {margin-top:auto;border-top:1px solid rgba(255,255,255,.12);padding-top:12px;}
+    body.ti-dashboard-v4 .topo {background:transparent;border:0;margin:0 0 22px;padding:0;align-items:flex-start;}
+    body.ti-dashboard-v4 .topo h1 {color:#101828;font-size:26px;letter-spacing:-.025em;line-height:1.15;}
+    body.ti-dashboard-v4 .topo-acoes {display:none!important;}
+    .ti-page-subtitle-v4 {display:block;color:var(--ti-muted);font-size:13px;margin-top:6px;font-weight:500;}
+    .ti-page-status-v4 {display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px;}
+    .ti-status-pill-v4 {display:inline-flex;gap:6px;align-items:center;border:1px solid #d0d5dd;background:#fff;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700;color:#475467;}
+    .ti-page-v4 {display:none;}
+    .ti-page-v4.ativo {display:block;}
+    body.ti-dashboard-v4 .filtros,
+    body.ti-dashboard-v4 .funcionario-card,
+    body.ti-dashboard-v4 .departamento-card,
+    body.ti-dashboard-v4 .gestao-painel,
+    .ti-panel-v4 {
+      background:#fff;border:1px solid var(--ti-border);border-radius:12px;box-shadow:0 2px 8px rgba(16,24,40,.035);
+    }
+    body.ti-dashboard-v4 .filtros {padding:16px;gap:12px;margin-bottom:16px;background:#fff;}
+    body.ti-dashboard-v4 label {font-size:12px;color:#344054;margin-bottom:5px;}
+    body.ti-dashboard-v4 input,body.ti-dashboard-v4 select {border-color:#d0d5dd;border-radius:8px;padding:9px 10px;font-size:13px;min-height:38px;}
+    body.ti-dashboard-v4 button,body.ti-dashboard-v4 .btn-link {border-radius:8px;padding:9px 13px;font-size:13px;}
+    body.ti-dashboard-v4 .resumo-geral {grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px;}
+    body.ti-dashboard-v4 .card-resumo {background:#fff;border:1px solid var(--ti-border);border-radius:11px;padding:15px;box-shadow:none;}
+    body.ti-dashboard-v4 .card-resumo h3 {font-size:11px;color:#667085;text-transform:uppercase;letter-spacing:.04em;}
+    body.ti-dashboard-v4 .card-resumo p {font-size:22px;color:#101828;letter-spacing:-.02em;}
+    .ti-section-heading-v4 {display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin:2px 0 13px;}
+    .ti-section-heading-v4 h2 {margin:0;font-size:17px;color:#101828;letter-spacing:-.01em;}
+    .ti-section-heading-v4 p {margin:4px 0 0;font-size:12px;color:#667085;}
+    .ti-kpi-row-v4 {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:15px;}
+    .ti-mini-kpi-v4 {background:#fff;border:1px solid var(--ti-border);border-radius:10px;padding:13px;}
+    .ti-mini-kpi-v4 small {display:block;color:#667085;font-size:11px;margin-bottom:5px;}
+    .ti-mini-kpi-v4 strong {font-size:20px;color:#101828;}
+    .ti-team-list-v4 {background:#fff;border:1px solid var(--ti-border);border-radius:12px;overflow:hidden;}
+    .ti-team-row-v4 {display:grid;grid-template-columns:minmax(220px,1.6fr) minmax(150px,.9fr) repeat(4,minmax(110px,.65fr));align-items:center;gap:10px;padding:12px 15px;border-bottom:1px solid #eef1f5;font-size:12px;}
+    .ti-team-row-v4:last-child{border-bottom:0}.ti-team-row-v4.header{background:#f8fafc;color:#667085;font-size:10px;text-transform:uppercase;font-weight:800;letter-spacing:.04em;}
+    .ti-team-name-v4 strong {display:block;color:#101828;font-size:13px;margin-bottom:4px;}.ti-team-name-v4 small{color:#667085;}
+    .ti-inst-badge {display:inline-flex;align-items:center;border-radius:999px;padding:2px 6px;font-size:9px;font-weight:800;letter-spacing:.03em;vertical-align:middle;margin-left:5px;}
+    .ti-inst-badge.gaudi{background:#eff6ff;color:#175cd3;border:1px solid #b2ddff}.ti-inst-badge.tracos{background:#fff6ed;color:#b54708;border:1px solid #fedf89}.ti-inst-badge.sem{background:#f2f4f7;color:#667085;border:1px solid #eaecf0}
+    .ti-saldo-pill-v4 {display:inline-flex;border-radius:999px;padding:5px 8px;font-weight:800;font-size:11px;white-space:nowrap;}
+    .ti-saldo-pill-v4.pos{background:#ecfdf3;color:#067647}.ti-saldo-pill-v4.neg{background:#fef3f2;color:#b42318}.ti-saldo-pill-v4.zero{background:#f2f4f7;color:#475467}
+    .ti-toolbar-v4 {display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;}
+    .ti-toolbar-v4 button {background:#f2f4f7;color:#344054;border:1px solid #e4e7ec;}.ti-toolbar-v4 button.ativo{background:#173b6c;color:#fff;border-color:#173b6c;}
+    .ti-func-summary-v4 {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:13px;}
+    .ti-func-summary-v4 > div {background:#fff;border:1px solid var(--ti-border);border-radius:10px;padding:12px;}.ti-func-summary-v4 small{display:block;color:#667085;font-size:10px}.ti-func-summary-v4 strong{display:block;font-size:18px;margin-top:4px;color:#101828}
+    .ti-alert-dept-v4 {border:1px solid #fedf89;background:#fffaeb;border-radius:10px;padding:11px 13px;color:#93370d;margin:10px 0;font-size:12px;font-weight:700;display:flex;gap:8px;align-items:flex-start;}
+    .ti-alert-dept-v4.ok {border-color:#abefc6;background:#ecfdf3;color:#067647;}
+    body.ti-dashboard-v4 .departamento-header {background:#f8fafc;padding:14px 16px;border-bottom-color:#e4e7ec;}
+    body.ti-dashboard-v4 .departamento-header h2{font-size:15px;color:#101828;}
+    body.ti-dashboard-v4 .departamento-resumo{font-size:11px;gap:9px;}
+    body.ti-dashboard-v4 .funcionario-header {background:#f9fafb;padding:13px 15px;}
+    body.ti-dashboard-v4 .funcionario-header h2{font-size:14px;color:#101828;}
+    body.ti-dashboard-v4 .mes-card{border-radius:9px;margin-top:9px;border-color:#e4e7ec;}
+    body.ti-dashboard-v4 .mes-header{background:#f8fafc;color:#344054;padding:10px 12px;font-size:12px;}
+    body.ti-dashboard-v4 .mes-conteudo{padding:10px;}
+    body.ti-dashboard-v4 .tabela-wrapper{border-radius:10px;border-color:#e4e7ec;}
+    body.ti-dashboard-v4 table{min-width:760px;} body.ti-dashboard-v4 th{background:#173b6c;font-size:10px;text-transform:uppercase;letter-spacing:.025em;padding:10px;} body.ti-dashboard-v4 td{font-size:11px;padding:10px;}
+    .ti-page-v4 .pagina-departamentos,.ti-page-v4 .pagina-gestao,.ti-page-v4 .pagina-tratativas{display:block!important;margin:0!important;}
+    body.ti-dashboard-v4.visualizando-departamentos .container > :not(.topo):not(.pagina-departamentos),
+    body.ti-dashboard-v4.visualizando-gestao .container > :not(.topo):not(.pagina-gestao),
+    body.ti-dashboard-v4.visualizando-tratativas .container > :not(.topo):not(.pagina-tratativas){display:initial!important;}
+    #tiPageDepartamentos .pagina-departamentos > .departamento-card {display:none!important;}
+    #tiPageDepartamentos #listaDatasEspeciais,#tiPageDepartamentos #listaAjustesHoras{display:none!important;}
+    #tiPageGestao .pagina-gestao{background:transparent;border:0;padding:0;grid-template-columns:repeat(3,minmax(0,1fr));}
+    #tiPageGestao .tratativas-cabecalho{grid-column:1/-1;background:#fff;border:1px solid var(--ti-border);border-radius:11px;padding:14px;}
+    #tiPageGestao .gestao-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
+    #tiPageGestao .gestao-card{border-radius:10px;padding:12px;box-shadow:none;}.gestao-card strong{font-size:18px!important;}
+    #tiPageGestao .gestao-layout{grid-template-columns:minmax(300px,.8fr) minmax(420px,1.2fr);gap:13px;}
+    .ti-payment-summary-v4 {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 14px;}
+    .ti-payment-summary-v4 .box{border:1px solid var(--ti-border);background:#fff;border-radius:10px;padding:13px;}.ti-payment-summary-v4 small{display:block;color:#667085;font-size:10px}.ti-payment-summary-v4 strong{display:block;margin-top:5px;font-size:18px;}
+    .ti-month-status-v4 {font-size:10px;font-weight:800;border-radius:999px;padding:4px 7px;}.ti-month-status-v4.quit{background:#ecfdf3;color:#067647}.ti-month-status-v4.pending{background:#fffaeb;color:#b54708}
+    @media(max-width:1050px){body.ti-dashboard-v4{--ti-sidebar:210px}.ti-team-row-v4{grid-template-columns:minmax(190px,1.5fr) minmax(130px,.8fr) repeat(2,minmax(100px,.6fr));}.ti-team-row-v4 > :nth-child(5),.ti-team-row-v4 > :nth-child(6){display:none}.ti-func-summary-v4,.ti-kpi-row-v4{grid-template-columns:repeat(2,1fr)}#tiPageGestao .gestao-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){body.ti-dashboard-v4{--ti-sidebar:0}.ti-sidebar-v4{position:sticky;top:0;width:100%;height:auto;flex-direction:row;overflow-x:auto;padding:8px;}.ti-brand-v4,.ti-nav-label-v4,.ti-nav-bottom-v4{display:none}.ti-sidebar-v4 button{width:auto;white-space:nowrap}.ti-sidebar-v4 button span{display:inline}.ti-sidebar-v4 button i{width:auto}body.ti-dashboard-v4 .container{margin-left:0;padding:18px 14px}.ti-team-row-v4{grid-template-columns:1fr auto}.ti-team-row-v4.header{display:none}.ti-team-row-v4 > :not(:first-child):not(:last-child){display:none}.ti-func-summary-v4,.ti-kpi-row-v4,body.ti-dashboard-v4 .resumo-geral,.ti-payment-summary-v4,#tiPageGestao .gestao-grid{grid-template-columns:1fr 1fr}#tiPageGestao .gestao-layout{grid-template-columns:1fr}.ti-page-subtitle-v4{font-size:12px}}
+
   </style>
 </head>
 <body>
@@ -906,24 +1033,25 @@
 
     <div class="filtros admin-only">
       <div style="grid-column: 1 / -1;">
-        <h2 style="margin:0; color:#1f3a93; font-size:1.15rem;"><i class="fas fa-minus-circle"></i> Ajuste manual / abono com saldo anterior</h2>
-        <small style="color:#5f6b7a;">Use para descontar, acrescentar crédito ou abonar horas faltadas usando saldo anterior, sem apagar o ponto original.</small>
+        <h2 style="margin:0; color:#1f3a93; font-size:1.15rem;"><i class="fas fa-money-check-dollar"></i> Pagamento e ajuste de horas</h2>
+        <small style="color:#5f6b7a;">Registre horas extras pagas para abatê-las diretamente no saldo do mês de referência, sem apagar o ponto original.</small>
       </div>
 
       <div>
         <label for="ajusteFuncionario">Funcionário</label>
-        <input type="text" id="ajusteFuncionario" placeholder="Nome igual ao registro de ponto">
+        <input type="text" id="ajusteFuncionario" list="listaFuncionariosAtestado" placeholder="Digite e selecione o funcionário">
       </div>
 
       <div>
-        <label for="ajusteData">Data do desconto/ajuste</label>
+        <label for="ajusteData">Data do pagamento / ocorrência</label>
         <input type="date" id="ajusteData">
       </div>
 
       <div>
         <label for="ajusteTipo">Tipo de ajuste</label>
         <select id="ajusteTipo">
-          <option value="desconto_extra" selected>Descontar do banco de horas</option>
+          <option value="horas_pagas" selected>Horas extras pagas</option>
+          <option value="desconto_extra">Outro desconto do banco</option>
           <option value="folga_descontar">Folga a descontar em mês escolhido</option>
           <option value="acrescimo_extra">Adicionar crédito manual</option>
           <option value="abono_saldo_anterior">Abonar falta com saldo anterior/2025</option>
@@ -931,23 +1059,23 @@
       </div>
 
       <div>
-        <label for="ajusteHoras">Quantidade de horas</label>
+        <label for="ajusteHoras">Horas a pagar/ajustar</label>
         <input type="number" id="ajusteHoras" placeholder="Ex: 2 ou 1.5" min="0" step="0.25">
       </div>
 
       <div id="campoMesDescontoFolga" class="campo-oculto">
-        <label for="ajusteMesDesconto">Mês em que vai descontar</label>
+        <label for="ajusteMesDesconto" id="labelAjusteMesDesconto">Mês de referência</label>
         <input type="month" id="ajusteMesDesconto">
       </div>
 
       <div style="grid-column: span 2;">
         <label for="ajusteDescricao">Descrição / Motivo</label>
-        <input type="text" id="ajusteDescricao" placeholder="Ex: Faltou pela manhã com autorização da direção; descontar do saldo de 2025">
+        <input type="text" id="ajusteDescricao" placeholder="Ex: Pagamento realizado na folha deste mês">
       </div>
 
       <div style="display:flex; align-items:end;">
-        <button onclick="salvarAjusteHoras()" style="width:100%; background:#8e44ad;">
-          <i class="fas fa-save"></i> Salvar Ajuste
+        <button id="btnSalvarAjusteHoras" onclick="salvarAjusteHoras()" style="width:100%; background:#15803d;">
+          <i class="fas fa-money-check-dollar"></i> Registrar pagamento
         </button>
       </div>
     </div>
@@ -1579,6 +1707,30 @@
       return `${nomesMeses[Number(mes) - 1]}/${ano}`;
     }
 
+    function obterDataReferenciaAjuste(ajuste) {
+      const referencia = String(ajuste?.mesReferencia || "").trim();
+      if (/^\d{4}-\d{2}$/.test(referencia)) return `${referencia}-01`;
+      return ajuste?.data || "";
+    }
+
+    function obterChaveOrdenacaoMesAno(mesAno) {
+      if (!mesAno || mesAno === "Sem período") return "0000-00";
+      const [nomeMes, ano] = String(mesAno).split("/");
+      const indice = nomesMeses.indexOf(nomeMes);
+      return `${ano || "0000"}-${String(indice + 1).padStart(2, "0")}`;
+    }
+
+    function obterEmpresaCodigoFuncionario(nome) {
+      return obterPerfilFuncionario(nome)?.empresa || "";
+    }
+
+    function renderizarInstituicaoBadgeTI(nome) {
+      const empresa = obterEmpresaCodigoFuncionario(nome);
+      if (empresa === "gaudi") return '<span class="ti-inst-badge gaudi">GAUDÍ</span>';
+      if (empresa === "tracos") return '<span class="ti-inst-badge tracos">TRAÇOS</span>';
+      return '<span class="ti-inst-badge sem">INSTITUIÇÃO NÃO DEFINIDA</span>';
+    }
+
     function formatarTipoEspecial(tipo) {
       if (tipo === "facultativo") return "Facultativo";
       if (tipo === "folga_empresa") return "Folga da empresa";
@@ -2045,7 +2197,9 @@
               tipo: item.tipo || "desconto_extra",
               minutos: Number(item.minutos || 0),
               descricao: item.descricao || "",
-              criadoEm: item.criadoEm || new Date().toISOString()
+              criadoEm: item.criadoEm || new Date().toISOString(),
+              dataPagamento: item.dataPagamento || "",
+              mesReferencia: item.mesReferencia || ""
             }));
           } catch (error) {
             console.warn("Nao foi possivel mesclar ajustes no Firebase.", error);
@@ -2348,13 +2502,20 @@
 
     async function buscarAjustesHoras() {
       ajustesHoras = [];
+      const chavesCarregadas = new Set();
+
+      const adicionarAjusteCarregado = (item) => {
+        const chave = `${normalizarNomeBusca(item.funcionario)}|${item.data || ""}|${item.tipo || ""}|${Number(item.minutos || 0)}|${item.criadoEm || item.id || ""}`;
+        if (chavesCarregadas.has(chave)) return;
+        chavesCarregadas.add(chave);
+        ajustesHoras.push(item);
+      };
 
       try {
         const snapshot = await getDocs(collection(db, "ajustesHoras"));
-
         snapshot.forEach((docItem) => {
           const d = docItem.data();
-          ajustesHoras.push({
+          adicionarAjusteCarregado({
             id: docItem.id,
             origem: "firebase",
             funcionario: d.funcionario || "Sem nome",
@@ -2362,15 +2523,41 @@
             tipo: d.tipo || "desconto_extra",
             minutos: Number(d.minutos || 0),
             descricao: d.descricao || "",
-            criadoEm: d.criadoEm || ""
+            criadoEm: d.criadoEm || "",
+            dataPagamento: d.dataPagamento || "",
+            mesReferencia: d.mesReferencia || ""
           });
         });
       } catch (error) {
-        console.warn("Não foi possível carregar ajustes do Firebase. Usando ajustes locais.", error);
+        console.warn("Não foi possível carregar ajustes da coleção ajustesHoras.", error);
+      }
+
+      // Fallback compartilhado: alguns projetos têm permissão apenas na coleção horas.
+      // Lançamentos com ajusteManual=true ficam fora do ponto normal e são lidos aqui como ajustes.
+      try {
+        const snapshotHoras = await getDocs(collection(db, "horas"));
+        snapshotHoras.forEach((docItem) => {
+          const d = docItem.data();
+          if (d.ajusteManual !== true) return;
+          adicionarAjusteCarregado({
+            id: docItem.id,
+            origem: "firebase_horas",
+            funcionario: d.funcionario || "Sem nome",
+            data: d.data || "",
+            tipo: d.tipo || "desconto_extra",
+            minutos: Number(d.minutos || 0),
+            descricao: d.descricao || "",
+            criadoEm: d.criadoEm || "",
+            dataPagamento: d.dataPagamento || "",
+            mesReferencia: d.mesReferencia || ""
+          });
+        });
+      } catch (error) {
+        console.warn("Não foi possível carregar ajustes manuais da coleção horas.", error);
       }
 
       const locais = carregarAjustesLocais().map(item => ({ ...item, origem: "local" }));
-      ajustesHoras = ajustesHoras.concat(locais);
+      locais.forEach(adicionarAjusteCarregado);
       renderizarAjustesHoras();
       renderizarAtestadosMedicos();
     }
@@ -2390,8 +2577,9 @@
         let mesOk = true;
         let anoOk = true;
 
-        if (ajuste.data) {
-          const [ano, mes] = ajuste.data.split("-");
+        const dataReferenciaAjuste = obterDataReferenciaAjuste(ajuste);
+        if (dataReferenciaAjuste) {
+          const [ano, mes] = dataReferenciaAjuste.split("-");
           if (mesFiltro) mesOk = mes === mesFiltro;
           if (anoFiltro) anoOk = ano === anoFiltro;
         }
@@ -2945,12 +3133,14 @@
           }
 
           totalAjustes += obterMinutosAjuste(ajuste);
-          const chaveMes = obterMesAno(ajuste.data);
+          const dataReferenciaAjuste = obterDataReferenciaAjuste(ajuste);
+          const chaveMes = obterMesAno(dataReferenciaAjuste);
           if (!registrosPorMes[chaveMes]) registrosPorMes[chaveMes] = [];
           registrosPorMes[chaveMes].push({
             id: ajuste.id,
-            data: ajuste.data,
-            horariosTexto: "Ajuste manual",
+            data: dataReferenciaAjuste,
+            horariosTexto: ajuste.tipo === "horas_pagas" ? "Pagamento de horas extras" : "Ajuste manual",
+            tipoAjuste: ajuste.tipo,
             duracaoMinutos: 0,
             previstoDia: 0,
             saldoDia: obterMinutosAjuste(ajuste),
@@ -2972,11 +3162,18 @@
           totalAjustes,
           saldoFinal,
           meses: Object.keys(registrosPorMes)
-            .sort((a, b) => a.localeCompare(b, "pt-BR"))
-            .map(mesAno => ({
-              mesAno,
-              registros: registrosPorMes[mesAno]
-            }))
+            .sort((a, b) => obterChaveOrdenacaoMesAno(b).localeCompare(obterChaveOrdenacaoMesAno(a)))
+            .map(mesAno => {
+              const registrosMes = registrosPorMes[mesAno];
+              return {
+                mesAno,
+                registros: registrosMes,
+                horasPagas: registrosMes
+                  .filter(registro => registro.tipoAjuste === "horas_pagas")
+                  .reduce((total, registro) => total + Math.abs(Number(registro.saldoDia || 0)), 0),
+                saldoMes: registrosMes.reduce((total, registro) => total + Number(registro.saldoDia || 0), 0)
+              };
+            })
         });
       });
 
@@ -3009,7 +3206,11 @@
           <div class="mes-card">
             <div class="mes-header" onclick="toggleMes('${contentId}')">
               <span><i class="fas fa-folder"></i> ${mes.mesAno}</span>
-              <span><i class="fas fa-chevron-down"></i></span>
+              <span style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
+                ${mes.horasPagas > 0 ? `<strong class="negativo"><i class="fas fa-money-check-dollar"></i> Pagas: ${formatarMinutosParaHora(mes.horasPagas)}</strong>` : ""}
+                <strong class="${obterClasseSaldo(mes.saldoMes)}">Saldo: ${formatarMinutosParaHora(mes.saldoMes)}</strong>
+                <i class="fas fa-chevron-down"></i>
+              </span>
             </div>
             <div class="mes-conteudo" id="${contentId}">
               <div class="tabela-wrapper">
@@ -3035,7 +3236,7 @@
       return `
         <div class="funcionario-card">
           <div class="funcionario-header">
-            <h2><i class="fas fa-user"></i> ${item.funcionario}<br><small style="color:#5f6b7a; font-size:13px;">${item.departamento || "Sem departamento"}</small><br>${renderizarStatusFuncionario(item.funcionario)}</h2>
+            <h2><i class="fas fa-user"></i> ${item.funcionario}<br><small style="color:#5f6b7a; font-size:13px;">${item.departamento || "Sem departamento"} ${renderizarInstituicaoBadgeTI(item.funcionario)}</small><br>${renderizarStatusFuncionario(item.funcionario)}</h2>
             <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
               <strong>Saldo:</strong>
               <span class="${obterClasseSaldo(item.saldoFinal)}">${formatarMinutosParaHora(item.saldoFinal)}</span>
@@ -3157,7 +3358,11 @@
             <div class="mes-card">
               <div class="mes-header" onclick="toggleMes('${contentId}')">
                 <span><i class="fas fa-folder"></i> ${mes.mesAno}</span>
-                <span><i class="fas fa-chevron-down"></i></span>
+                <span style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
+                  ${mes.horasPagas > 0 ? `<strong class="negativo"><i class="fas fa-money-check-dollar"></i> Pagas: ${formatarMinutosParaHora(mes.horasPagas)}</strong>` : ""}
+                  <strong class="${obterClasseSaldo(mes.saldoMes)}">Saldo: ${formatarMinutosParaHora(mes.saldoMes)}</strong>
+                  <i class="fas fa-chevron-down"></i>
+                </span>
               </div>
               <div class="mes-conteudo" id="${contentId}">
                 <div class="tabela-wrapper">
@@ -3185,7 +3390,7 @@
         return `
           <div class="funcionario-card">
             <div class="funcionario-header">
-              <h2><i class="fas fa-user"></i> ${item.funcionario}<br><small style="color:#5f6b7a; font-size:13px;">${item.departamento || "Sem departamento"}</small></h2>
+              <h2><i class="fas fa-user"></i> ${item.funcionario}<br><small style="color:#5f6b7a; font-size:13px;">${item.departamento || "Sem departamento"} ${renderizarInstituicaoBadgeTI(item.funcionario)}</small></h2>
               <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
                 <strong>Saldo:</strong>
                 <span class="${obterClasseSaldo(item.saldoFinal)}">${formatarMinutosParaHora(item.saldoFinal)}</span>
@@ -3356,20 +3561,25 @@
     };
 
     window.salvarAjusteHoras = async function() {
-      const funcionario = document.getElementById("ajusteFuncionario").value.trim();
+      const funcionarioDigitado = document.getElementById("ajusteFuncionario").value.trim();
+      const funcionario = resolverNomeFuncionarioSistema(funcionarioDigitado);
       const dataOriginalFolga = document.getElementById("ajusteData").value;
       const tipo = document.getElementById("ajusteTipo").value;
       const mesDesconto = document.getElementById("ajusteMesDesconto")?.value || "";
-      const data = tipo === "folga_descontar" && mesDesconto ? `${mesDesconto}-01` : dataOriginalFolga;
+      const usaMesReferencia = tipo === "folga_descontar" || tipo === "horas_pagas";
+      const data = usaMesReferencia && mesDesconto ? `${mesDesconto}-01` : dataOriginalFolga;
       const horasInformadas = document.getElementById("ajusteHoras").value;
       const descricaoDigitada = document.getElementById("ajusteDescricao").value.trim();
+      const mesReferenciaTexto = mesDesconto.split("-").reverse().join("/");
       const descricao = tipo === "folga_descontar"
-        ? `Folga de ${formatarDataBR(dataOriginalFolga)} descontada em ${mesDesconto.split("-").reverse().join("/")}${descricaoDigitada ? " - " + descricaoDigitada : ""}`
-        : descricaoDigitada;
+        ? `Folga de ${formatarDataBR(dataOriginalFolga)} descontada em ${mesReferenciaTexto}${descricaoDigitada ? " - " + descricaoDigitada : ""}`
+        : tipo === "horas_pagas"
+          ? `Pagamento realizado em ${formatarDataBR(dataOriginalFolga)} - referência ${mesReferenciaTexto}${descricaoDigitada ? " - " + descricaoDigitada : ""}`
+          : descricaoDigitada;
 
-      if (!funcionario) { alert("Informe o nome do funcionário."); return; }
-      if (!dataOriginalFolga) { alert("Informe a data da folga/ajuste."); return; }
-      if (tipo === "folga_descontar" && !mesDesconto) { alert("Informe em qual mês a folga será descontada."); return; }
+      if (!funcionarioDigitado) { alert("Informe o nome do funcionário."); return; }
+      if (!dataOriginalFolga) { alert(tipo === "horas_pagas" ? "Informe a data do pagamento." : "Informe a data da folga/ajuste."); return; }
+      if (usaMesReferencia && !mesDesconto) { alert("Informe o mês em que as horas devem ser descontadas."); return; }
       if (horasInformadas === "") { alert("Informe a quantidade de horas."); return; }
       const [anoAjuste, mesAjuste] = data.split("-");
       if (mesEstaFechado(anoAjuste, mesAjuste) && !confirm(`O mês ${mesAjuste}/${anoAjuste} está fechado. Deseja lançar este ajuste mesmo assim?`)) {
@@ -3385,28 +3595,41 @@
         tipo,
         minutos: Math.round(horas * 60),
         descricao,
-        criadoEm: new Date().toISOString()
+        criadoEm: new Date().toISOString(),
+        dataPagamento: tipo === "horas_pagas" ? dataOriginalFolga : "",
+        mesReferencia: usaMesReferencia ? mesDesconto : ""
       };
 
+      let salvoOnline = false;
       try {
         await addDoc(collection(db, "ajustesHoras"), dadosAjuste);
-        alert("Ajuste salvo com sucesso!");
+        salvoOnline = true;
       } catch (error) {
-        console.error("Erro ao salvar ajuste no Firebase:", error);
+        console.warn("A coleção ajustesHoras foi bloqueada. Tentando fallback compartilhado na coleção horas.", error);
+        try {
+          await addDoc(collection(db, "horas"), {
+            ...dadosAjuste,
+            ajusteManual: true,
+            horarios: []
+          });
+          salvoOnline = true;
+        } catch (fallbackError) {
+          console.error("Também não foi possível salvar o ajuste na coleção horas:", fallbackError);
+        }
+      }
 
+      if (salvoOnline) {
+        alert(tipo === "horas_pagas" ? `Pagamento registrado no Firebase, descontado do saldo de ${mesReferenciaTexto} e disponibilizado para a Chefia/PDF mensal.` : "Ajuste salvo com sucesso!");
+      } else {
         const locais = carregarAjustesLocais();
-        locais.push({
-          id: `local_${Date.now()}`,
-          ...dadosAjuste
-        });
+        locais.push({ id: `local_${Date.now()}`, ...dadosAjuste });
         salvarAjustesLocais(locais);
-
-        alert("O Firebase bloqueou o salvamento do ajuste. Salvei no navegador para não perder, mas atualize as regras do Firebase para salvar online.");
+        alert("ATENÇÃO: o Firebase bloqueou o pagamento nas duas coleções. O lançamento ficou apenas neste navegador e NÃO aparecerá na Chefia até as regras do Firebase serem liberadas.");
       }
 
       document.getElementById("ajusteFuncionario").value = "";
       document.getElementById("ajusteData").value = "";
-      document.getElementById("ajusteTipo").value = "desconto_extra";
+      document.getElementById("ajusteTipo").value = "horas_pagas";
       document.getElementById("ajusteHoras").value = "";
       document.getElementById("ajusteMesDesconto").value = "";
       document.getElementById("ajusteDescricao").value = "";
@@ -3494,7 +3717,9 @@
         tipo: "atestado_medico",
         minutos: Math.round(horas * 60),
         descricao: descricaoDigitada || "Atestado médico entregue",
-        criadoEm: new Date().toISOString()
+        criadoEm: new Date().toISOString(),
+        dataPagamento: "",
+        mesReferencia: ""
       };
 
       try {
@@ -3559,6 +3784,8 @@
         if (ajuste?.origem === "local" || String(id).startsWith("local_")) {
           const locais = carregarAjustesLocais().filter(item => item.id !== id);
           salvarAjustesLocais(locais);
+        } else if (ajuste?.origem === "firebase_horas") {
+          await deleteDoc(doc(db, "horas", id));
         } else {
           await deleteDoc(doc(db, "ajustesHoras", id));
         }
@@ -3684,6 +3911,9 @@
         renderizarTabela(linhas);
         renderizarDetalhes(detalhesAtuaisPDF);
         renderizarResumo(ultimoResumoPDF);
+        renderizarResumoEquipeTI();
+        atualizarAlertasDepartamentosTI();
+        atualizarResumoFuncionariosTI();
 
       } catch (error) {
         console.error("Erro ao carregar banco de horas:", error);
@@ -3955,7 +4185,14 @@
       salvarListaLocal(HISTORICO_TRATATIVAS_KEY, historicoTratativas);
 
       try {
-        await setDoc(doc(db, "historicoTratativasHoras", registro.id), registro);
+        await setDoc(doc(db, "historicoTratativasHoras", registro.id), {
+          funcionario: registro.funcionario || "",
+          acao: registro.acao || "",
+          periodoTexto: registro.periodoTexto || "",
+          statusAnterior: registro.statusAnterior || "",
+          statusNovo: registro.statusNovo || "",
+          criadoEm: registro.criadoEm || new Date().toISOString()
+        });
       } catch (error) {
         console.warn("Firebase bloqueou o historico da tratativa. Ficou salvo no navegador.", error);
       }
@@ -4391,7 +4628,7 @@
       salvarListaLocal(FECHAMENTOS_MENSAIS_KEY, fechamentosMensais);
 
       try {
-        await setDoc(doc(db, "fechamentosMensais", id), dados);
+        await setDoc(doc(db, "fechamentosMensais", id), { ano, mes, status: "fechado", observacao, atualizadoEm: dados.atualizadoEm });
       } catch (error) {
         console.warn("Firebase bloqueou o fechamento mensal. Ficou salvo no navegador.", error);
         alert("Fechamento salvo no navegador. Para salvar online, atualize as regras do Firebase.");
@@ -4414,7 +4651,7 @@
       salvarListaLocal(FECHAMENTOS_MENSAIS_KEY, fechamentosMensais);
 
       try {
-        await setDoc(doc(db, "fechamentosMensais", id), dados);
+        await setDoc(doc(db, "fechamentosMensais", id), { ano, mes, status: "aberto", observacao: "Reaberto pelo ADM", atualizadoEm: dados.atualizadoEm });
       } catch (error) {
         console.warn("Firebase bloqueou a reabertura mensal. Ficou salvo no navegador.", error);
       }
@@ -4555,107 +4792,7 @@
       return y + 22;
     }
 
-    window.gerarPDFFuncionario = function(indexFuncionario) {
-      const funcionarioDetalhe = detalhesAtuaisPDF[indexFuncionario];
-
-      if (!funcionarioDetalhe) {
-        alert("Funcionário não encontrado para gerar PDF.");
-        return;
-      }
-
-      if (!window.jspdf || !window.jspdf.jsPDF) {
-        alert("Erro: biblioteca do PDF não carregou.");
-        return;
-      }
-
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF("p", "mm", "a4");
-      const dataAtual = new Date();
-      let y = 18;
-
-      doc.setFontSize(18);
-      doc.setTextColor(31, 58, 147);
-      doc.text("Relatório Individual de Banco de Horas", 14, y);
-      y += 8;
-
-      doc.setFontSize(10);
-      doc.setTextColor(80, 80, 80);
-      doc.text(`Gerado em: ${dataAtual.toLocaleDateString("pt-BR")} ${dataAtual.toLocaleTimeString("pt-BR")}`, 14, y);
-      y += 10;
-
-      doc.setFontSize(13);
-      doc.setTextColor(0, 0, 0);
-      doc.text(`Funcionário: ${funcionarioDetalhe.funcionario}`, 14, y);
-      y += 6;
-
-      doc.autoTable({
-        startY: y,
-        head: [["Trabalhado", "Previsto", "Extras", "Negativas", "Ajustes", "Saldo Final"]],
-        body: [[
-          formatarMinutosParaHora(funcionarioDetalhe.totalTrabalhado),
-          formatarMinutosParaHora(funcionarioDetalhe.totalPrevisto),
-          formatarMinutosParaHora(funcionarioDetalhe.totalExtras),
-          formatarMinutosParaHora(funcionarioDetalhe.totalNegativas),
-          formatarMinutosParaHora(funcionarioDetalhe.totalAjustes || 0),
-          formatarMinutosParaHora(funcionarioDetalhe.saldoFinal)
-        ]],
-        theme: "grid",
-        headStyles: { fillColor: [31, 58, 147] },
-        styles: { fontSize: 10 }
-      });
-
-      y = doc.autoTable.previous.finalY + 10;
-
-      funcionarioDetalhe.meses.forEach((mes) => {
-        if (y > 225) {
-          doc.addPage();
-          y = 16;
-        }
-
-        doc.setFontSize(12);
-        doc.setTextColor(31, 58, 147);
-        doc.text(`Mês/Ano: ${mes.mesAno}`, 14, y);
-        y += 4;
-
-        const bodyMes = mes.registros.map(reg => {
-          let observacao = reg.observacao || "-";
-          if (reg.dataEspecial?.descricao) observacao += ` | ${reg.dataEspecial.descricao}`;
-
-          return [
-            formatarDataBR(reg.data),
-            reg.horariosTexto || "-",
-            formatarMinutosParaHora(reg.duracaoMinutos),
-            formatarMinutosParaHora(reg.previstoDia),
-            formatarMinutosParaHora(reg.saldoDia),
-            observacao
-          ];
-        });
-
-        doc.autoTable({
-          startY: y,
-          head: [["Data", "Horários", "Trabalhado", "Previsto", "Saldo do Dia", "Observação"]],
-          body: bodyMes,
-          theme: "striped",
-          headStyles: { fillColor: [31, 58, 147] },
-          styles: { fontSize: 8.5, cellPadding: 2 },
-          columnStyles: {
-            0: { cellWidth: 22 },
-            1: { cellWidth: 42 },
-            2: { cellWidth: 22 },
-            3: { cellWidth: 22 },
-            4: { cellWidth: 22 },
-            5: { cellWidth: 55 }
-          }
-        });
-
-        y = doc.autoTable.previous.finalY + 8;
-      });
-
-      const nomeSeguro = removerAcentos(funcionarioDetalhe.funcionario).replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_+|_+$/g, "");
-      doc.save(`banco_de_horas_${nomeSeguro || "funcionario"}_${dataAtual.toLocaleDateString("pt-BR").replace(/\//g, "-")}.pdf`);
-    };
-
-    window.gerarPDFFuncionario = function(indexFuncionario) {
+window.__legacyGerarPDFFuncionario = function(indexFuncionario) {
       const funcionarioDetalhe = detalhesAtuaisPDF[indexFuncionario];
 
       if (!funcionarioDetalhe) {
@@ -4799,7 +4936,7 @@
       doc.save(`banco_de_horas_${nomeSeguro || "funcionario"}_${periodoSeguro || "periodo"}.pdf`);
     };
 
-    window.gerarPDFBancoHoras = function() {
+    window.__legacyGerarPDFBancoHoras = function() {
       if (!window.jspdf || !window.jspdf.jsPDF) {
         alert("Erro: biblioteca do PDF não carregou.");
         return;
@@ -5006,12 +5143,883 @@
     function atualizarCampoMesDescontoFolga() {
       const tipo = document.getElementById("ajusteTipo").value;
       const campo = document.getElementById("campoMesDescontoFolga");
-      if (tipo === "folga_descontar") {
+      const labelMes = document.getElementById("labelAjusteMesDesconto");
+      const labelData = document.querySelector('label[for="ajusteData"]');
+      const botao = document.getElementById("btnSalvarAjusteHoras");
+      if (tipo === "folga_descontar" || tipo === "horas_pagas") {
         campo.classList.remove("campo-oculto");
       } else {
         campo.classList.add("campo-oculto");
       }
+      if (labelMes) labelMes.textContent = tipo === "folga_descontar" ? "Mês em que vai descontar" : "Mês de referência do pagamento";
+      if (labelData) labelData.textContent = tipo === "horas_pagas" ? "Data em que foi pago" : "Data do desconto/ajuste";
+      if (botao) {
+        botao.style.background = tipo === "horas_pagas" ? "#15803d" : "#8e44ad";
+        botao.innerHTML = tipo === "horas_pagas"
+          ? '<i class="fas fa-money-check-dollar"></i> Registrar pagamento'
+          : '<i class="fas fa-save"></i> Salvar ajuste';
+      }
     }
+
+
+
+    // =========================================================
+    // PAINEL T.I. V4 - navegação, organização e indicadores
+    // =========================================================
+    let tiPaginaAtualV4 = "resumo";
+
+    function encontrarFiltroPorIdTI(id) {
+      return Array.from(document.querySelectorAll(".filtros")).find(bloco => bloco.querySelector(`#${id}`)) || null;
+    }
+
+    function tituloPaginaTI(aba) {
+      const mapa = {
+        resumo: ["Visão geral", "Acompanhe saldo, horas pagas e situação atual da equipe."],
+        funcionarios: ["Funcionários", "Cadastros, instituição, departamento e situação de ativos e inativos."],
+        cargas: ["Cargas horárias", "Defina 44h, 40h, 22h ou jornadas específicas por funcionário."],
+        pagamentos: ["Pagamentos e ajustes", "Registre horas pagas, folgas e ajustes no mês correto."],
+        datas: ["Datas especiais", "Sábados letivos, compensações e regras de dias especiais."],
+        departamentos: ["Departamentos", "Veja a equipe agrupada por setor e identifique extras pendentes."],
+        gestao: ["Gestão", "Pendências, atestados, fechamento mensal e histórico administrativo."],
+        tratativas: ["Tratativas", "Acompanhe decisões registradas nos relatórios individuais."]
+      };
+      return mapa[aba] || mapa.resumo;
+    }
+
+    function abrirPaginaTI(aba) {
+      tiPaginaAtualV4 = aba;
+      document.body.classList.remove("visualizando-departamentos", "visualizando-gestao", "visualizando-tratativas");
+      document.querySelectorAll(".ti-page-v4").forEach(p => p.classList.toggle("ativo", p.dataset.tiPage === aba));
+      document.querySelectorAll("[data-ti-nav]").forEach(b => b.classList.toggle("ativo", b.dataset.tiNav === aba));
+      const [titulo, subtitulo] = tituloPaginaTI(aba);
+      const h1 = document.querySelector(".topo h1");
+      if (h1) h1.textContent = titulo;
+      const sub = document.querySelector(".ti-page-subtitle-v4");
+      if (sub) sub.textContent = subtitulo;
+
+      if (aba === "departamentos") {
+        sincronizarFiltrosDepartamentosComBanco();
+        const det = document.getElementById("detalhesFuncionarios");
+        if (det && detalhesAtuaisPDF.length) det.innerHTML = renderizarDetalhesPorDepartamento(detalhesAtuaisPDF);
+        atualizarAlertasDepartamentosTI();
+      }
+      if (aba === "gestao") {
+        sincronizarFiltrosGestaoComBanco();
+        preencherCamposFechamentoPadrao();
+        renderizarGestaoBancoHoras();
+      }
+      if (aba === "tratativas") renderizarTratativasHorasPDF();
+      if (aba === "funcionarios") atualizarResumoFuncionariosTI();
+      if (aba === "pagamentos") renderizarResumoPagamentosTI();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    window.abrirPaginaTI = abrirPaginaTI;
+
+    function organizarLayoutTI() {
+      const container = document.querySelector(".container");
+      const topo = document.querySelector(".topo");
+      if (!container || !topo || document.querySelector(".ti-sidebar-v4")) return;
+      document.body.classList.add("ti-dashboard-v4");
+
+      const sidebar = document.createElement("aside");
+      sidebar.className = "ti-sidebar-v4";
+      sidebar.innerHTML = `
+        <div class="ti-brand-v4"><div class="brand-row"><span class="brand-icon"><i class="fas fa-business-time"></i></span><div><strong>Banco de Horas</strong><small>Configurações T.I.</small></div></div></div>
+        <div class="ti-nav-label-v4">Navegação</div>
+        <button data-ti-nav="resumo" class="ativo" onclick="abrirPaginaTI('resumo')"><i class="fas fa-chart-pie"></i><span>Visão geral</span></button>
+        <button data-ti-nav="funcionarios" onclick="abrirPaginaTI('funcionarios')"><i class="fas fa-users"></i><span>Funcionários</span></button>
+        <button data-ti-nav="cargas" onclick="abrirPaginaTI('cargas')"><i class="fas fa-clock"></i><span>Cargas horárias</span></button>
+        <button data-ti-nav="pagamentos" onclick="abrirPaginaTI('pagamentos')"><i class="fas fa-money-check-dollar"></i><span>Pagamentos / ajustes</span></button>
+        <button data-ti-nav="datas" onclick="abrirPaginaTI('datas')"><i class="fas fa-calendar-days"></i><span>Datas especiais</span></button>
+        <button data-ti-nav="departamentos" onclick="abrirPaginaTI('departamentos')"><i class="fas fa-building"></i><span>Departamentos</span></button>
+        <button data-ti-nav="gestao" onclick="abrirPaginaTI('gestao')"><i class="fas fa-list-check"></i><span>Gestão</span></button>
+        <button data-ti-nav="tratativas" onclick="abrirPaginaTI('tratativas')"><i class="fas fa-clipboard-check"></i><span>Tratativas</span></button>
+        <div class="ti-nav-bottom-v4">
+          <a href="index.html"><i class="fas fa-arrow-left"></i><span>Registros</span></a>
+          <a href="banco_de_horas_chefes.html"><i class="fas fa-eye"></i><span>Abrir Chefia</span></a>
+          <button onclick="exportarBackupCompleto()"><i class="fas fa-download"></i><span>Backup</span></button>
+        </div>`;
+      document.body.insertBefore(sidebar, container);
+
+      let subtitulo = document.createElement("span");
+      subtitulo.className = "ti-page-subtitle-v4";
+      topo.querySelector("h1")?.insertAdjacentElement("afterend", subtitulo);
+
+      const criarPagina = (id, aba) => {
+        const pg = document.createElement("section"); pg.id=id; pg.className="ti-page-v4"; pg.dataset.tiPage=aba; container.appendChild(pg); return pg;
+      };
+      const pResumo=criarPagina("tiPageResumo","resumo");
+      const pFunc=criarPagina("tiPageFuncionarios","funcionarios");
+      const pCarga=criarPagina("tiPageCargas","cargas");
+      const pPag=criarPagina("tiPagePagamentos","pagamentos");
+      const pDatas=criarPagina("tiPageDatas","datas");
+      const pDep=criarPagina("tiPageDepartamentos","departamentos");
+      const pGest=criarPagina("tiPageGestao","gestao");
+      const pTrat=criarPagina("tiPageTratativas","tratativas");
+
+      const filtroPrincipal=encontrarFiltroPorIdTI("filtroFuncionario");
+      const blocoDatas=encontrarFiltroPorIdTI("dataEspecial");
+      const blocoFunc=encontrarFiltroPorIdTI("listaFuncionariosAdmin");
+      const blocoCarga=encontrarFiltroPorIdTI("cargaFuncionarioNome");
+      const blocoPag=encontrarFiltroPorIdTI("ajusteFuncionario");
+      const resumo=document.querySelector(".resumo-geral");
+      const dep=document.querySelector(".pagina-departamentos");
+      const gest=document.querySelector(".pagina-gestao");
+      const trat=document.querySelector(".pagina-tratativas");
+      const listaDatas=document.getElementById("listaDatasEspeciais");
+      const listaAjustes=document.getElementById("listaAjustesHoras");
+
+      pResumo.innerHTML = `<div class="ti-section-heading-v4"><div><h2>Painel do banco de horas</h2><p>Os valores abaixo já consideram pagamentos e ajustes lançados.</p></div><button type="button" class="btn-pdf" onclick="gerarPDFBancoHoras()"><i class="fas fa-file-pdf"></i> PDF completo</button></div>`;
+      if(resumo) pResumo.appendChild(resumo); if(filtroPrincipal) pResumo.appendChild(filtroPrincipal);
+      const resumoEquipe=document.createElement("div");resumoEquipe.id="tiResumoEquipe";pResumo.appendChild(resumoEquipe);
+
+      pFunc.innerHTML=`<div class="ti-section-heading-v4"><div><h2>Cadastro da equipe</h2><p>Mantenha instituição, departamento, CPF e situação atualizados.</p></div></div><div id="tiResumoFuncionarios" class="ti-func-summary-v4"></div><div class="ti-toolbar-v4"><button class="ativo" onclick="filtrarFuncionariosTI('todos',this)">Todos</button><button onclick="filtrarFuncionariosTI('ativos',this)">Ativos</button><button onclick="filtrarFuncionariosTI('inativos',this)">Inativos</button></div>`;
+      if(blocoFunc) pFunc.appendChild(blocoFunc);
+
+      pCarga.innerHTML=`<div class="ti-section-heading-v4"><div><h2>Carga horária individual</h2><p>A carga de cada pessoa prevalece sobre a carga padrão.</p></div></div>`;if(blocoCarga)pCarga.appendChild(blocoCarga);
+      pPag.innerHTML=`<div class="ti-section-heading-v4"><div><h2>Pagamentos e ajustes</h2><p>O mês de referência define exatamente onde o saldo será abatido.</p></div></div><div id="tiResumoPagamentos" class="ti-payment-summary-v4"></div>`;if(blocoPag)pPag.appendChild(blocoPag);if(listaAjustes)pPag.appendChild(listaAjustes);
+      pDatas.innerHTML=`<div class="ti-section-heading-v4"><div><h2>Datas especiais</h2><p>Regras de sábados, feriados internos e compensações.</p></div></div>`;if(blocoDatas)pDatas.appendChild(blocoDatas);if(listaDatas)pDatas.appendChild(listaDatas);
+      pDep.innerHTML=`<div class="ti-section-heading-v4"><div><h2>Departamentos</h2><p>Alertas são exibidos apenas para saldo positivo ainda pendente.</p></div></div><div id="tiAlertasDepartamentos"></div>`;if(dep)pDep.appendChild(dep);
+      if(gest)pGest.appendChild(gest); if(trat)pTrat.appendChild(trat);
+
+      // remove old helper text from main flow; functions remain available.
+      document.querySelector(".info-regra")?.remove();
+      abrirPaginaTI("resumo");
+      atualizarResumoFuncionariosTI(); renderizarResumoEquipeTI(); renderizarResumoPagamentosTI();
+    }
+
+    function renderizarResumoEquipeTI() {
+      const c=document.getElementById("tiResumoEquipe"); if(!c) return;
+      const ativos=resultadoAtualCSV.filter(i=>!funcionarioEstaInativoBanco(i.funcionario));
+      const comExtra=ativos.filter(i=>Number(i.saldo||0)>0); const negativos=ativos.filter(i=>Number(i.saldo||0)<0);
+      const pendente=comExtra.reduce((t,i)=>t+Number(i.saldo||0),0);
+      c.innerHTML=`<div class="ti-kpi-row-v4"><div class="ti-mini-kpi-v4"><small>Com extra pendente</small><strong>${comExtra.length}</strong></div><div class="ti-mini-kpi-v4"><small>Total extra pendente</small><strong>${formatarMinutosParaHora(pendente)}</strong></div><div class="ti-mini-kpi-v4"><small>Com saldo negativo</small><strong>${negativos.length}</strong></div></div><div class="ti-team-list-v4"><div class="ti-team-row-v4 header"><span>Funcionário</span><span>Departamento</span><span>Extras</span><span>Pagas / ajustes</span><span>Saldo</span><span>Situação</span></div>${ativos.map(item=>{const cls=item.saldo>0?'pos':item.saldo<0?'neg':'zero';const sit=item.saldo>0?'Pendente':item.saldo<0?'Negativo':'Quitado';return `<div class="ti-team-row-v4"><div class="ti-team-name-v4"><strong>${escaparHTML(item.funcionario)}</strong><small>${renderizarInstituicaoBadgeTI(item.funcionario)} ${item.cargaSemanal||obterCargaSemanalFuncionario(item.funcionario)}h/semana</small></div><span>${escaparHTML(item.departamento||'Sem departamento')}</span><strong class="positivo">${formatarMinutosParaHora(item.extras)}</strong><span>${formatarMinutosParaHora(item.ajustes||0)}</span><span class="ti-saldo-pill-v4 ${cls}">${formatarMinutosParaHora(item.saldo)}</span><strong>${sit}</strong></div>`}).join('')}</div>`;
+    }
+
+    function atualizarResumoFuncionariosTI(){const c=document.getElementById("tiResumoFuncionarios");if(!c)return;const nomes=obterNomesFuncionariosSistema();const ativos=nomes.filter(n=>!funcionarioEstaInativoBanco(n));const inativos=nomes.filter(n=>funcionarioEstaInativoBanco(n));const gaudi=nomes.filter(n=>obterEmpresaCodigoFuncionario(n)==='gaudi');const tracos=nomes.filter(n=>obterEmpresaCodigoFuncionario(n)==='tracos');c.innerHTML=`<div><small>Total cadastrado</small><strong>${nomes.length}</strong></div><div><small>Ativos</small><strong>${ativos.length}</strong></div><div><small>Inativos</small><strong>${inativos.length}</strong></div><div><small>GAUDÍ / TRAÇOS</small><strong>${gaudi.length} / ${tracos.length}</strong></div>`;}
+    window.filtrarFuncionariosTI=function(status,btn){document.querySelectorAll('#tiPageFuncionarios .ti-toolbar-v4 button').forEach(b=>b.classList.remove('ativo'));btn?.classList.add('ativo');document.querySelectorAll('#listaFuncionariosAdmin tbody tr').forEach(tr=>{const sel=tr.querySelector('select[id^="ativo_"]');const ativo=sel?sel.value==='true':true;tr.style.display=status==='todos'||(status==='ativos'&&ativo)||(status==='inativos'&&!ativo)?'':'none';});};
+
+    function renderizarResumoPagamentosTI(){const c=document.getElementById('tiResumoPagamentos');if(!c)return;const pagamentos=ajustesHoras.filter(a=>a.tipo==='horas_pagas');const mins=pagamentos.reduce((t,a)=>t+Math.abs(Number(a.minutos||0)),0);const meses=new Set(pagamentos.map(a=>String(a.mesReferencia||obterDataReferenciaAjuste(a).slice(0,7))).filter(Boolean));c.innerHTML=`<div class="box"><small>Pagamentos registrados</small><strong>${pagamentos.length}</strong></div><div class="box"><small>Total de horas pagas</small><strong>${formatarMinutosParaHora(mins)}</strong></div><div class="box"><small>Meses com pagamento</small><strong>${meses.size}</strong></div>`;}
+
+    function atualizarAlertasDepartamentosTI(){const c=document.getElementById('tiAlertasDepartamentos');if(!c)return;const mapa={};detalhesAtuaisPDF.filter(i=>!funcionarioEstaInativoBanco(i.funcionario)&&Number(i.saldoFinal||0)>0).forEach(i=>{const dep=i.departamento||'Sem departamento';if(!mapa[dep])mapa[dep]={q:0,m:0};mapa[dep].q++;mapa[dep].m+=Number(i.saldoFinal||0);});const itens=Object.entries(mapa);c.innerHTML=itens.length?itens.sort((a,b)=>b[1].m-a[1].m).map(([dep,v])=>`<div class="ti-alert-dept-v4"><i class="fas fa-triangle-exclamation"></i><div><strong>${escaparHTML(dep)}</strong><br>${v.q} funcionário(s) com extra pendente • ${formatarMinutosParaHora(v.m)} ainda em aberto</div></div>`).join(''):`<div class="ti-alert-dept-v4 ok"><i class="fas fa-circle-check"></i><div>Nenhum departamento possui saldo extra pendente no filtro atual.</div></div>`;
+      document.querySelectorAll('#tiPageDepartamentos #detalhesFuncionarios > .departamento-card').forEach(card=>{const nome=card.querySelector('.departamento-header h2')?.textContent?.trim()||'';const hit=itens.find(([dep])=>nome.includes(dep));if(hit){card.style.borderColor='#fedf89';card.querySelector('.departamento-header')?.style.setProperty('background','#fffaeb');}});
+    }
+
+
+
+    // ===== PDF PROFISSIONAL PADRONIZADO - T.I. =====
+    // Esta implementação sobrescreve os geradores antigos para manter um único padrão visual.
+    const PDF_PRO_CONTEXT = "T.I.";
+
+    function pdfProText(valor) {
+      return String(valor ?? "");
+    }
+
+    function pdfProStatus(saldo) {
+      const valor = Number(saldo || 0);
+      if (valor > 0) return { texto: "Pendente", cor: [180, 83, 9] };
+      if (valor < 0) return { texto: "Negativo", cor: [185, 28, 28] };
+      return { texto: "Quitado", cor: [21, 128, 61] };
+    }
+
+    function pdfProMesNumero(mesAno) {
+      const [nomeMes, ano] = String(mesAno || "").split("/");
+      const indice = nomesMeses.indexOf(nomeMes);
+      return { ano: Number(ano || 0), mes: indice >= 0 ? indice + 1 : 0 };
+    }
+
+    function pdfProOrdenarMeses(meses) {
+      return (meses || []).slice().sort((a, b) => {
+        const ma = pdfProMesNumero(a.mesAno);
+        const mb = pdfProMesNumero(b.mesAno);
+        return ma.ano - mb.ano || ma.mes - mb.mes;
+      });
+    }
+
+    function pdfProMesCombinaFiltro(mesAno) {
+      const filtroMes = document.getElementById("filtroMes")?.value || "";
+      const filtroAno = document.getElementById("filtroAno")?.value?.trim() || "";
+      if (!filtroMes && !filtroAno) return true;
+      const info = pdfProMesNumero(mesAno);
+      return (!filtroMes || String(info.mes).padStart(2, "0") === filtroMes) && (!filtroAno || String(info.ano) === filtroAno);
+    }
+
+    function pdfProResumoMes(mes) {
+      const resumo = { trabalhado: 0, previsto: 0, extras: 0, negativas: 0, pagas: 0, outrosAjustes: 0, saldo: 0, registros: 0 };
+      (mes?.registros || []).forEach(reg => {
+        const saldo = Number(reg.saldoDia || 0);
+        const tipo = reg.tipoAjuste || "";
+        if (tipo === "horas_pagas") {
+          resumo.pagas += Math.abs(saldo || Number(reg.minutos || 0));
+          resumo.saldo += saldo;
+          return;
+        }
+        if (tipo) {
+          resumo.outrosAjustes += saldo;
+          resumo.saldo += saldo;
+          return;
+        }
+        resumo.trabalhado += Number(reg.duracaoMinutos || 0);
+        resumo.previsto += Number(reg.previstoDia || 0);
+        if (saldo > 0) resumo.extras += saldo;
+        if (saldo < 0) resumo.negativas += Math.abs(saldo);
+        resumo.saldo += saldo;
+        resumo.registros += 1;
+      });
+      if (Number(mes?.horasPagas || 0) > resumo.pagas) resumo.pagas = Number(mes.horasPagas || 0);
+      if (Number.isFinite(Number(mes?.saldoMes))) resumo.saldo = Number(mes.saldoMes);
+      return resumo;
+    }
+
+    function pdfProResumoFuncionario(item, meses) {
+      const total = { trabalhado: 0, previsto: 0, extras: 0, negativas: 0, pagas: 0, outrosAjustes: 0, saldo: 0, registros: 0 };
+      (meses || []).forEach(mes => {
+        const r = pdfProResumoMes(mes);
+        Object.keys(total).forEach(chave => total[chave] += Number(r[chave] || 0));
+      });
+      return total;
+    }
+
+    function pdfProEmpresaNome(funcionario, departamento) {
+      try {
+        const empresa = obterEmpresaFuncionario(funcionario, departamento);
+        return empresa?.nome || "Instituição não informada";
+      } catch (e) {
+        const perfil = obterPerfilFuncionario(funcionario) || {};
+        if (perfil.empresa === "gaudi") return "Colégio Antoni Gaudí";
+        if (perfil.empresa === "tracos") return "Escola Traços e Letras";
+        return "Instituição não informada";
+      }
+    }
+
+    function pdfProCabecalho(doc, titulo, subtitulo = "") {
+      const largura = doc.internal.pageSize.width;
+      doc.setFillColor(15, 23, 42);
+      doc.rect(0, 0, largura, 29, "F");
+      doc.setFillColor(37, 99, 235);
+      doc.rect(0, 29, largura, 2, "F");
+      doc.setTextColor(255, 255, 255);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(15);
+      doc.text(pdfProText(titulo), 14, 12);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      if (subtitulo) doc.text(pdfProText(subtitulo), 14, 20);
+      doc.text(`Banco de Horas - ${PDF_PRO_CONTEXT}`, largura - 14, 12, { align: "right" });
+      doc.text(new Date().toLocaleString("pt-BR"), largura - 14, 20, { align: "right" });
+    }
+
+    function pdfProRodape(doc, titulo) {
+      const total = doc.internal.getNumberOfPages();
+      const largura = doc.internal.pageSize.width;
+      const altura = doc.internal.pageSize.height;
+      for (let pagina = 1; pagina <= total; pagina++) {
+        doc.setPage(pagina);
+        doc.setDrawColor(226, 232, 240);
+        doc.line(14, altura - 13, largura - 14, altura - 13);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7.5);
+        doc.setTextColor(100, 116, 139);
+        doc.text(pdfProText(titulo), 14, altura - 7);
+        doc.text("Sistema de Banco de Horas", largura / 2, altura - 7, { align: "center" });
+        doc.text(`Página ${pagina} de ${total}`, largura - 14, altura - 7, { align: "right" });
+      }
+    }
+
+    function pdfProSecao(doc, titulo, y) {
+      const largura = doc.internal.pageSize.width;
+      if (y > doc.internal.pageSize.height - 30) {
+        doc.addPage();
+        pdfProCabecalho(doc, "Banco de Horas", "Continuação do relatório");
+        y = 40;
+      }
+      doc.setFillColor(241, 245, 249);
+      doc.setDrawColor(226, 232, 240);
+      doc.roundedRect(14, y, largura - 28, 9, 1.5, 1.5, "FD");
+      doc.setTextColor(30, 41, 59);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9.5);
+      doc.text(pdfProText(titulo), 18, y + 6);
+      return y + 13;
+    }
+
+    function pdfProCards(doc, cards, y) {
+      const larguraUtil = doc.internal.pageSize.width - 28;
+      const gap = 2;
+      const quantidade = cards.length;
+      const largura = (larguraUtil - gap * (quantidade - 1)) / quantidade;
+      cards.forEach((card, i) => {
+        const x = 14 + i * (largura + gap);
+        doc.setFillColor(248, 250, 252);
+        doc.setDrawColor(226, 232, 240);
+        doc.roundedRect(x, y, largura, 20, 2, 2, "FD");
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(6.8);
+        doc.setTextColor(100, 116, 139);
+        doc.text(pdfProText(card.label), x + 2.5, y + 6);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9.2);
+        doc.setTextColor(...(card.cor || [30, 41, 59]));
+        doc.text(pdfProText(card.valor), x + 2.5, y + 14);
+      });
+      return y + 25;
+    }
+
+    function pdfProAutoTable(doc, config, tituloCabecalho, subtituloCabecalho) {
+      const originalDidDraw = config.didDrawPage;
+      doc.autoTable({
+        ...config,
+        margin: { top: 38, bottom: 18, left: 14, right: 14, ...(config.margin || {}) },
+        didDrawPage: (data) => {
+          if (data.pageNumber > 1) pdfProCabecalho(doc, tituloCabecalho, subtituloCabecalho);
+          if (typeof originalDidDraw === "function") originalDidDraw(data);
+        }
+      });
+      return doc.autoTable.previous.finalY;
+    }
+
+    function pdfProTipoMovimento(reg) {
+      if (reg.tipoAjuste === "horas_pagas") return "Pagamento";
+      if (reg.tipoAjuste === "folga_descontar") return "Folga descontada";
+      if (reg.tipoAjuste === "desconto_extra") return "Desconto";
+      if (reg.tipoAjuste === "acrescimo_extra") return "Crédito";
+      if (reg.tipoAjuste === "abono_saldo_anterior") return "Abono";
+      if (reg.tipoAjuste === "atestado_medico") return "Atestado";
+      return "Ajuste";
+    }
+
+    function pdfProDescricaoMovimento(reg) {
+      const partes = [];
+      if (reg.horariosTexto) partes.push(reg.horariosTexto);
+      if (reg.observacao) partes.push(reg.observacao);
+      if (reg.dataEspecial?.descricao) partes.push(reg.dataEspecial.descricao);
+      return partes.filter(Boolean).join(" | ") || "-";
+    }
+
+    function pdfProTabelaResumoMeses(doc, meses, y, titulo, subtitulo) {
+      const body = meses.map(mes => {
+        const r = pdfProResumoMes(mes);
+        const situacao = pdfProStatus(r.saldo).texto;
+        return [
+          mes.mesAno,
+          formatarMinutosParaHora(r.trabalhado),
+          formatarMinutosParaHora(r.previsto),
+          formatarMinutosParaHora(r.extras),
+          formatarMinutosParaHora(r.pagas),
+          formatarMinutosParaHora(r.outrosAjustes),
+          formatarMinutosParaHora(r.saldo),
+          situacao
+        ];
+      });
+      return pdfProAutoTable(doc, {
+        startY: y,
+        head: [["Mês", "Trabalhado", "Previsto", "Extras", "Pagas", "Outros ajustes", "Saldo", "Situação"]],
+        body,
+        theme: "grid",
+        headStyles: { fillColor: [30, 41, 59], textColor: [255, 255, 255], fontSize: 7.3, halign: "center" },
+        styles: { fontSize: 7.1, cellPadding: 1.5, valign: "middle" },
+        columnStyles: { 0: { cellWidth: 24 }, 7: { cellWidth: 20, fontStyle: "bold" } },
+        didParseCell: data => {
+          if (data.section === "body" && data.column.index === 6) {
+            const raw = String(data.cell.raw || "");
+            data.cell.styles.fontStyle = "bold";
+            data.cell.styles.textColor = raw.startsWith("-") ? [185,28,28] : raw === "00h 00m" ? [21,128,61] : [180,83,9];
+          }
+        }
+      }, titulo, subtitulo);
+    }
+
+    function pdfProDetalharMes(doc, item, mes, y, titulo, subtitulo) {
+      const r = pdfProResumoMes(mes);
+      if (y > 220) {
+        doc.addPage();
+        pdfProCabecalho(doc, titulo, subtitulo);
+        y = 40;
+      }
+      y = pdfProSecao(doc, `${mes.mesAno} - ${pdfProStatus(r.saldo).texto}`, y);
+      y = pdfProCards(doc, [
+        { label: "Trabalhado", valor: formatarMinutosParaHora(r.trabalhado), cor: [37, 99, 235] },
+        { label: "Previsto", valor: formatarMinutosParaHora(r.previsto), cor: [71, 85, 105] },
+        { label: "Extras", valor: formatarMinutosParaHora(r.extras), cor: [21, 128, 61] },
+        { label: "Pagas", valor: formatarMinutosParaHora(r.pagas), cor: [2, 132, 199] },
+        { label: "Ajustes", valor: formatarMinutosParaHora(r.outrosAjustes), cor: [124, 58, 237] },
+        { label: "Saldo", valor: formatarMinutosParaHora(r.saldo), cor: pdfProStatus(r.saldo).cor }
+      ], y);
+
+      const pontos = (mes.registros || []).filter(reg => !reg.tipoAjuste);
+      const movimentos = (mes.registros || []).filter(reg => !!reg.tipoAjuste);
+
+      if (pontos.length) {
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(8.5);
+        doc.setTextColor(71, 85, 105);
+        doc.text("Jornada e registros do mês", 14, y);
+        y += 3;
+        y = pdfProAutoTable(doc, {
+          startY: y,
+          head: [["Data", "Horários / ocorrência", "Trabalhado", "Previsto", "Saldo do dia"]],
+          body: pontos.map(reg => [
+            formatarDataBR(reg.data),
+            pdfProDescricaoMovimento(reg),
+            formatarMinutosParaHora(Number(reg.duracaoMinutos || 0)),
+            formatarMinutosParaHora(Number(reg.previstoDia || 0)),
+            formatarMinutosParaHora(Number(reg.saldoDia || 0))
+          ]),
+          theme: "striped",
+          headStyles: { fillColor: [51, 65, 85], textColor: [255,255,255], fontSize: 7.1 },
+          styles: { fontSize: 6.9, cellPadding: 1.3, valign: "middle", overflow: "linebreak" },
+          columnStyles: { 0: { cellWidth: 22 }, 1: { cellWidth: 80 }, 2: { cellWidth: 25 }, 3: { cellWidth: 25 }, 4: { cellWidth: 25, fontStyle: "bold" } },
+          didParseCell: data => {
+            if (data.section === "body" && data.column.index === 4) {
+              const raw = String(data.cell.raw || "");
+              data.cell.styles.textColor = raw.startsWith("-") ? [185,28,28] : raw === "00h 00m" ? [71,85,105] : [21,128,61];
+            }
+          }
+        }, titulo, subtitulo) + 6;
+      }
+
+      if (movimentos.length) {
+        if (y > 232) { doc.addPage(); pdfProCabecalho(doc, titulo, subtitulo); y = 40; }
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(8.5);
+        doc.setTextColor(71, 85, 105);
+        doc.text("Pagamentos, folgas e ajustes", 14, y);
+        y += 3;
+        y = pdfProAutoTable(doc, {
+          startY: y,
+          head: [["Data", "Tipo", "Movimento", "Descrição"]],
+          body: movimentos.map(reg => [
+            formatarDataBR(reg.data),
+            pdfProTipoMovimento(reg),
+            formatarMinutosParaHora(Number(reg.saldoDia || 0)),
+            pdfProDescricaoMovimento(reg)
+          ]),
+          theme: "grid",
+          headStyles: { fillColor: [15, 118, 110], textColor: [255,255,255], fontSize: 7.1 },
+          styles: { fontSize: 6.9, cellPadding: 1.4, valign: "middle", overflow: "linebreak" },
+          columnStyles: { 0: { cellWidth: 24 }, 1: { cellWidth: 35 }, 2: { cellWidth: 26, fontStyle: "bold" }, 3: { cellWidth: 92 } }
+        }, titulo, subtitulo) + 7;
+      }
+      return y;
+    }
+
+    function pdfProAssinaturas(doc, y, funcionario, resumo = {}, meses = [], periodo = "") {
+      // A conferência final recebe uma página própria para deixar pagamentos e assinaturas bem visíveis.
+      doc.addPage();
+      pdfProCabecalho(doc, "Fechamento do banco de horas", `${funcionario}${periodo ? ` - ${periodo}` : ""}`);
+      y = 40;
+
+      y = pdfProSecao(doc, "Fechamento financeiro do período", y);
+      const status = pdfProStatus(Number(resumo.saldo || 0));
+      const largura = doc.internal.pageSize.width;
+      const cards = [
+        { label: "HORAS EXTRAS APURADAS", valor: formatarMinutosParaHora(Number(resumo.extras || 0)), cor: [21,128,61] },
+        { label: "HORAS PAGAS", valor: formatarMinutosParaHora(Number(resumo.pagas || 0)), cor: [2,132,199] },
+        { label: "OUTROS AJUSTES", valor: formatarMinutosParaHora(Number(resumo.outrosAjustes || 0)), cor: [124,58,237] },
+        { label: "SALDO FINAL", valor: formatarMinutosParaHora(Number(resumo.saldo || 0)), cor: status.cor }
+      ];
+
+      const cardW = 43.5;
+      const gap = 2;
+      cards.forEach((card, index) => {
+        const x = 14 + index * (cardW + gap);
+        doc.setFillColor(248, 250, 252);
+        doc.setDrawColor(203, 213, 225);
+        doc.roundedRect(x, y, cardW, 24, 2, 2, "FD");
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(6.8);
+        doc.setTextColor(100, 116, 139);
+        doc.text(pdfProText(card.label), x + 3, y + 7);
+        doc.setFontSize(12);
+        doc.setTextColor(...card.cor);
+        doc.text(pdfProText(card.valor), x + 3, y + 17);
+      });
+      y += 31;
+
+      // Status em destaque.
+      doc.setFillColor(...status.cor.map(c => Math.min(255, c + 215)));
+      doc.setDrawColor(...status.cor);
+      doc.roundedRect(14, y, largura - 28, 11, 2, 2, "FD");
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9.5);
+      doc.setTextColor(...status.cor);
+      doc.text(pdfProText(`SITUAÇÃO DO PERÍODO: ${status.texto.toUpperCase()}`), largura / 2, y + 7, { align: "center" });
+      y += 17;
+
+      // Texto descritivo para deixar explícito o que foi pago.
+      const textoFechamento = `No período ${periodo || "informado"}, foram apuradas ${formatarMinutosParaHora(Number(resumo.extras || 0))} de horas extras. Foram registradas ${formatarMinutosParaHora(Number(resumo.pagas || 0))} como HORAS PAGAS. Considerando os demais ajustes de ${formatarMinutosParaHora(Number(resumo.outrosAjustes || 0))}, o saldo final do banco de horas é ${formatarMinutosParaHora(Number(resumo.saldo || 0))}.`;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      doc.setTextColor(51, 65, 85);
+      const linhasTexto = doc.splitTextToSize(pdfProText(textoFechamento), largura - 32);
+      doc.text(linhasTexto, 16, y);
+      y += linhasTexto.length * 4.2 + 6;
+
+      const pagamentosMes = (meses || [])
+        .map(mes => ({ mesAno: mes.mesAno, pagas: Number(pdfProResumoMes(mes).pagas || 0) }))
+        .filter(item => item.pagas > 0);
+
+      y = pdfProSecao(doc, "Horas pagas por mês", y);
+      if (pagamentosMes.length) {
+        doc.autoTable({
+          startY: y,
+          head: [["Mês de referência", "Horas pagas", "Situação"]],
+          body: pagamentosMes.map(item => [
+            pdfProText(item.mesAno),
+            formatarMinutosParaHora(item.pagas),
+            "Pagamento registrado"
+          ]),
+          theme: "grid",
+          headStyles: { fillColor: [2,132,199], textColor: [255,255,255], fontSize: 8 },
+          styles: { fontSize: 8, cellPadding: 2.2, valign: "middle" },
+          columnStyles: { 0: { cellWidth: 55 }, 1: { cellWidth: 45, fontStyle: "bold" }, 2: { cellWidth: 82 } },
+          margin: { left: 14, right: 14 }
+        });
+        y = doc.autoTable.previous.finalY + 9;
+      } else {
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8.5);
+        doc.setTextColor(100,116,139);
+        doc.text("Nenhum lançamento de horas pagas foi registrado no período.", 16, y + 2);
+        y += 10;
+      }
+
+      y = pdfProSecao(doc, "Ciência e assinaturas", y);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      doc.setTextColor(51,65,85);
+      const declaracao = `Declaro estar ciente dos registros apresentados neste relatório, inclusive das ${formatarMinutosParaHora(Number(resumo.pagas || 0))} de horas pagas e do saldo final de ${formatarMinutosParaHora(Number(resumo.saldo || 0))}.`;
+      const linhasDeclaracao = doc.splitTextToSize(pdfProText(declaracao), largura - 32);
+      doc.text(linhasDeclaracao, 16, y);
+      y += linhasDeclaracao.length * 4.2 + 12;
+
+      // Área ampla para assinatura manual.
+      const linhaY = y + 22;
+      doc.setDrawColor(71,85,105);
+      doc.setLineWidth(0.35);
+      doc.line(18, linhaY, 91, linhaY);
+      doc.line(117, linhaY, 190, linhaY);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8);
+      doc.setTextColor(30,41,59);
+      doc.text("ASSINATURA DA CHEFIA / RESPONSÁVEL", 54.5, linhaY + 6, { align: "center" });
+      doc.text("ASSINATURA DO FUNCIONÁRIO", 153.5, linhaY + 6, { align: "center" });
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7.5);
+      doc.text(pdfProText(funcionario), 153.5, linhaY + 11, { align: "center" });
+      doc.text("Data: ____/____/________", 14, linhaY + 20);
+      doc.text("Local: ______________________________________________", 86, linhaY + 20);
+      return linhaY + 25;
+    }
+
+    window.gerarPDFFuncionario = function(indexFuncionario) {
+      const item = detalhesAtuaisPDF[indexFuncionario];
+      if (!item) { alert("Funcionário não encontrado para gerar o PDF."); return; }
+      if (!window.jspdf?.jsPDF) { alert("A biblioteca de PDF ainda não carregou."); return; }
+
+      const mesesTodos = pdfProOrdenarMeses(item.meses || []);
+      const mesesFiltrados = mesesTodos.filter(m => pdfProMesCombinaFiltro(m.mesAno));
+
+      // O relatório individual de uma folha passa a ser, de fato, um relatório mensal.
+      // Isso permite mostrar todas as batidas do mês sem perder a área de assinatura.
+      if (mesesFiltrados.length !== 1) {
+        alert("Para gerar o relatório individual em uma única folha com todas as entradas e saídas, selecione um mês no filtro e tente novamente.");
+        return;
+      }
+
+      const mes = mesesFiltrados[0];
+      const meses = [mes];
+      const resumo = pdfProResumoFuncionario(item, meses);
+      const empresa = pdfProEmpresaNome(item.funcionario, item.departamento);
+      const periodo = mes.mesAno;
+      const perfil = obterPerfilFuncionario(item.funcionario) || {};
+      const statusFinal = pdfProStatus(Number(resumo.saldo || 0));
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF("p", "mm", "a4");
+      const largura = doc.internal.pageSize.width;
+      const altura = doc.internal.pageSize.height;
+
+      // CABEÇALHO
+      doc.setFillColor(18, 38, 82);
+      doc.rect(0, 0, largura, 26, "F");
+      doc.setFillColor(37, 99, 235);
+      doc.rect(0, 26, largura, 2, "F");
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(14.5);
+      doc.setTextColor(255,255,255);
+      doc.text(pdfProText("RELATÓRIO MENSAL INDIVIDUAL DE BANCO DE HORAS"), 14, 11);
+      doc.setFontSize(8.2);
+      doc.setFont("helvetica", "normal");
+      doc.text(pdfProText(`${item.funcionario} • ${periodo}`), 14, 18);
+      doc.text(pdfProText(PDF_PRO_CONTEXT), largura - 14, 18, { align: "right" });
+
+      let y = 33;
+
+      // IDENTIFICAÇÃO
+      doc.setFillColor(248,250,252);
+      doc.setDrawColor(226,232,240);
+      doc.roundedRect(14, y, largura - 28, 17, 2, 2, "FD");
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(6.8);
+      doc.setTextColor(100,116,139);
+      doc.text("FUNCIONÁRIO", 18, y + 4.8);
+      doc.text("DEPARTAMENTO", 78, y + 4.8);
+      doc.text("INSTITUIÇÃO", 132, y + 4.8);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7.8);
+      doc.setTextColor(30,41,59);
+      doc.text(pdfProText(item.funcionario), 18, y + 10.5, { maxWidth: 56 });
+      doc.text(pdfProText(item.departamento || "Sem departamento"), 78, y + 10.5, { maxWidth: 50 });
+      doc.text(pdfProText(empresa), 132, y + 10.5, { maxWidth: 59 });
+      doc.setFontSize(6.3);
+      doc.setTextColor(100,116,139);
+      doc.text(pdfProText(`CPF: ${perfil.cpf || "Não informado"} • Carga: ${obterCargaSemanalFuncionario(item.funcionario)}h/semana • Status: ${funcionarioEstaInativoBanco(item.funcionario) ? "Inativo" : "Ativo"}`), 18, y + 15.2);
+      y += 21;
+
+      // RESUMO DO MÊS
+      const cards = [
+        { label: "TRABALHADO", valor: formatarMinutosParaHora(resumo.trabalhado), cor: [37,99,235] },
+        { label: "EXTRAS", valor: formatarMinutosParaHora(resumo.extras), cor: [21,128,61] },
+        { label: "HORAS PAGAS", valor: formatarMinutosParaHora(resumo.pagas), cor: [2,132,199] },
+        { label: "AJUSTES", valor: formatarMinutosParaHora(resumo.outrosAjustes), cor: [124,58,237] },
+        { label: "SALDO", valor: formatarMinutosParaHora(resumo.saldo), cor: statusFinal.cor }
+      ];
+      const gap = 2;
+      const cardW = (largura - 28 - gap * 4) / 5;
+      cards.forEach((card, i) => {
+        const x = 14 + i * (cardW + gap);
+        doc.setFillColor(248,250,252);
+        doc.setDrawColor(203,213,225);
+        doc.roundedRect(x, y, cardW, 18, 2, 2, "FD");
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(5.9);
+        doc.setTextColor(100,116,139);
+        doc.text(pdfProText(card.label), x + 2.3, y + 5.5);
+        doc.setFontSize(9.4);
+        doc.setTextColor(...card.cor);
+        doc.text(pdfProText(card.valor), x + 2.3, y + 13.2);
+      });
+      y += 22;
+
+      // SITUAÇÃO
+      const corStatusFundo = statusFinal.texto === "Quitado" ? [236,253,245] : statusFinal.texto === "Negativo" ? [254,242,242] : [255,247,237];
+      doc.setFillColor(...corStatusFundo);
+      doc.setDrawColor(...statusFinal.cor);
+      doc.roundedRect(14, y, largura - 28, 8, 2, 2, "FD");
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(7.5);
+      doc.setTextColor(...statusFinal.cor);
+      doc.text(pdfProText(`SITUAÇÃO: ${statusFinal.texto.toUpperCase()}  •  PAGAS: ${formatarMinutosParaHora(resumo.pagas)}  •  SALDO: ${formatarMinutosParaHora(resumo.saldo)}`), largura / 2, y + 5.2, { align: "center" });
+      y += 12;
+
+      // BATIDAS DO MÊS — entrada e saída aparecem normalmente.
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8.2);
+      doc.setTextColor(30,41,59);
+      doc.text(pdfProText(`REGISTRO DO MÊS — ${periodo}`), 14, y);
+      y += 2.5;
+
+      const registrosPonto = (mes.registros || []).filter(reg => !reg.tipoAjuste);
+      const qtd = registrosPonto.length;
+      const fonteTabela = qtd > 27 ? 4.6 : qtd > 23 ? 4.9 : qtd > 18 ? 5.2 : 5.6;
+      const paddingTabela = qtd > 27 ? 0.22 : qtd > 23 ? 0.28 : 0.35;
+
+      const linhasPonto = registrosPonto.map(reg => {
+        let horarios = "-";
+        if (Array.isArray(reg.horarios) && reg.horarios.length) {
+          horarios = reg.horarios
+            .filter(h => h?.entrada || h?.saida)
+            .map(h => `${h.entrada || "--:--"} - ${h.saida || "--:--"}`)
+            .join(" | ");
+        } else if (reg.horariosTexto) {
+          horarios = String(reg.horariosTexto).split(" | ")[0] || reg.horariosTexto;
+        }
+
+        const obs = [];
+        if (reg.sabado) obs.push("Sábado");
+        if (reg.dataEspecial?.tipo) obs.push(formatarTipoEspecial(reg.dataEspecial.tipo));
+        if (reg.observacaoAbono) obs.push("Abono");
+
+        return [
+          formatarDataBR(reg.data),
+          pdfProText(horarios),
+          formatarMinutosParaHora(Number(reg.duracaoMinutos || 0)),
+          formatarMinutosParaHora(Number(reg.previstoDia || 0)),
+          formatarMinutosParaHora(Number(reg.saldoDia || 0)),
+          pdfProText(obs.join(" / ") || "-")
+        ];
+      });
+
+      doc.autoTable({
+        startY: y,
+        head: [["Data", "Entradas / Saídas", "Trabalhado", "Previsto", "Saldo", "Obs."]],
+        body: linhasPonto.length ? linhasPonto : [["-", "Nenhuma batida registrada no mês", "-", "-", "-", "-"]],
+        theme: "grid",
+        headStyles: { fillColor: [30,41,59], textColor: [255,255,255], fontSize: fonteTabela, halign: "center", cellPadding: paddingTabela },
+        styles: { fontSize: fonteTabela, cellPadding: paddingTabela, valign: "middle", halign: "center", overflow: "ellipsize", minCellHeight: 2.8 },
+        columnStyles: {
+          0: { cellWidth: 20 },
+          1: { cellWidth: 72, halign: "left" },
+          2: { cellWidth: 24 },
+          3: { cellWidth: 24 },
+          4: { cellWidth: 24, fontStyle: "bold" },
+          5: { cellWidth: 18 }
+        },
+        margin: { left: 14, right: 14 },
+        pageBreak: "avoid",
+        rowPageBreak: "avoid",
+        didParseCell: function(data) {
+          if (data.section === "body" && data.column.index === 4) {
+            const raw = String(data.cell.raw || "");
+            if (raw.startsWith("-")) data.cell.styles.textColor = [185,28,28];
+            else if (raw !== "00h 00m" && raw !== "-") data.cell.styles.textColor = [21,128,61];
+          }
+        }
+      });
+      y = doc.autoTable.previous.finalY + 4;
+
+      // Destaque explícito das horas pagas do mês.
+      if (Number(resumo.pagas || 0) > 0) {
+        doc.setFillColor(239,246,255);
+        doc.setDrawColor(125,211,252);
+        doc.roundedRect(14, y, largura - 28, 8, 1.5, 1.5, "FD");
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(7.2);
+        doc.setTextColor(2,132,199);
+        doc.text(pdfProText(`HORAS PAGAS NESTE MÊS: ${formatarMinutosParaHora(resumo.pagas)}`), largura / 2, y + 5.2, { align: "center" });
+        y += 11;
+      }
+
+      // DECLARAÇÃO DE CIÊNCIA
+      const declaracaoY = Math.min(Math.max(y, 207), 218);
+      doc.setFillColor(248,250,252);
+      doc.setDrawColor(226,232,240);
+      doc.roundedRect(14, declaracaoY, largura - 28, 20, 2, 2, "FD");
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(7.2);
+      doc.setTextColor(30,41,59);
+      doc.text("DECLARAÇÃO DE CIÊNCIA", 18, declaracaoY + 5.5);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(6.8);
+      const declaracao = `Declaro estar ciente dos registros de entrada e saída do mês de ${periodo}. Foram apuradas ${formatarMinutosParaHora(resumo.extras)} de horas extras, sendo ${formatarMinutosParaHora(resumo.pagas)} registradas como HORAS PAGAS. O saldo final do mês é ${formatarMinutosParaHora(resumo.saldo)}.`;
+      const linhasDecl = doc.splitTextToSize(pdfProText(declaracao), largura - 36);
+      doc.text(linhasDecl, 18, declaracaoY + 10.5);
+
+      // ASSINATURAS
+      const assinaturaY = 249;
+      doc.setDrawColor(71,85,105);
+      doc.setLineWidth(0.4);
+      doc.line(18, assinaturaY, 91, assinaturaY);
+      doc.line(117, assinaturaY, 190, assinaturaY);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(7.6);
+      doc.setTextColor(30,41,59);
+      doc.text("ASSINATURA DA CHEFIA / RESPONSÁVEL", 54.5, assinaturaY + 5.5, { align: "center" });
+      doc.text("ASSINATURA DO FUNCIONÁRIO", 153.5, assinaturaY + 5.5, { align: "center" });
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(6.8);
+      doc.text(pdfProText(item.funcionario), 153.5, assinaturaY + 10, { align: "center", maxWidth: 70 });
+      doc.text("Data: ____/____/________", 14, assinaturaY + 17);
+      doc.text("Local: __________________________________________", 86, assinaturaY + 17);
+
+      // RODAPÉ
+      doc.setDrawColor(226,232,240);
+      doc.line(14, altura - 13, largura - 14, altura - 13);
+      doc.setFontSize(6.3);
+      doc.setTextColor(100,116,139);
+      doc.text(pdfProText(`Banco de Horas • ${item.funcionario} • ${periodo}`), 14, altura - 7);
+      doc.text("Desenvolvido por Nay Cordeiro - IT", largura - 14, altura - 7, { align: "right" });
+
+      const nomeSeguro = removerAcentos(item.funcionario).replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+      const periodoSeguro = removerAcentos(periodo).replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+      doc.save(`banco_de_horas_${nomeSeguro || "funcionario"}_${periodoSeguro || "mes"}_mensal.pdf`);
+    };
+
+    window.gerarPDFBancoHoras = function() {
+      if (!window.jspdf?.jsPDF) { alert("A biblioteca de PDF ainda não carregou."); return; }
+      if (!resultadoAtualCSV?.length) { alert("Não há dados para gerar o PDF com o filtro atual."); return; }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF("p", "mm", "a4");
+      const filtroMes = document.getElementById("filtroMes")?.value || "";
+      const filtroAno = document.getElementById("filtroAno")?.value?.trim() || "";
+      const filtroFuncionario = document.getElementById("filtroFuncionario")?.value?.trim() || "";
+      const filtroDepartamento = document.getElementById("filtroDepartamento")?.value || "";
+      const partesFiltro = [];
+      if (filtroMes) partesFiltro.push(nomesMeses[Number(filtroMes) - 1]);
+      if (filtroAno) partesFiltro.push(filtroAno);
+      if (filtroFuncionario) partesFiltro.push(`Funcionário: ${filtroFuncionario}`);
+      if (filtroDepartamento) partesFiltro.push(`Departamento: ${filtroDepartamento}`);
+      const periodo = partesFiltro.join(" - ") || "Todos os registros disponíveis";
+      const titulo = "Relatório completo de banco de horas";
+      const subtitulo = periodo;
+      pdfProCabecalho(doc, titulo, subtitulo);
+
+      const itensDetalhe = (detalhesAtuaisPDF || []).filter(item => !funcionarioEstaInativoBanco(item.funcionario));
+      const resumos = itensDetalhe.map(item => {
+        const meses = pdfProOrdenarMeses(item.meses || []).filter(m => pdfProMesCombinaFiltro(m.mesAno));
+        return { item, meses, resumo: pdfProResumoFuncionario(item, meses) };
+      }).filter(x => x.meses.length);
+
+      const global = resumos.reduce((acc, x) => {
+        Object.keys(acc).forEach(k => acc[k] += Number(x.resumo[k] || 0));
+        return acc;
+      }, { trabalhado:0, previsto:0, extras:0, negativas:0, pagas:0, outrosAjustes:0, saldo:0, registros:0 });
+
+      let y = 40;
+      y = pdfProSecao(doc, "Visão geral", y);
+      y = pdfProCards(doc, [
+        { label: "Funcionários", valor: String(resumos.length), cor: [30,41,59] },
+        { label: "Trabalhado", valor: formatarMinutosParaHora(global.trabalhado), cor: [37,99,235] },
+        { label: "Extras", valor: formatarMinutosParaHora(global.extras), cor: [21,128,61] },
+        { label: "Pagas", valor: formatarMinutosParaHora(global.pagas), cor: [2,132,199] },
+        { label: "Negativas", valor: formatarMinutosParaHora(global.negativas), cor: [185,28,28] },
+        { label: "Saldo geral", valor: formatarMinutosParaHora(global.saldo), cor: pdfProStatus(global.saldo).cor }
+      ], y);
+
+      y = pdfProSecao(doc, "Resumo por funcionário", y);
+      y = pdfProAutoTable(doc, {
+        startY: y,
+        head: [["Funcionário", "Departamento", "Instituição", "Extras", "Pagas", "Ajustes", "Saldo", "Situação"]],
+        body: resumos.map(x => [
+          x.item.funcionario,
+          x.item.departamento || "Sem departamento",
+          pdfProEmpresaNome(x.item.funcionario, x.item.departamento),
+          formatarMinutosParaHora(x.resumo.extras),
+          formatarMinutosParaHora(x.resumo.pagas),
+          formatarMinutosParaHora(x.resumo.outrosAjustes),
+          formatarMinutosParaHora(x.resumo.saldo),
+          pdfProStatus(x.resumo.saldo).texto
+        ]),
+        theme: "grid",
+        headStyles: { fillColor: [30,41,59], textColor: [255,255,255], fontSize: 6.8 },
+        styles: { fontSize: 6.5, cellPadding: 1.2, overflow: "linebreak", valign: "middle" },
+        columnStyles: { 0: { cellWidth: 34 }, 1: { cellWidth: 28 }, 2: { cellWidth: 31 }, 3: { cellWidth: 20 }, 4: { cellWidth: 20 }, 5: { cellWidth: 20 }, 6: { cellWidth: 20, fontStyle: "bold" }, 7: { cellWidth: 20, fontStyle: "bold" } }
+      }, titulo, subtitulo) + 8;
+
+      resumos.forEach((x, idx) => {
+        doc.addPage();
+        const subtituloFuncionario = `${x.item.funcionario} - ${x.meses.length ? `${x.meses[0].mesAno} a ${x.meses[x.meses.length - 1].mesAno}` : periodo}`;
+        pdfProCabecalho(doc, titulo, subtituloFuncionario);
+        let yy = 40;
+        yy = pdfProSecao(doc, `Funcionário - ${x.item.funcionario}`, yy);
+        yy = pdfProCards(doc, [
+          { label: "Extras", valor: formatarMinutosParaHora(x.resumo.extras), cor: [21,128,61] },
+          { label: "Pagas", valor: formatarMinutosParaHora(x.resumo.pagas), cor: [2,132,199] },
+          { label: "Ajustes", valor: formatarMinutosParaHora(x.resumo.outrosAjustes), cor: [124,58,237] },
+          { label: "Negativas", valor: formatarMinutosParaHora(x.resumo.negativas), cor: [185,28,28] },
+          { label: "Saldo", valor: formatarMinutosParaHora(x.resumo.saldo), cor: pdfProStatus(x.resumo.saldo).cor }
+        ], yy);
+        yy = pdfProSecao(doc, "Resumo mensal", yy);
+        yy = pdfProTabelaResumoMeses(doc, x.meses, yy, titulo, subtituloFuncionario) + 7;
+        x.meses.forEach(mes => { yy = pdfProDetalharMes(doc, x.item, mes, yy, titulo, subtituloFuncionario); });
+      });
+
+      pdfProRodape(doc, `Relatório completo - ${periodo}`);
+      const nome = `relatorio_completo_banco_horas_${new Date().toLocaleDateString("pt-BR").replace(/\//g, "-")}.pdf`;
+      doc.save(nome);
+    };
+    // ===== FIM PDF PROFISSIONAL PADRONIZADO =====
 
     document.getElementById("regraDataEspecial").addEventListener("change", atualizarCampoCargaPersonalizada);
     document.getElementById("tipoDataEspecial").addEventListener("change", atualizarCampoCargaPersonalizada);
@@ -5034,8 +6042,14 @@
       if (event.key === "Enter") window.aplicarFiltrosGestao();
     });
 
+    // O layout novo precisa aparecer ANTES de qualquer leitura do Firebase.
+    // Assim o HTML legado nunca chega a piscar na tela durante o carregamento.
     aplicarModoDaPagina();
     carregarFuncionariosInativosLocais();
+    organizarLayoutTI();
+    document.documentElement.classList.add("ti-ready-v5");
+
+    // Depois que a interface já está pronta, carregamos os dados em segundo plano.
     await buscarRegistros();
     await buscarDatasEspeciais();
     await buscarAjustesHoras();
