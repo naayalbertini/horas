@@ -1617,6 +1617,11 @@
     .chefia-extra-func-head-v15 strong {display:block;color:#172033;font-size:14px;}
     .chefia-extra-func-head-v15 small {color:#667085;}
     .chefia-extra-vazio-v15 {background:#ecfdf3;border:1px solid #abefc6;color:#067647;border-radius:12px;padding:14px;font-weight:700;}
+    .chefia-extra-valor-v15 {font-weight:800;}
+    .chefia-extra-valor-v15.positivo {color:#039855 !important;}
+    .chefia-extra-valor-v15.negativo {color:#dc2626 !important;}
+    .chefia-extra-valor-v15.neutro {color:#475467 !important;}
+    .chefia-extra-pago-mais-v15 {display:block;margin-top:3px;color:#dc2626;font-size:10px;font-weight:800;}
 
     /* Gestão */
     body.visualizando-gestao-chefia .container > :not(.topo):not(.pagina-gestao-chefia):not(.chefia-nav-v5) { display:none !important; }
@@ -4436,7 +4441,7 @@
                     </div>
                     <div style="text-align:right;">
                       <small style="display:block;color:#667085;font-weight:700;">Total que falta quitar</small>
-                      <strong class="positivo" style="font-size:18px;">${formatarMinutosParaHora(saldoFuncionario)}</strong>
+                      <strong class="chefia-extra-valor-v15 ${obterClasseSaldo(saldoFuncionario)}" style="font-size:18px;">${formatarMinutosParaHora(saldoFuncionario)}</strong>
                     </div>
                   </div>
                   <div class="tabela-wrapper">
@@ -4453,15 +4458,15 @@
                         ${mesesFuncionario.map(item => `
                           <tr>
                             <td>${escaparHTML(item.mesAno)}</td>
-                            <td class="positivo">${formatarMinutosParaHora(item.extras)}</td>
-                            <td>${formatarMinutosParaHora(Number(item.pagas || 0) + Math.abs(Math.min(Number(item.ajustes || 0), 0)) + Number(item.negativas || 0))}</td>
-                            <td class="${obterClasseSaldo(item.saldo)}"><strong>${formatarMinutosParaHora(item.saldo)}</strong>${Number(item.saldo || 0) < 0 ? '<br><small>pago a mais</small>' : ''}</td>
+                            <td class="chefia-extra-valor-v15 positivo">${formatarMinutosParaHora(item.extras)}</td>
+                            <td class="chefia-extra-valor-v15 neutro">${formatarMinutosParaHora(Number(item.pagas || 0) + Math.abs(Math.min(Number(item.ajustes || 0), 0)) + Number(item.negativas || 0))}</td>
+                            <td><strong class="chefia-extra-valor-v15 ${obterClasseSaldo(item.saldo)}">${formatarMinutosParaHora(item.saldo)}</strong>${Number(item.saldo || 0) < 0 ? '<span class="chefia-extra-pago-mais-v15">pago a mais</span>' : ''}</td>
                           </tr>
                         `).join("")}
                         <tr>
                           <td colspan="2"><strong>Resumo do funcionário no filtro</strong></td>
-                          <td>${formatarMinutosParaHora(totalBaixas)}</td>
-                          <td class="${obterClasseSaldo(saldoFuncionario)}"><strong>${formatarMinutosParaHora(saldoFuncionario)}</strong></td>
+                          <td class="chefia-extra-valor-v15 neutro">${formatarMinutosParaHora(totalBaixas)}</td>
+                          <td><strong class="chefia-extra-valor-v15 ${obterClasseSaldo(saldoFuncionario)}">${formatarMinutosParaHora(saldoFuncionario)}</strong></td>
                         </tr>
                       </tbody>
                     </table>
