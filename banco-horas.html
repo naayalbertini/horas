@@ -955,6 +955,11 @@
     .ti-extra-dep-v4 {background:#fff;border:1px solid var(--ti-border);border-radius:12px;margin-bottom:12px;overflow:hidden;}
     .ti-extra-dep-v4 h3 {margin:0;padding:13px 15px;background:#f8fafc;border-bottom:1px solid #e4e7ec;font-size:15px;color:#101828;}
     .ti-extra-vazio-v4 {background:#ecfdf3;border:1px solid #abefc6;color:#067647;border-radius:10px;padding:14px;font-weight:700;}
+    .ti-extra-valor-v4 {font-weight:800;}
+    .ti-extra-valor-v4.positivo {color:#039855 !important;}
+    .ti-extra-valor-v4.negativo {color:#dc2626 !important;}
+    .ti-extra-valor-v4.neutro {color:#475467 !important;}
+    .ti-extra-pago-mais-v4 {display:block;margin-top:3px;color:#dc2626;font-size:10px;font-weight:800;}
     .ti-month-status-v4 {font-size:10px;font-weight:800;border-radius:999px;padding:4px 7px;}.ti-month-status-v4.quit{background:#ecfdf3;color:#067647}.ti-month-status-v4.pending{background:#fffaeb;color:#b54708}
     @media(max-width:1050px){body.ti-dashboard-v4{--ti-sidebar:210px}.ti-team-row-v4{grid-template-columns:minmax(190px,1.5fr) minmax(130px,.8fr) repeat(2,minmax(100px,.6fr));}.ti-team-row-v4 > :nth-child(5),.ti-team-row-v4 > :nth-child(6){display:none}.ti-func-summary-v4,.ti-kpi-row-v4{grid-template-columns:repeat(2,1fr)}#tiPageGestao .gestao-grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:760px){body.ti-dashboard-v4{--ti-sidebar:0}.ti-sidebar-v4{position:sticky;top:0;width:100%;height:auto;flex-direction:row;overflow-x:auto;padding:8px;}.ti-brand-v4,.ti-nav-label-v4,.ti-nav-bottom-v4{display:none}.ti-sidebar-v4 button{width:auto;white-space:nowrap}.ti-sidebar-v4 button span{display:inline}.ti-sidebar-v4 button i{width:auto}body.ti-dashboard-v4 .container{margin-left:0;padding:18px 14px}.ti-team-row-v4{grid-template-columns:1fr auto}.ti-team-row-v4.header{display:none}.ti-team-row-v4 > :not(:first-child):not(:last-child){display:none}.ti-func-summary-v4,.ti-kpi-row-v4,body.ti-dashboard-v4 .resumo-geral,.ti-payment-summary-v4,.ti-extra-resumo-v4,#tiPageGestao .gestao-grid{grid-template-columns:1fr 1fr}#tiPageGestao .gestao-layout{grid-template-columns:1fr}.ti-page-subtitle-v4{font-size:12px}}
@@ -5852,7 +5857,7 @@ window.__legacyGerarPDFFuncionario = function(indexFuncionario) {
                     </div>
                     <div style="text-align:right;">
                       <small style="display:block;color:#667085;font-weight:700;">Total que falta quitar</small>
-                      <strong class="positivo" style="font-size:18px;">${formatarMinutosParaHora(saldoFuncionario)}</strong>
+                      <strong class="ti-extra-valor-v4 ${obterClasseSaldo(saldoFuncionario)}" style="font-size:18px;">${formatarMinutosParaHora(saldoFuncionario)}</strong>
                     </div>
                   </div>
                   <div class="tabela-wrapper">
@@ -5869,15 +5874,15 @@ window.__legacyGerarPDFFuncionario = function(indexFuncionario) {
                         ${mesesFuncionario.map(item => `
                           <tr>
                             <td>${escaparHTML(item.mesAno)}</td>
-                            <td class="positivo">${formatarMinutosParaHora(item.extras)}</td>
-                            <td>${formatarMinutosParaHora(Number(item.pagas || 0) + Math.abs(Math.min(Number(item.ajustes || 0), 0)) + Number(item.negativas || 0))}</td>
-                          <td class="${obterClasseSaldo(item.saldo)}"><strong>${formatarMinutosParaHora(item.saldo)}</strong>${Number(item.saldo || 0) < 0 ? '<br><small>pago a mais</small>' : ''}</td>
+                            <td class="ti-extra-valor-v4 positivo">${formatarMinutosParaHora(item.extras)}</td>
+                            <td class="ti-extra-valor-v4 neutro">${formatarMinutosParaHora(Number(item.pagas || 0) + Math.abs(Math.min(Number(item.ajustes || 0), 0)) + Number(item.negativas || 0))}</td>
+                            <td><strong class="ti-extra-valor-v4 ${obterClasseSaldo(item.saldo)}">${formatarMinutosParaHora(item.saldo)}</strong>${Number(item.saldo || 0) < 0 ? '<span class="ti-extra-pago-mais-v4">pago a mais</span>' : ''}</td>
                           </tr>
                         `).join("")}
                         <tr>
                           <td colspan="2"><strong>Resumo do funcionário no filtro</strong></td>
-                          <td>${formatarMinutosParaHora(totalBaixas)}</td>
-                          <td class="${obterClasseSaldo(saldoFuncionario)}"><strong>${formatarMinutosParaHora(saldoFuncionario)}</strong></td>
+                          <td class="ti-extra-valor-v4 neutro">${formatarMinutosParaHora(totalBaixas)}</td>
+                          <td><strong class="ti-extra-valor-v4 ${obterClasseSaldo(saldoFuncionario)}">${formatarMinutosParaHora(saldoFuncionario)}</strong></td>
                         </tr>
                       </tbody>
                     </table>
