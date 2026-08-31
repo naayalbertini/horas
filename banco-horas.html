@@ -5730,10 +5730,23 @@ window.__legacyGerarPDFFuncionario = function(indexFuncionario) {
       const mes = mesesFiltrados[0];
       const meses = [mes];
       const resumo = pdfProResumoFuncionario(item, meses);
-      const empresa = pdfProEmpresaNome(item.funcionario, item.departamento);
+      const chaveMesPagamento = obterChaveMesAnoPDF(mes.mesAno);
+      const pagamentosEmpresa = ajustesHoras
+        .filter(ajuste => ajuste.tipo === "horas_pagas" && nomesIguais(obterNomeFuncionario(ajuste.funcionario), item.funcionario) && String(ajuste.mesReferencia || ajuste.data || "").slice(0, 7) === chaveMesPagamento)
+        .slice()
+        .sort((a,b) => String(a.dataPagamento || a.data || "").localeCompare(String(b.dataPagamento || b.data || "")));
+      const totalPagamentosEmpresa = pagamentosEmpresa.reduce((total,p) => total + Math.abs(Number(p.minutos || 0)), 0);
+      if (pagamentosEmpresa.length) resumo.pagas = totalPagamentosEmpresa;
+      const empresaInfo = obterEmpresaFuncionario(item.funcionario, item.departamento) || { nome: pdfProEmpresaNome(item.funcionario, item.departamento), cnpj: "-" };
+      const empresa = empresaInfo.nome || pdfProEmpresaNome(item.funcionario, item.departamento);
+      const cnpjEmpresa = empresaInfo.cnpj || "-";
       const periodo = mes.mesAno;
       const perfil = obterPerfilFuncionario(item.funcionario) || {};
+      const saldoAntesBaixas = Number(resumo.extras || 0) - Number(resumo.negativas || 0);
+      const outrosAjustesMes = Number(resumo.outrosAjustes || 0);
       const statusFinal = pdfProStatus(Number(resumo.saldo || 0));
+      const datasPagamento = Array.from(new Set(pagamentosEmpresa.map(p => p.dataPagamento || p.data).filter(Boolean))).sort();
+      const datasPagamentoTexto = datasPagamento.length ? datasPagamento.map(formatarDataBR).join(", ").replace(/, ([^,]*)$/, " e $1") : "não houve pagamento registrado";
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF("p", "mm", "a4");
       const largura = doc.internal.pageSize.width;
@@ -5773,31 +5786,33 @@ window.__legacyGerarPDFFuncionario = function(indexFuncionario) {
       doc.text(pdfProText(empresa), 132, y + 10.5, { maxWidth: 59 });
       doc.setFontSize(6.3);
       doc.setTextColor(100,116,139);
-      doc.text(pdfProText(`CPF: ${perfil.cpf || "Não informado"} • Carga: ${obterCargaSemanalFuncionario(item.funcionario)}h/semana • Status: ${funcionarioEstaInativoBanco(item.funcionario) ? "Inativo" : "Ativo"}`), 18, y + 15.2);
+      doc.text(pdfProText(`CPF: ${perfil.cpf || "Não informado"} • Carga: ${obterCargaSemanalFuncionario(item.funcionario)}h/semana • Status: ${funcionarioEstaInativoBanco(item.funcionario) ? "Inativo" : "Ativo"}`), 18, y + 15.2, { maxWidth: 108 });
+      doc.text(pdfProText(`CNPJ: ${cnpjEmpresa}`), 132, y + 15.2, { maxWidth: 59 });
       y += 21;
 
-      // RESUMO DO MÊS
+      // RESUMO CONTÁBIL DO MÊS
       const cards = [
-        { label: "TRABALHADO", valor: formatarMinutosParaHora(resumo.trabalhado), cor: [37,99,235] },
-        { label: "EXTRAS", valor: formatarMinutosParaHora(resumo.extras), cor: [21,128,61] },
-        { label: "HORAS PAGAS", valor: formatarMinutosParaHora(resumo.pagas), cor: [2,132,199] },
-        { label: "AJUSTES", valor: formatarMinutosParaHora(resumo.outrosAjustes), cor: [124,58,237] },
-        { label: "SALDO", valor: formatarMinutosParaHora(resumo.saldo), cor: statusFinal.cor }
+        { label: "EXTRAS APURADAS", valor: formatarMinutosParaHora(resumo.extras), cor: [21,128,61] },
+        { label: "HORAS NEGATIVAS", valor: formatarMinutosParaHora(resumo.negativas), cor: [185,28,28] },
+        { label: "SALDO PRÉ-BAIXA", valor: formatarMinutosParaHora(saldoAntesBaixas), cor: saldoAntesBaixas < 0 ? [185,28,28] : [180,83,9] },
+        { label: "PAGAS EMPRESA", valor: formatarMinutosParaHora(totalPagamentosEmpresa), cor: [2,132,199] },
+        { label: "DEMAIS AJUSTES", valor: formatarMinutosParaHora(outrosAjustesMes), cor: [124,58,237] },
+        { label: "SALDO FINAL", valor: formatarMinutosParaHora(resumo.saldo), cor: statusFinal.cor }
       ];
-      const gap = 2;
-      const cardW = (largura - 28 - gap * 4) / 5;
+      const gap = 1.5;
+      const cardW = (largura - 28 - gap * 5) / 6;
       cards.forEach((card, i) => {
         const x = 14 + i * (cardW + gap);
         doc.setFillColor(248,250,252);
         doc.setDrawColor(203,213,225);
         doc.roundedRect(x, y, cardW, 18, 2, 2, "FD");
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(5.9);
+        doc.setFontSize(4.9);
         doc.setTextColor(100,116,139);
-        doc.text(pdfProText(card.label), x + 2.3, y + 5.5);
-        doc.setFontSize(9.4);
+        doc.text(pdfProText(card.label), x + 1.7, y + 5.3, { maxWidth: cardW - 3.4 });
+        doc.setFontSize(8.1);
         doc.setTextColor(...card.cor);
-        doc.text(pdfProText(card.valor), x + 2.3, y + 13.2);
+        doc.text(pdfProText(card.valor), x + 1.7, y + 13.1);
       });
       y += 22;
 
@@ -5809,7 +5824,7 @@ window.__legacyGerarPDFFuncionario = function(indexFuncionario) {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(7.5);
       doc.setTextColor(...statusFinal.cor);
-      doc.text(pdfProText(`SITUAÇÃO: ${statusFinal.texto.toUpperCase()}  •  PAGAS: ${formatarMinutosParaHora(resumo.pagas)}  •  SALDO: ${formatarMinutosParaHora(resumo.saldo)}`), largura / 2, y + 5.2, { align: "center" });
+      doc.text(pdfProText(`SITUAÇÃO: ${statusFinal.texto.toUpperCase()}  •  SALDO ANTES DAS BAIXAS: ${formatarMinutosParaHora(saldoAntesBaixas)}  •  SALDO FINAL: ${formatarMinutosParaHora(resumo.saldo)}`), largura / 2, y + 5.2, { align: "center" });
       y += 12;
 
       // BATIDAS DO MÊS — entrada e saída aparecem normalmente.
@@ -5878,31 +5893,58 @@ window.__legacyGerarPDFFuncionario = function(indexFuncionario) {
       });
       y = doc.autoTable.previous.finalY + 4;
 
-      // Destaque explícito das horas pagas do mês.
-      if (Number(resumo.pagas || 0) > 0) {
+      // HORAS PAGAS PELA EMPRESA
+      if (pagamentosEmpresa.length) {
+        const detalhesPagamento = pagamentosEmpresa.map(p => {
+          const dataPg = p.dataPagamento || p.data || "";
+          const dataTxt = dataPg ? formatarDataBR(dataPg) : "data não informada";
+          const horasTxt = formatarMinutosParaHora(Math.abs(Number(p.minutos || 0)));
+          const desc = String(p.descricao || "Pagamento de horas extras pela empresa").replace(/\s+/g, " ").trim();
+          return `${dataTxt} — ${horasTxt} — ${desc}`;
+        }).join("   |   ");
+        const linhasPagamento = doc.splitTextToSize(pdfProText(detalhesPagamento), largura - 40).slice(0, 3);
+        const alturaPagamento = 9 + linhasPagamento.length * 3.4;
+        const yPagamento = Math.min(y, 201);
         doc.setFillColor(239,246,255);
-        doc.setDrawColor(125,211,252);
-        doc.roundedRect(14, y, largura - 28, 8, 1.5, 1.5, "FD");
+        doc.setDrawColor(56,189,248);
+        doc.roundedRect(14, yPagamento, largura - 28, alturaPagamento, 1.5, 1.5, "FD");
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(7.2);
+        doc.setFontSize(7.1);
         doc.setTextColor(2,132,199);
-        doc.text(pdfProText(`HORAS PAGAS NESTE MÊS: ${formatarMinutosParaHora(resumo.pagas)}`), largura / 2, y + 5.2, { align: "center" });
-        y += 11;
+        doc.text(pdfProText(`HORAS PAGAS PELA EMPRESA — TOTAL NO MÊS: ${formatarMinutosParaHora(totalPagamentosEmpresa)}`), 18, yPagamento + 5);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(5.8);
+        doc.setTextColor(51,65,85);
+        doc.text(linhasPagamento, 18, yPagamento + 9);
+        y = yPagamento + alturaPagamento + 3;
+      } else {
+        const yPagamento = Math.min(y, 205);
+        doc.setFillColor(248,250,252);
+        doc.setDrawColor(203,213,225);
+        doc.roundedRect(14, yPagamento, largura - 28, 8, 1.5, 1.5, "FD");
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(6.6);
+        doc.setTextColor(100,116,139);
+        doc.text("NENHUMA HORA PAGA PELA EMPRESA FOI REGISTRADA NESTE MÊS", largura / 2, yPagamento + 5.2, { align: "center" });
+        y = yPagamento + 11;
       }
 
-      // DECLARAÇÃO DE CIÊNCIA
-      const declaracaoY = Math.min(Math.max(y, 207), 218);
+      // DECLARAÇÃO DE CIÊNCIA — APURAÇÃO COMPLETA DO MÊS
+      const declaracaoY = Math.min(Math.max(y, 204), 214);
       doc.setFillColor(248,250,252);
-      doc.setDrawColor(226,232,240);
-      doc.roundedRect(14, declaracaoY, largura - 28, 20, 2, 2, "FD");
+      doc.setDrawColor(203,213,225);
+      doc.roundedRect(14, declaracaoY, largura - 28, 29, 2, 2, "FD");
       doc.setFont("helvetica", "bold");
       doc.setFontSize(7.2);
       doc.setTextColor(30,41,59);
-      doc.text("DECLARAÇÃO DE CIÊNCIA", 18, declaracaoY + 5.5);
+      doc.text("DECLARAÇÃO DE CIÊNCIA E FECHAMENTO DO MÊS", 18, declaracaoY + 5.5);
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(6.8);
-      const declaracao = `Declaro estar ciente dos registros de entrada e saída do mês de ${periodo}. Foram apuradas ${formatarMinutosParaHora(resumo.extras)} de horas extras, sendo ${formatarMinutosParaHora(resumo.pagas)} registradas como HORAS PAGAS. O saldo final do mês é ${formatarMinutosParaHora(resumo.saldo)}.`;
-      const linhasDecl = doc.splitTextToSize(pdfProText(declaracao), largura - 36);
+      doc.setFontSize(6.25);
+      const textoPagamentoDeclaracao = totalPagamentosEmpresa > 0
+        ? `Deste saldo, foram pagas pela empresa ${formatarMinutosParaHora(totalPagamentosEmpresa)} em ${datasPagamentoTexto}.`
+        : "Não houve registro de horas pagas pela empresa neste mês.";
+      const declaracao = `Declaro estar ciente de que, no mês de ${periodo}, foram apuradas ${formatarMinutosParaHora(resumo.extras)} de horas extras e ${formatarMinutosParaHora(resumo.negativas)} de horas negativas, resultando em saldo líquido de ${formatarMinutosParaHora(saldoAntesBaixas)} antes das baixas. ${textoPagamentoDeclaracao} Considerando as horas pagas e os demais ajustes do mês (${formatarMinutosParaHora(outrosAjustesMes)}), o saldo final após as baixas é de ${formatarMinutosParaHora(resumo.saldo)}.`;
+      const linhasDecl = doc.splitTextToSize(pdfProText(declaracao), largura - 36).slice(0, 5);
       doc.text(linhasDecl, 18, declaracaoY + 10.5);
 
       // ASSINATURAS
