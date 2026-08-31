@@ -4336,7 +4336,8 @@
 
           mesesConsiderados.forEach(mes => {
             const resumo = pdfProResumoMes(mes);
-            if (Number(resumo.saldo || 0) <= 0) return;
+            const temMovimentoBaixa = (mes.registros || []).some(reg => reg.tipoAjuste === "horas_pagas" || reg.tipoAjuste === "folga_descontar" || reg.tipoAjuste === "desconto_extra");
+            if (Number(resumo.saldo || 0) === 0 && !temMovimentoBaixa) return;
 
             linhas.push({
               departamento,
@@ -4394,7 +4395,7 @@
           <div><small>Departamentos</small><strong>${departamentos.size}</strong></div>
           <div><small>Funcionários</small><strong>${funcionarios.size}</strong></div>
           <div><small>Baixas consideradas</small><strong>${formatarMinutosParaHora(totalBaixas)}</strong></div>
-          <div><small>Extra restante</small><strong class="positivo">${formatarMinutosParaHora(totalSaldo)}</strong></div>
+          <div><small>Total a quitar</small><strong class="positivo">${formatarMinutosParaHora(totalSaldo)}</strong></div>
         </div>
       `;
 
@@ -4421,7 +4422,7 @@
 
         return `
           <section class="chefia-extra-dep-v15">
-            <h3><i class="fas fa-building"></i> ${escaparHTML(departamento)} - ${formatarMinutosParaHora(totalDepartamento)} em aberto</h3>
+            <h3><i class="fas fa-building"></i> ${escaparHTML(departamento)} - ${formatarMinutosParaHora(totalDepartamento)} a quitar</h3>
             ${Object.entries(porFuncionario).map(([funcionario, mesesFuncionario]) => {
               const saldoFuncionario = Number(mesesFuncionario[0]?.saldoFuncionario || 0);
               const instituicao = mesesFuncionario[0]?.instituicao || "Instituição não informada";
@@ -4434,7 +4435,7 @@
                       <small>${escaparHTML(instituicao)}</small>
                     </div>
                     <div style="text-align:right;">
-                      <small style="display:block;color:#667085;font-weight:700;">Saldo final restante</small>
+                      <small style="display:block;color:#667085;font-weight:700;">Total que falta quitar</small>
                       <strong class="positivo" style="font-size:18px;">${formatarMinutosParaHora(saldoFuncionario)}</strong>
                     </div>
                   </div>
@@ -4454,13 +4455,13 @@
                             <td>${escaparHTML(item.mesAno)}</td>
                             <td class="positivo">${formatarMinutosParaHora(item.extras)}</td>
                             <td>${formatarMinutosParaHora(Number(item.pagas || 0) + Math.abs(Math.min(Number(item.ajustes || 0), 0)) + Number(item.negativas || 0))}</td>
-                            <td class="${obterClasseSaldo(item.saldo)}"><strong>${formatarMinutosParaHora(item.saldo)}</strong></td>
+                            <td class="${obterClasseSaldo(item.saldo)}"><strong>${formatarMinutosParaHora(item.saldo)}</strong>${Number(item.saldo || 0) < 0 ? '<br><small>pago a mais</small>' : ''}</td>
                           </tr>
                         `).join("")}
                         <tr>
                           <td colspan="2"><strong>Resumo do funcionário no filtro</strong></td>
                           <td>${formatarMinutosParaHora(totalBaixas)}</td>
-                          <td class="positivo"><strong>${formatarMinutosParaHora(saldoFuncionario)}</strong></td>
+                          <td class="${obterClasseSaldo(saldoFuncionario)}"><strong>${formatarMinutosParaHora(saldoFuncionario)}</strong></td>
                         </tr>
                       </tbody>
                     </table>
@@ -7642,7 +7643,7 @@
         { label: "Funcionários", valor: String(funcionarios.size), cor: [37,99,235] },
         { label: "Extras apuradas", valor: formatarMinutosParaHora(totalExtras), cor: [21,128,61] },
         { label: "Baixas consideradas", valor: formatarMinutosParaHora(totalBaixas), cor: [2,132,199] },
-        { label: "Saldo restante", valor: formatarMinutosParaHora(totalSaldo), cor: [180,83,9] }
+        { label: "Total a quitar", valor: formatarMinutosParaHora(totalSaldo), cor: [180,83,9] }
       ], y);
 
       const porDepartamento = linhas.reduce((acc, item) => {
@@ -7661,7 +7662,7 @@
         const saldosDepartamento = new Map();
         itens.forEach(item => saldosDepartamento.set(item.funcionario, Number(item.saldoFuncionario || 0)));
         const totalDepartamento = Array.from(saldosDepartamento.values()).reduce((total, saldo) => total + saldo, 0);
-        y = pdfProSecao(doc, `${departamento} - saldo em aberto ${formatarMinutosParaHora(totalDepartamento)}`, y);
+        y = pdfProSecao(doc, `${departamento} - ${formatarMinutosParaHora(totalDepartamento)} a quitar`, y);
 
         const porFuncionario = itens.reduce((acc, item) => {
           if (!acc[item.funcionario]) acc[item.funcionario] = [];
@@ -7671,7 +7672,7 @@
 
         y = pdfProAutoTable(doc, {
           startY: y,
-          head: [["Funcionário", "Instituição", "Meses com extra", "Baixas consideradas", "Saldo final restante"]],
+          head: [["Funcionário", "Instituição", "Meses detalhados", "Baixas consideradas", "Total a quitar"]],
           body: Object.entries(porFuncionario).map(([funcionario, mesesFuncionario]) => {
             const primeiro = mesesFuncionario[0] || {};
             const totalBaixasFuncionario = mesesFuncionario.reduce((total, item) => total + Number(item.pagas || 0) + Math.abs(Math.min(Number(item.ajustes || 0), 0)) + Number(item.negativas || 0), 0);
@@ -7695,7 +7696,8 @@
           },
           didParseCell: data => {
             if (data.section === "body" && data.column.index === 4) {
-              data.cell.styles.textColor = [180, 83, 9];
+              const raw = String(data.cell.raw || "");
+              data.cell.styles.textColor = raw.startsWith("-") ? [185, 28, 28] : [180, 83, 9];
               data.cell.styles.fontStyle = "bold";
             }
           }
@@ -7727,7 +7729,8 @@
           },
           didParseCell: data => {
             if (data.section === "body" && data.column.index === 6) {
-              data.cell.styles.textColor = [180, 83, 9];
+              const raw = String(data.cell.raw || "");
+              data.cell.styles.textColor = raw.startsWith("-") ? [185, 28, 28] : [180, 83, 9];
               data.cell.styles.fontStyle = "bold";
             }
           }
@@ -7778,5 +7781,3 @@
   </script>
 </body>
 </html>
-
-
