@@ -1900,6 +1900,47 @@
       .gestao-v12 .gestao-form-atestado .campo-largo { grid-column:auto; }
     }
 
+
+    /* ===== V14: VISÃO GERAL CHEFIA ESPELHADA NA T.I. ===== */
+    body.modo-chefia .resumo-geral.visao-geral-chefia {
+      grid-template-columns: repeat(4, minmax(0,1fr)) !important; gap:12px !important; margin-bottom:18px !important;
+    }
+    body.modo-chefia .resumo-geral.visao-geral-chefia::before { display:none !important; }
+    body.modo-chefia .resumo-geral.visao-geral-chefia .card-resumo {
+      background:#fff !important; border:1px solid #e3e8ef !important; border-radius:11px !important; padding:15px !important; box-shadow:none !important;
+    }
+    body.modo-chefia .resumo-geral.visao-geral-chefia .card-resumo h3 {
+      font-size:11px !important; color:#667085 !important; text-transform:uppercase; letter-spacing:.04em; margin-bottom:8px !important;
+    }
+    body.modo-chefia .resumo-geral.visao-geral-chefia .card-resumo p {
+      font-size:22px !important; color:#101828 !important; letter-spacing:-.02em;
+    }
+    .chefia-overview-heading-v14 {display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin:2px 0 13px;}
+    .chefia-overview-heading-v14 h2 {margin:0;font-size:17px;color:#101828;letter-spacing:-.01em;}
+    .chefia-overview-heading-v14 p {margin:4px 0 0;font-size:12px;color:#667085;}
+    .chefia-overview-heading-v14 .btn-pdf {padding:9px 13px;border-radius:8px;font-size:13px;}
+    body.modo-chefia .filtros-principais-chefia {background:#fff !important;border:1px solid #e3e8ef !important;border-radius:12px !important;padding:16px !important;gap:12px !important;margin-bottom:16px !important;box-shadow:0 2px 8px rgba(16,24,40,.035) !important;}
+    body.modo-chefia .filtros-principais-chefia .titulo-filtros-chefia {display:none !important;}
+    body.modo-chefia .filtros-principais-chefia label{font-size:12px;color:#344054;margin-bottom:5px;}
+    body.modo-chefia .filtros-principais-chefia input, body.modo-chefia .filtros-principais-chefia select{border-color:#d0d5dd;border-radius:8px;padding:9px 10px;font-size:13px;min-height:38px;}
+    .chefia-kpi-row-v14 {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:15px;}
+    .chefia-mini-kpi-v14 {background:#fff;border:1px solid #e3e8ef;border-radius:10px;padding:13px;}
+    .chefia-mini-kpi-v14 small {display:block;color:#667085;font-size:11px;margin-bottom:5px;}
+    .chefia-mini-kpi-v14 strong {font-size:20px;color:#101828;}
+    .chefia-team-list-v14 {background:#fff;border:1px solid #e3e8ef;border-radius:12px;overflow:hidden;margin-bottom:20px;}
+    .chefia-team-row-v14 {display:grid;grid-template-columns:minmax(220px,1.6fr) minmax(150px,.9fr) repeat(4,minmax(110px,.65fr));align-items:center;gap:10px;padding:12px 15px;border-bottom:1px solid #eef1f5;font-size:12px;}
+    .chefia-team-row-v14:last-child{border-bottom:0}.chefia-team-row-v14.header{background:#f8fafc;color:#667085;font-size:10px;text-transform:uppercase;font-weight:800;letter-spacing:.04em;}
+    .chefia-team-name-v14 strong{display:block;color:#101828;font-size:13px;margin-bottom:4px}.chefia-team-name-v14 small{color:#667085;display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+    .chefia-saldo-pill-v14{display:inline-flex;border-radius:999px;padding:5px 8px;font-weight:800;font-size:11px;white-space:nowrap;}
+    .chefia-saldo-pill-v14.pos{background:#ecfdf3;color:#067647}.chefia-saldo-pill-v14.neg{background:#fef3f2;color:#b42318}.chefia-saldo-pill-v14.zero{background:#f2f4f7;color:#475467}
+    .chefia-overview-status-v14{font-weight:800;font-size:11px}.chefia-overview-status-v14.pendente{color:#b54708}.chefia-overview-status-v14.negativo{color:#b42318}.chefia-overview-status-v14.quitado{color:#067647}
+    body.modo-chefia .chefia-resumo-lista-v4{display:none!important;}
+    @media(max-width:1100px){.chefia-team-row-v14{grid-template-columns:minmax(200px,1.4fr) minmax(130px,.8fr) repeat(2,minmax(105px,.65fr));}.chefia-team-row-v14>*:nth-child(3),.chefia-team-row-v14>*:nth-child(4){display:none;}}
+    @media(max-width:760px){body.modo-chefia .resumo-geral.visao-geral-chefia{grid-template-columns:repeat(2,minmax(0,1fr))!important}.chefia-kpi-row-v14{grid-template-columns:1fr}.chefia-team-row-v14{grid-template-columns:1.5fr .8fr .8fr}.chefia-team-row-v14>*:nth-child(2),.chefia-team-row-v14>*:nth-child(3),.chefia-team-row-v14>*:nth-child(4){display:none}.chefia-overview-heading-v14{align-items:flex-start;flex-direction:column}}
+
+    body.visualizando-gestao-chefia .chefia-overview-heading-v14, body.visualizando-gestao-chefia #chefiaResumoEquipeV14,
+    body.visualizando-departamentos-chefia .chefia-overview-heading-v14, body.visualizando-departamentos-chefia #chefiaResumoEquipeV14,
+    body.visualizando-inativos-chefia .chefia-overview-heading-v14, body.visualizando-inativos-chefia #chefiaResumoEquipeV14 {display:none!important;}
 </style>
 </head>
 <body class="modo-chefia">
@@ -4122,8 +4163,21 @@
         container.appendChild(paginaInativos);
       }
 
-      if (resumo && topo) topo.insertAdjacentElement("afterend", resumo);
+      let overviewHeading = document.querySelector(".chefia-overview-heading-v14");
+      if (!overviewHeading) {
+        overviewHeading = document.createElement("div");
+        overviewHeading.className = "chefia-overview-heading-v14";
+        overviewHeading.innerHTML = `<div><h2>Painel do banco de horas</h2><p>Os valores abaixo já consideram pagamentos e ajustes lançados.</p></div><button type="button" class="btn-pdf" onclick="gerarPDFBancoHoras()"><i class="fas fa-file-pdf"></i> PDF completo</button>`;
+      }
+      if (topo) topo.insertAdjacentElement("afterend", overviewHeading);
+      if (resumo && overviewHeading) overviewHeading.insertAdjacentElement("afterend", resumo);
       if (filtrosPrincipais && resumo) resumo.insertAdjacentElement("afterend", filtrosPrincipais);
+      let resumoEquipeV14 = document.getElementById("chefiaResumoEquipeV14");
+      if (!resumoEquipeV14) {
+        resumoEquipeV14 = document.createElement("div");
+        resumoEquipeV14.id = "chefiaResumoEquipeV14";
+      }
+      if (filtrosPrincipais) filtrosPrincipais.insertAdjacentElement("afterend", resumoEquipeV14);
 
       if (cardResumoGeral && filtrosPrincipais) {
         let wrapper = document.querySelector(".chefia-resumo-lista-v4");
@@ -4142,6 +4196,43 @@
       }
 
       marcarAbaChefia("banco");
+    }
+
+    function renderizarResumoEquipeChefiaV14() {
+      const c = document.getElementById("chefiaResumoEquipeV14");
+      if (!c) return;
+      const ativos = (resultadoAtualCSV || []).filter(item => !funcionarioEstaInativoBanco(item.funcionario));
+      const comExtra = ativos.filter(item => Number(item.saldo || 0) > 0);
+      const negativos = ativos.filter(item => Number(item.saldo || 0) < 0);
+      const pendente = comExtra.reduce((total, item) => total + Number(item.saldo || 0), 0);
+      const ordenar = ativos.slice().sort((a,b) => {
+        const pesoA = Number(a.saldo||0)>0 ? 0 : Number(a.saldo||0)<0 ? 1 : 2;
+        const pesoB = Number(b.saldo||0)>0 ? 0 : Number(b.saldo||0)<0 ? 1 : 2;
+        return pesoA-pesoB || String(a.funcionario||'').localeCompare(String(b.funcionario||''),'pt-BR');
+      });
+      c.innerHTML = `
+        <div class="chefia-kpi-row-v14">
+          <div class="chefia-mini-kpi-v14"><small>Com extra pendente</small><strong>${comExtra.length}</strong></div>
+          <div class="chefia-mini-kpi-v14"><small>Total extra pendente</small><strong>${formatarMinutosParaHora(pendente)}</strong></div>
+          <div class="chefia-mini-kpi-v14"><small>Com saldo negativo</small><strong>${negativos.length}</strong></div>
+        </div>
+        <div class="chefia-team-list-v14">
+          <div class="chefia-team-row-v14 header"><span>Funcionário</span><span>Departamento</span><span>Extras</span><span>Pagas / ajustes</span><span>Saldo</span><span>Situação</span></div>
+          ${ordenar.map(item => {
+            const saldo = Number(item.saldo || 0);
+            const cls = saldo > 0 ? 'pos' : saldo < 0 ? 'neg' : 'zero';
+            const sit = saldo > 0 ? 'Pendente' : saldo < 0 ? 'Negativo' : 'Quitado';
+            const sitCls = saldo > 0 ? 'pendente' : saldo < 0 ? 'negativo' : 'quitado';
+            return `<div class="chefia-team-row-v14">
+              <div class="chefia-team-name-v14"><strong>${escaparHTML(item.funcionario)}</strong><small>${renderizarInstituicaoFuncionario(item.funcionario)} <span>${item.cargaSemanal || obterCargaSemanalFuncionario(item.funcionario)}h/semana</span></small></div>
+              <span>${escaparHTML(item.departamento || 'Sem departamento')}</span>
+              <strong class="positivo">${formatarMinutosParaHora(item.extras || 0)}</strong>
+              <span>${formatarMinutosParaHora(item.ajustes || 0)}</span>
+              <span class="chefia-saldo-pill-v14 ${cls}">${formatarMinutosParaHora(saldo)}</span>
+              <span class="chefia-overview-status-v14 ${sitCls}">${sit}</span>
+            </div>`;
+          }).join('')}
+        </div>`;
     }
 
     function filtrarAjustesHoras() {
@@ -5739,6 +5830,7 @@
         renderizarTabela(linhas);
         renderizarDetalhes(detalhesAtuaisPDF);
         renderizarResumo(ultimoResumoPDF);
+        renderizarResumoEquipeChefiaV14();
         renderizarPagamentosChefia();
         renderizarPainelGestaoChefia();
 
