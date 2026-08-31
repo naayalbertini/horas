@@ -1534,10 +1534,11 @@
     body.modo-chefia tbody tr:hover { background:#f8fbff !important; }
 
     /* Esconde duplicidades na visão geral. */
-    body.modo-chefia:not(.visualizando-gestao-chefia):not(.visualizando-departamentos-chefia) .painel-tratativas-chefia,
-    body.modo-chefia:not(.visualizando-gestao-chefia):not(.visualizando-departamentos-chefia) #secaoPagamentosChefia,
-    body.modo-chefia:not(.visualizando-gestao-chefia):not(.visualizando-departamentos-chefia) .pagina-gestao-chefia,
-    body.modo-chefia:not(.visualizando-gestao-chefia):not(.visualizando-departamentos-chefia) .pagina-departamentos-chefia,
+    body.modo-chefia:not(.visualizando-gestao-chefia):not(.visualizando-departamentos-chefia):not(.visualizando-extras-chefia) .painel-tratativas-chefia,
+    body.modo-chefia:not(.visualizando-gestao-chefia):not(.visualizando-departamentos-chefia):not(.visualizando-extras-chefia) #secaoPagamentosChefia,
+    body.modo-chefia:not(.visualizando-gestao-chefia):not(.visualizando-departamentos-chefia):not(.visualizando-extras-chefia) .pagina-gestao-chefia,
+    body.modo-chefia:not(.visualizando-gestao-chefia):not(.visualizando-departamentos-chefia):not(.visualizando-extras-chefia) .pagina-departamentos-chefia,
+    body.modo-chefia:not(.visualizando-extras-chefia) .pagina-extras-chefia,
     body.modo-chefia .info-regra { display:none !important; }
 
     /* Departamentos */
@@ -1595,6 +1596,27 @@
     body.visualizando-departamentos-chefia #detalhesFuncionarios > .departamento-card {
       margin-top: 10px !important;
     }
+
+    /* Extras pendentes */
+    body.visualizando-extras-chefia .container > :not(.topo):not(.pagina-extras-chefia):not(.chefia-nav-v5) { display:none !important; }
+    body.visualizando-extras-chefia .chefia-nav-v5 { display:flex !important; }
+    body.visualizando-extras-chefia .pagina-extras-chefia {
+      grid-column:2 !important;
+      display:block !important;
+      margin:0 !important;
+    }
+    .chefia-extra-filtros-v15 {display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px;}
+    .chefia-extra-resumo-v15 {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px;}
+    .chefia-extra-resumo-v15 > div {background:#fff;border:1px solid var(--v5-line);border-radius:12px;padding:13px 14px;}
+    .chefia-extra-resumo-v15 small {display:block;color:#667085;font-size:10px;text-transform:uppercase;font-weight:800;letter-spacing:.03em;}
+    .chefia-extra-resumo-v15 strong {display:block;margin-top:5px;font-size:19px;color:#172033;}
+    .chefia-extra-dep-v15 {background:#fff;border:1px solid var(--v5-line);border-radius:14px;margin-bottom:12px;overflow:hidden;}
+    .chefia-extra-dep-v15 h3 {margin:0;padding:14px 16px;background:#fff;border-bottom:1px solid #edf0f4;font-size:14px;color:#172033;}
+    .chefia-extra-func-v15 {margin:12px;padding:12px;border:1px solid var(--v5-line);border-radius:12px;background:#fff;}
+    .chefia-extra-func-head-v15 {display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px;}
+    .chefia-extra-func-head-v15 strong {display:block;color:#172033;font-size:14px;}
+    .chefia-extra-func-head-v15 small {color:#667085;}
+    .chefia-extra-vazio-v15 {background:#ecfdf3;border:1px solid #abefc6;color:#067647;border-radius:12px;padding:14px;font-weight:700;}
 
     /* Gestão */
     body.visualizando-gestao-chefia .container > :not(.topo):not(.pagina-gestao-chefia):not(.chefia-nav-v5) { display:none !important; }
@@ -1938,9 +1960,10 @@
     @media(max-width:1100px){.chefia-team-row-v14{grid-template-columns:minmax(200px,1.4fr) minmax(130px,.8fr) repeat(2,minmax(105px,.65fr));}.chefia-team-row-v14>*:nth-child(3),.chefia-team-row-v14>*:nth-child(4){display:none;}}
     @media(max-width:760px){body.modo-chefia .resumo-geral.visao-geral-chefia{grid-template-columns:repeat(2,minmax(0,1fr))!important}.chefia-kpi-row-v14{grid-template-columns:1fr}.chefia-team-row-v14{grid-template-columns:1.5fr .8fr .8fr}.chefia-team-row-v14>*:nth-child(2),.chefia-team-row-v14>*:nth-child(3),.chefia-team-row-v14>*:nth-child(4){display:none}.chefia-overview-heading-v14{align-items:flex-start;flex-direction:column}}
 
-    body.visualizando-gestao-chefia .chefia-overview-heading-v14, body.visualizando-gestao-chefia #chefiaResumoEquipeV14,
-    body.visualizando-departamentos-chefia .chefia-overview-heading-v14, body.visualizando-departamentos-chefia #chefiaResumoEquipeV14,
-    body.visualizando-inativos-chefia .chefia-overview-heading-v14, body.visualizando-inativos-chefia #chefiaResumoEquipeV14 {display:none!important;}
+    body.visualizando-gestao-chefia .container > .chefia-overview-heading-v14, body.visualizando-gestao-chefia #chefiaResumoEquipeV14,
+    body.visualizando-departamentos-chefia .container > .chefia-overview-heading-v14, body.visualizando-departamentos-chefia #chefiaResumoEquipeV14,
+    body.visualizando-extras-chefia .container > .chefia-overview-heading-v14, body.visualizando-extras-chefia #chefiaResumoEquipeV14,
+    body.visualizando-inativos-chefia .container > .chefia-overview-heading-v14, body.visualizando-inativos-chefia #chefiaResumoEquipeV14 {display:none!important;}
 </style>
 </head>
 <body class="modo-chefia">
@@ -2876,7 +2899,7 @@
 
     window.abrirPaginaGestaoChefia = async function() {
       marcarAbaChefia("gestao");
-      document.body.classList.remove("visualizando-departamentos-chefia", "visualizando-inativos-chefia");
+      document.body.classList.remove("visualizando-departamentos-chefia", "visualizando-inativos-chefia", "visualizando-extras-chefia");
       document.body.classList.add("visualizando-gestao-chefia");
       sincronizarFiltrosGestaoComBanco();
       await atualizarPainelGestaoChefia();
@@ -2885,9 +2908,17 @@
 
     window.abrirPaginaDepartamentosChefia = function() {
       marcarAbaChefia("departamentos");
-      document.body.classList.remove("visualizando-gestao-chefia", "visualizando-inativos-chefia");
+      document.body.classList.remove("visualizando-gestao-chefia", "visualizando-inativos-chefia", "visualizando-extras-chefia");
       document.body.classList.add("visualizando-departamentos-chefia");
       sincronizarFiltrosDepartamentosComBanco();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    window.abrirPaginaExtrasChefia = function() {
+      marcarAbaChefia("extras");
+      document.body.classList.remove("visualizando-gestao-chefia", "visualizando-departamentos-chefia", "visualizando-inativos-chefia");
+      document.body.classList.add("visualizando-extras-chefia");
+      renderizarExtrasPendentesChefia();
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
@@ -2897,6 +2928,7 @@
       document.body.classList.remove("visualizando-gestao-chefia");
       document.body.classList.remove("visualizando-departamentos-chefia");
       document.body.classList.remove("visualizando-inativos-chefia");
+      document.body.classList.remove("visualizando-extras-chefia");
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
@@ -3275,7 +3307,7 @@
 
     window.abrirPaginaInativosChefia = function() {
       marcarAbaChefia("inativos");
-      document.body.classList.remove("visualizando-gestao-chefia", "visualizando-departamentos-chefia");
+      document.body.classList.remove("visualizando-gestao-chefia", "visualizando-departamentos-chefia", "visualizando-extras-chefia");
       document.body.classList.add("visualizando-inativos-chefia");
       renderizarFuncionariosInativosChefia();
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -4084,6 +4116,7 @@
       const titulos = {
         banco: ["Visão geral", "Resumo do banco de horas da equipe no período selecionado."],
         departamentos: ["Departamentos", "Consulte saldos e registros agrupados por setor."],
+        extras: ["Extras pendentes", "Monitore por departamento quem ainda tem horas extras em aberto."],
         gestao: ["Gestão", "Pagamentos, tratativas, pendências e histórico em um só lugar."],
         inativos: ["Funcionários inativos", "Pessoas que não fazem mais parte da equipe, com histórico preservado."]
       };
@@ -4127,6 +4160,7 @@
           <div class="chefia-nav-label-v5">Navegação</div>
           <button type="button" class="ativo" data-chefia-aba="banco" onclick="abrirPaginaBancoChefia()"><i class="fas fa-chart-simple"></i><span>Visão geral</span></button>
           <button type="button" data-chefia-aba="departamentos" onclick="abrirPaginaDepartamentosChefia()"><i class="fas fa-building"></i><span>Departamentos</span></button>
+          <button type="button" data-chefia-aba="extras" onclick="abrirPaginaExtrasChefia()"><i class="fas fa-hourglass-half"></i><span>Extras pendentes</span></button>
           <button type="button" data-chefia-aba="gestao" onclick="abrirPaginaGestaoChefia()"><i class="fas fa-list-check"></i><span>Gestão</span></button>
           <button type="button" data-chefia-aba="inativos" onclick="abrirPaginaInativosChefia()"><i class="fas fa-user-slash"></i><span>Inativos</span></button>
           <div class="nav-bottom-v5">
@@ -4161,6 +4195,49 @@
           <div id="historicoFuncionarioInativoV11"></div>
         `;
         container.appendChild(paginaInativos);
+      }
+
+      let paginaExtras = document.querySelector(".pagina-extras-chefia");
+      if (!paginaExtras) {
+        paginaExtras = document.createElement("section");
+        paginaExtras.className = "pagina-extras-chefia";
+        paginaExtras.innerHTML = `
+          <div class="chefia-overview-heading-v14">
+            <div><h2>Horas extras pendentes</h2><p>Mostra somente saldo positivo após descontar pagamentos, folgas, negativas e ajustes.</p></div>
+            <button type="button" class="btn-pdf" onclick="gerarPDFExtrasPendentesChefia()"><i class="fas fa-file-pdf"></i> Baixar PDF</button>
+          </div>
+          <div class="secao-chefia" style="margin-bottom:14px;">
+            <div class="secao-chefia-conteudo">
+              <div class="chefia-extra-filtros-v15">
+                <div>
+                  <label for="extrasChefiaFiltroDepartamento">Departamento</label>
+                  <select id="extrasChefiaFiltroDepartamento" onchange="renderizarExtrasPendentesChefia()"><option value="">Todos</option></select>
+                </div>
+                <div>
+                  <label for="extrasChefiaFiltroMes">Mês</label>
+                  <select id="extrasChefiaFiltroMes" onchange="renderizarExtrasPendentesChefia()">
+                    <option value="">Todos</option>
+                    <option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option>
+                    <option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option>
+                    <option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option>
+                    <option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="extrasChefiaFiltroAno">Ano</label>
+                  <input type="number" id="extrasChefiaFiltroAno" placeholder="Ex: 2026" onkeydown="if(event.key==='Enter') renderizarExtrasPendentesChefia()">
+                </div>
+                <div style="display:flex;align-items:end;gap:8px;flex-wrap:wrap;">
+                  <button type="button" onclick="renderizarExtrasPendentesChefia()" style="background:#2563eb;"><i class="fas fa-search"></i> Filtrar</button>
+                  <button type="button" class="btn-cancelar" onclick="limparFiltrosExtrasPendentesChefia()"><i class="fas fa-eraser"></i> Limpar</button>
+                </div>
+              </div>
+              <div id="chefiaExtrasPendentesResumo"></div>
+            </div>
+          </div>
+          <div id="chefiaExtrasPendentesLista"></div>
+        `;
+        container.appendChild(paginaExtras);
       }
 
       let overviewHeading = document.querySelector(".chefia-overview-heading-v14");
@@ -4234,6 +4311,175 @@
           }).join('')}
         </div>`;
     }
+
+    function obterLinhasExtrasPendentesChefia() {
+      const departamentoFiltro = document.getElementById("extrasChefiaFiltroDepartamento")?.value || "";
+      const mesFiltro = document.getElementById("extrasChefiaFiltroMes")?.value || "";
+      const anoFiltro = document.getElementById("extrasChefiaFiltroAno")?.value?.trim() || "";
+      const linhas = [];
+
+      (detalhesAtuaisPDF || [])
+        .filter(item => !funcionarioEstaInativoBanco(item.funcionario))
+        .forEach(item => {
+          const departamento = item.departamento || "Sem departamento";
+          if (departamentoFiltro && departamento !== departamentoFiltro) return;
+
+          const mesesConsiderados = (item.meses || []).filter(mes => {
+            const info = pdfProMesNumero(mes.mesAno);
+            if (mesFiltro && String(info.mes).padStart(2, "0") !== mesFiltro) return false;
+            if (anoFiltro && String(info.ano) !== anoFiltro) return false;
+            return true;
+          });
+
+          const resumoFuncionario = pdfProResumoFuncionario(item, mesesConsiderados);
+          if (Number(resumoFuncionario.saldo || 0) <= 0) return;
+
+          mesesConsiderados.forEach(mes => {
+            const resumo = pdfProResumoMes(mes);
+            if (Number(resumo.saldo || 0) <= 0) return;
+
+            linhas.push({
+              departamento,
+              funcionario: item.funcionario,
+              mesAno: mes.mesAno,
+              extras: resumo.extras,
+              negativas: resumo.negativas,
+              pagas: resumo.pagas,
+              ajustes: resumo.outrosAjustes,
+              saldo: resumo.saldo,
+              saldoFuncionario: resumoFuncionario.saldo,
+              instituicao: pdfProEmpresaNome(item.funcionario, departamento)
+            });
+          });
+        });
+
+      return linhas.sort((a, b) =>
+        a.departamento.localeCompare(b.departamento, "pt-BR") ||
+        a.funcionario.localeCompare(b.funcionario, "pt-BR") ||
+        obterChaveOrdenacaoMesAno(a.mesAno).localeCompare(obterChaveOrdenacaoMesAno(b.mesAno))
+      );
+    }
+
+    function atualizarSelectExtrasPendentesChefia() {
+      const select = document.getElementById("extrasChefiaFiltroDepartamento");
+      if (!select) return;
+      const valorAtual = select.value;
+      const departamentos = Array.from(new Set((detalhesAtuaisPDF || [])
+        .filter(item => !funcionarioEstaInativoBanco(item.funcionario))
+        .map(item => item.departamento || "Sem departamento")))
+        .sort((a, b) => a.localeCompare(b, "pt-BR"));
+
+      select.innerHTML = '<option value="">Todos</option>' + departamentos
+        .map(dep => `<option value="${escaparHTML(dep)}">${escaparHTML(dep)}</option>`)
+        .join("");
+      if (departamentos.includes(valorAtual)) select.value = valorAtual;
+    }
+
+    window.renderizarExtrasPendentesChefia = function() {
+      const lista = document.getElementById("chefiaExtrasPendentesLista");
+      const resumo = document.getElementById("chefiaExtrasPendentesResumo");
+      if (!lista || !resumo) return;
+
+      atualizarSelectExtrasPendentesChefia();
+      const linhas = obterLinhasExtrasPendentesChefia();
+      const departamentos = new Set(linhas.map(item => item.departamento));
+      const funcionarios = new Set(linhas.map(item => item.funcionario));
+      const saldosPorFuncionario = new Map();
+      linhas.forEach(item => saldosPorFuncionario.set(item.funcionario, Number(item.saldoFuncionario || 0)));
+      const totalSaldo = Array.from(saldosPorFuncionario.values()).reduce((total, saldo) => total + saldo, 0);
+      const totalBaixas = linhas.reduce((total, item) => total + Number(item.pagas || 0) + Math.abs(Math.min(Number(item.ajustes || 0), 0)) + Number(item.negativas || 0), 0);
+
+      resumo.innerHTML = `
+        <div class="chefia-extra-resumo-v15">
+          <div><small>Departamentos</small><strong>${departamentos.size}</strong></div>
+          <div><small>Funcionários</small><strong>${funcionarios.size}</strong></div>
+          <div><small>Baixas consideradas</small><strong>${formatarMinutosParaHora(totalBaixas)}</strong></div>
+          <div><small>Extra restante</small><strong class="positivo">${formatarMinutosParaHora(totalSaldo)}</strong></div>
+        </div>
+      `;
+
+      if (!linhas.length) {
+        lista.innerHTML = '<div class="chefia-extra-vazio-v15"><i class="fas fa-circle-check"></i> Nenhuma hora extra pendente encontrada com os filtros atuais.</div>';
+        return;
+      }
+
+      const porDepartamento = linhas.reduce((acc, item) => {
+        if (!acc[item.departamento]) acc[item.departamento] = [];
+        acc[item.departamento].push(item);
+        return acc;
+      }, {});
+
+      lista.innerHTML = Object.entries(porDepartamento).map(([departamento, itens]) => {
+        const saldosDepartamento = new Map();
+        itens.forEach(item => saldosDepartamento.set(item.funcionario, Number(item.saldoFuncionario || 0)));
+        const totalDepartamento = Array.from(saldosDepartamento.values()).reduce((total, saldo) => total + saldo, 0);
+        const porFuncionario = itens.reduce((acc, item) => {
+          if (!acc[item.funcionario]) acc[item.funcionario] = [];
+          acc[item.funcionario].push(item);
+          return acc;
+        }, {});
+
+        return `
+          <section class="chefia-extra-dep-v15">
+            <h3><i class="fas fa-building"></i> ${escaparHTML(departamento)} - ${formatarMinutosParaHora(totalDepartamento)} em aberto</h3>
+            ${Object.entries(porFuncionario).map(([funcionario, mesesFuncionario]) => {
+              const saldoFuncionario = Number(mesesFuncionario[0]?.saldoFuncionario || 0);
+              const instituicao = mesesFuncionario[0]?.instituicao || "Instituição não informada";
+              const totalBaixas = mesesFuncionario.reduce((total, item) => total + Number(item.pagas || 0) + Math.abs(Math.min(Number(item.ajustes || 0), 0)) + Number(item.negativas || 0), 0);
+              return `
+                <div class="chefia-extra-func-v15">
+                  <div class="chefia-extra-func-head-v15">
+                    <div>
+                      <strong>${escaparHTML(funcionario)}</strong>
+                      <small>${escaparHTML(instituicao)}</small>
+                    </div>
+                    <div style="text-align:right;">
+                      <small style="display:block;color:#667085;font-weight:700;">Saldo final restante</small>
+                      <strong class="positivo" style="font-size:18px;">${formatarMinutosParaHora(saldoFuncionario)}</strong>
+                    </div>
+                  </div>
+                  <div class="tabela-wrapper">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Mês</th>
+                          <th>Extras do mês</th>
+                          <th>Baixas no mês</th>
+                          <th>Saldo do mês</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${mesesFuncionario.map(item => `
+                          <tr>
+                            <td>${escaparHTML(item.mesAno)}</td>
+                            <td class="positivo">${formatarMinutosParaHora(item.extras)}</td>
+                            <td>${formatarMinutosParaHora(Number(item.pagas || 0) + Math.abs(Math.min(Number(item.ajustes || 0), 0)) + Number(item.negativas || 0))}</td>
+                            <td class="${obterClasseSaldo(item.saldo)}"><strong>${formatarMinutosParaHora(item.saldo)}</strong></td>
+                          </tr>
+                        `).join("")}
+                        <tr>
+                          <td colspan="2"><strong>Resumo do funcionário no filtro</strong></td>
+                          <td>${formatarMinutosParaHora(totalBaixas)}</td>
+                          <td class="positivo"><strong>${formatarMinutosParaHora(saldoFuncionario)}</strong></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          </section>
+        `;
+      }).join("");
+    };
+
+    window.limparFiltrosExtrasPendentesChefia = function() {
+      ["extrasChefiaFiltroDepartamento", "extrasChefiaFiltroMes", "extrasChefiaFiltroAno"].forEach(id => {
+        const campo = document.getElementById(id);
+        if (campo) campo.value = "";
+      });
+      renderizarExtrasPendentesChefia();
+    };
 
     function filtrarAjustesHoras() {
       const nomeFiltro = removerAcentos(
@@ -5064,11 +5310,12 @@
 
           totalAjustes += obterMinutosAjuste(ajuste);
           const dataReferenciaAjuste = obterDataReferenciaAjuste(ajuste);
+          const dataExibicaoAjuste = ajuste.data || dataReferenciaAjuste;
           const chaveMes = obterMesAno(dataReferenciaAjuste);
           if (!registrosPorMes[chaveMes]) registrosPorMes[chaveMes] = [];
           registrosPorMes[chaveMes].push({
             id: ajuste.id,
-            data: dataReferenciaAjuste,
+            data: dataExibicaoAjuste,
             horariosTexto: ajuste.tipo === "horas_pagas" ? "Pagamento de horas extras" : "Ajuste manual",
             tipoAjuste: ajuste.tipo,
             duracaoMinutos: 0,
@@ -5833,6 +6080,7 @@
         renderizarResumoEquipeChefiaV14();
         renderizarPagamentosChefia();
         renderizarPainelGestaoChefia();
+        renderizarExtrasPendentesChefia();
 
       } catch (error) {
         console.error("Erro ao carregar banco de horas:", error);
@@ -7355,6 +7603,141 @@
       const nome = `relatorio_completo_banco_horas_${new Date().toLocaleDateString("pt-BR").replace(/\//g, "-")}.pdf`;
       doc.save(nome);
     };
+
+    window.gerarPDFExtrasPendentesChefia = function() {
+      if (!window.jspdf?.jsPDF) { alert("A biblioteca de PDF ainda não carregou."); return; }
+      const linhas = obterLinhasExtrasPendentesChefia();
+      if (!linhas.length) {
+        alert("Não há horas extras pendentes para gerar PDF com os filtros atuais.");
+        return;
+      }
+
+      const departamentoFiltro = document.getElementById("extrasChefiaFiltroDepartamento")?.value || "";
+      const mesFiltro = document.getElementById("extrasChefiaFiltroMes")?.value || "";
+      const anoFiltro = document.getElementById("extrasChefiaFiltroAno")?.value?.trim() || "";
+      const partes = [];
+      if (departamentoFiltro) partes.push(`Departamento: ${departamentoFiltro}`);
+      if (mesFiltro) partes.push(nomesMeses[Number(mesFiltro) - 1]);
+      if (anoFiltro) partes.push(anoFiltro);
+      const periodo = partes.join(" - ") || "Todos os períodos com saldo positivo";
+      const titulo = "Relatório de horas extras pendentes";
+      const subtitulo = periodo;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF("p", "mm", "a4");
+      pdfProCabecalho(doc, titulo, subtitulo);
+
+      const saldosPorFuncionario = new Map();
+      linhas.forEach(item => saldosPorFuncionario.set(item.funcionario, Number(item.saldoFuncionario || 0)));
+      const totalSaldo = Array.from(saldosPorFuncionario.values()).reduce((total, saldo) => total + saldo, 0);
+      const totalExtras = linhas.reduce((total, item) => total + Number(item.extras || 0), 0);
+      const totalBaixas = linhas.reduce((total, item) => total + Number(item.pagas || 0) + Math.abs(Math.min(Number(item.ajustes || 0), 0)) + Number(item.negativas || 0), 0);
+      const funcionarios = new Set(linhas.map(item => item.funcionario));
+      const departamentos = new Set(linhas.map(item => item.departamento));
+
+      let y = 40;
+      y = pdfProSecao(doc, "Resumo geral", y);
+      y = pdfProCards(doc, [
+        { label: "Departamentos", valor: String(departamentos.size), cor: [30,41,59] },
+        { label: "Funcionários", valor: String(funcionarios.size), cor: [37,99,235] },
+        { label: "Extras apuradas", valor: formatarMinutosParaHora(totalExtras), cor: [21,128,61] },
+        { label: "Baixas consideradas", valor: formatarMinutosParaHora(totalBaixas), cor: [2,132,199] },
+        { label: "Saldo restante", valor: formatarMinutosParaHora(totalSaldo), cor: [180,83,9] }
+      ], y);
+
+      const porDepartamento = linhas.reduce((acc, item) => {
+        if (!acc[item.departamento]) acc[item.departamento] = [];
+        acc[item.departamento].push(item);
+        return acc;
+      }, {});
+
+      Object.entries(porDepartamento).forEach(([departamento, itens], index) => {
+        if (index > 0 && y > 210) {
+          doc.addPage();
+          pdfProCabecalho(doc, titulo, subtitulo);
+          y = 40;
+        }
+
+        const saldosDepartamento = new Map();
+        itens.forEach(item => saldosDepartamento.set(item.funcionario, Number(item.saldoFuncionario || 0)));
+        const totalDepartamento = Array.from(saldosDepartamento.values()).reduce((total, saldo) => total + saldo, 0);
+        y = pdfProSecao(doc, `${departamento} - saldo em aberto ${formatarMinutosParaHora(totalDepartamento)}`, y);
+
+        const porFuncionario = itens.reduce((acc, item) => {
+          if (!acc[item.funcionario]) acc[item.funcionario] = [];
+          acc[item.funcionario].push(item);
+          return acc;
+        }, {});
+
+        y = pdfProAutoTable(doc, {
+          startY: y,
+          head: [["Funcionário", "Instituição", "Meses com extra", "Baixas consideradas", "Saldo final restante"]],
+          body: Object.entries(porFuncionario).map(([funcionario, mesesFuncionario]) => {
+            const primeiro = mesesFuncionario[0] || {};
+            const totalBaixasFuncionario = mesesFuncionario.reduce((total, item) => total + Number(item.pagas || 0) + Math.abs(Math.min(Number(item.ajustes || 0), 0)) + Number(item.negativas || 0), 0);
+            return [
+              funcionario,
+              primeiro.instituicao || "Instituição não informada",
+              mesesFuncionario.map(item => item.mesAno).join(", "),
+              formatarMinutosParaHora(totalBaixasFuncionario),
+              formatarMinutosParaHora(primeiro.saldoFuncionario || 0)
+            ];
+          }),
+          theme: "grid",
+          headStyles: { fillColor: [21,128,61], textColor: [255,255,255], fontSize: 6.8 },
+          styles: { fontSize: 6.5, cellPadding: 1.2, overflow: "linebreak", valign: "middle" },
+          columnStyles: {
+            0: { cellWidth: 38 },
+            1: { cellWidth: 38 },
+            2: { cellWidth: 54 },
+            3: { cellWidth: 28 },
+            4: { cellWidth: 28, fontStyle: "bold" }
+          },
+          didParseCell: data => {
+            if (data.section === "body" && data.column.index === 4) {
+              data.cell.styles.textColor = [180, 83, 9];
+              data.cell.styles.fontStyle = "bold";
+            }
+          }
+        }, titulo, subtitulo) + 6;
+
+        y = pdfProAutoTable(doc, {
+          startY: y,
+          head: [["Funcionário", "Mês", "Extra do mês", "Pagas", "Folgas/Ajustes", "Negativas", "Saldo do mês"]],
+          body: itens.map(item => [
+            item.funcionario,
+            item.mesAno,
+            formatarMinutosParaHora(item.extras),
+            formatarMinutosParaHora(item.pagas),
+            formatarMinutosParaHora(item.ajustes),
+            formatarMinutosParaHora(item.negativas),
+            formatarMinutosParaHora(item.saldo)
+          ]),
+          theme: "grid",
+          headStyles: { fillColor: [30,41,59], textColor: [255,255,255], fontSize: 6.7 },
+          styles: { fontSize: 6.4, cellPadding: 1.15, overflow: "linebreak", valign: "middle" },
+          columnStyles: {
+            0: { cellWidth: 42 },
+            1: { cellWidth: 26 },
+            2: { cellWidth: 25 },
+            3: { cellWidth: 23 },
+            4: { cellWidth: 28 },
+            5: { cellWidth: 23 },
+            6: { cellWidth: 25, fontStyle: "bold" }
+          },
+          didParseCell: data => {
+            if (data.section === "body" && data.column.index === 6) {
+              data.cell.styles.textColor = [180, 83, 9];
+              data.cell.styles.fontStyle = "bold";
+            }
+          }
+        }, titulo, subtitulo) + 8;
+      });
+
+      pdfProRodape(doc, `Horas extras pendentes - ${periodo}`);
+      const nomeFiltro = removerAcentos(periodo).replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 60);
+      doc.save(`horas_extras_pendentes_chefia_${nomeFiltro || "geral"}.pdf`);
+    };
     // ===== FIM PDF PROFISSIONAL PADRONIZADO =====
 
     document.getElementById("regraDataEspecial").addEventListener("change", atualizarCampoCargaPersonalizada);
@@ -7395,13 +7778,5 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
 
 
